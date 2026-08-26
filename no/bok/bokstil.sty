@@ -1,44 +1,44 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{bokstil}[2026/08/26 v1.9 — frosset CUP-stil bokoppsett]
 
-% =================================================
-% STATUS: FROSSET
+% ============================================================
+% bokstil.sty — en monografi i CUP-stil
 %
-% Denne stilfilen definerer det typografiske utseendet
-% til en akademisk monografi (CUP-stil).
+% Alle typografiske valg bor i denne fila. Du skal ikke
+% trenge å endre noe her for å skrive en bok: sett
+% papirformatet i main.tex og begynn å skrive.
 %
-% Fysisk papirstørrelse (A4, B5, osv.) MÅ settes
-% via dokumentklassen, f.eks.:
+%   \documentclass[12pt,twoside,b5paper]{book}   % trykk
+%   \documentclass[12pt,twoside,a4paper]{book}   % utkast
 %
-%   \documentclass[a4paper]{book}
-%   \documentclass[b5paper]{book}
+% Motor: LuaLaTeX. Fontene er OpenType og lastes gjennom
+% unicode-math, og det kan ikke pdflatex.
 %
-% IKKE endre denne filen under skriving.
-% Kopier og versjoner den hvis endringer trengs.
-% =================================================
+% Rekkefølgen nedenfor: fonter, mikrotypografi, geometri,
+% avstander, seksjonering, sidemøblering, siteringer, og
+% hyperref sist.
+% ============================================================
 
 
-% =================================================
-% KJERNEFONT
+% ============================================================
+% FONTER
 %
-% MOTOR: LuaLaTeX (ikke pdflatex).
+% Garamond Libre til tekst, STIX Two Math til matematikk.
+% STIX Two krymper en indeks-i-indeks til 55 % der de fleste
+% mattefonter bruker 50 %, og det avgjør om en tensorindeks
+% er lesbar.
 %
-% Garamond Libre til tekst, STIX Two Math til
-% matematikk:
-%  - klassiske renessanseformer
-%  - STIX Two Math holder indeks-i-indeks lesbar
-%    (55 % mot Garamond-Math sine 50 %), noe som
-%    avgjør i tensornotasjon
+% Scale=0.90: en streng x-høydematch ville tilsagt 0,86. De
+% 6 % over er bevisst — viste uttrykk står isolert og bærer
+% indekser som trenger luft. Over omtrent 0,95 begynner
+% matten å rage over prosaen.
 %
-% Scale=0.90 -- streng x-høydematch ville gitt 0,86;
-% verdien ligger 6 % over, bevisst, siden viste uttrykk
-% står isolert og bærer indekser som trenger luft.
-%
-% FET MATEMATIKK er \symbf / \symbfit / \symbfup, som
-% henter STIX Two sine fete Unicode-alfabeter fra
-% samme fontfil. \bm og \boldmath hører pdflatex-tida
-% til og virker ikke her -- se README.
-% =================================================
+% Fet matematikk er \symbf, \symbfit, \symbfup. De henter
+% STIX Two sine tegnede fete Unicode-alfabeter fra samme
+% fontfil, og virker derfor på gresk så vel som latinsk.
+% \bm og \boldmath hører pdflatex-tida til og virker ikke
+% her — se README.
+% ============================================================
 \RequirePackage{unicode-math}
 
 \setmainfont{GaramondLibre}[
@@ -51,13 +51,14 @@
 \setmathfont{STIXTwoMath-Regular.otf}[Scale=0.90]
 
 
-% =================================================
+% ============================================================
 % MIKROTYPOGRAFI
 %
-% Subtil protrusion og ekspansjon forbedrer justering
-% uten synlig forvrengning. Tracking aktivert for
-% kapiteler og overskrifter.
-% =================================================
+% protrusion henger tegnsetting ut i margen, expansion
+% strekker glyffene brøkdeler av en prosent for å unngå løse
+% linjer, og tracking sperrer kapitelene. Slå av hvilken som
+% helst av de tre her hvis en side ser feil ut.
+% ============================================================
 \RequirePackage[
   expansion=true,
   protrusion=true,
@@ -65,30 +66,26 @@
 ]{microtype}
 
 
-% =================================================
+% ============================================================
 % SIDEGEOMETRI
 %
-% SATSBREDDE. Garamond Libres lilleboksalfabet er
-% 50,9 mm ved 12 pt. Bringhurst måler linjelengde i
-% alfabeter: 1,8-2,4 er det brukbare vinduet. De
-% 120 mm nedenfor er 2,36 alfabeter -- innenfor.
-% (126 mm ville vært 2,48: for bredt.)
+% SATSBREDDE. Bringhurst måler linjelengde i lilleboks-
+% alfabeter, og 1,8–2,4 er det brukbare vinduet. Garamond
+% Libres alfabet er 50,9 mm ved 12 pt, så de 120 mm nedenfor
+% er 2,36 alfabeter. 126 mm ville vært 2,48 — for bredt, og
+% det ville tvunget kjegla opp for å kompensere.
 %
-% MARGER. Utside > innside, bevisst: de to
-% innsidemargene møtes over ryggen og leses som ett
-% rom, mens ytterkanten er der tommelen ligger.
-% 2,4 cm innside klarer en limbinding.
+% MARGER. Utside bredere enn innside, bevisst: de to
+% innsidemargene møtes over ryggen og leses som ett rom,
+% mens ytterkanten er der tommelen ligger. 2,4 cm innside
+% klarer likevel en limbinding, og den brede ytterkanten er
+% der en overdimensjonert ligning kan henge ut.
 %
-% Den romslige ytterkanten er dessuten plassen en
-% overdimensjonert ligning kan henge ut i når et
-% kapittel trenger det.
-%
-% Det er satsbredden -- ikke margene -- som holdes
-% konstant på tvers av papirformat, slik at et
-% A4-utkast brekker linjer nøyaktig som den trykte
-% B5-en, med 4 cm igjen til notater. Sidebrudd blir
-% likevel ulike: A4 er høyere.
-% =================================================
+% Det er satsbredden, ikke margene, som holdes fast når
+% papirformatet endres: et A4-utkast brekker linjer nøyaktig
+% som den trykte B5-en, med 4 cm igjen til notater.
+% Sidebrudd blir likevel ulike — A4 er høyere.
+% ============================================================
 \RequirePackage{geometry}
 \ifdim\paperwidth>18cm
   \geometry{inner=4.3cm, outer=4.7cm, top=2.6cm, bottom=3.9cm}
@@ -97,56 +94,51 @@
 \fi
 
 
-% =================================================
-% AVSNITT- OG LINJEAVSTAND
+% ============================================================
+% AVSNITT OG KJEGLE
 %
-% Klassisk boktypografi:
-%  - innrykkede avsnitt
-%  - ingen linjeskift mellom avsnitt
-%  - lett luftig linjeavstand for lesbarhet
-% =================================================
+% Innrykkede avsnitt uten luft mellom — den klassiske
+% boksatsen.
+% ============================================================
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{0pt}
 
-% Kjegle: baseline 14,79 pt på 12 pt sats.
+% Baseline 14,79 pt på 12 pt sats — utledet, ikke valgt med
+% øyet. En CUP-monografi satt Times 10,5/13 har 3,28 pt ren
+% luft mellom én linjes underlengder og neste linjes
+% overlengder. Garamond Libre ved 12 pt har samme optiske
+% størrelse (x-høyde 4,88 pt, mot Times på 10,33 pt), men
+% lengder som er 18 % lengre, og trenger 14,79 pt for å gi
+% de samme 3,28 pt.
 %
-% Utledet, ikke valgt med øyet. En CUP-monografi satt
-% Times 10,5/13 har 3,28 pt ren luft mellom én linjes
-% underlengder og neste linjes overlengder. Garamond
-% Libre ved 12 pt har samme optiske størrelse
-% (x-høyde 4,88 pt = Times 10,33 pt), men lengder
-% 18 % lengre, og trenger baseline 14,79 pt for å gi
-% samme luft.
-%
-% Forholdet baseline/x-høyde havner likevel på 3,03
-% mot CUPs 2,62, så siden leser en anelse mer åpen
-% enn en Times-satt bok. Den resten er fonten selv --
-% lite øye, lange lengder -- og å lukke den ville
-% drive underlengdene opp i linja over. Det er prisen
-% for Garamond Libre, og den er verdt å betale.
+% Forholdet baseline/x-høyde havner likevel på 3,03 mot CUPs
+% 2,62, så siden leser en anelse mer åpen enn en Times-satt
+% bok. Den resten er fonten selv — lite øye, lange lengder —
+% og å lukke den ville drevet underlengdene opp i linja
+% over.
 \RequirePackage{setspace}
 \setstretch{1.02}
 
 
-% =================================================
+% ============================================================
 % AVSTAND RUNDT VISTE LIGNINGER
 %
-% Eksplisitt kontroll sikrer konsekvent visuell rytme rundt
-% matematikk, delt med notatstilen så de to leses som en familie.
-% Bare OVER-skipet krymper etter en kort innledende linje (en kort
-% linje gir allerede luft der), og aldri til null; UNDER-skipet er
-% alltid full verdi, så luften under en ligning aldri avhenger av
-% hva som stod over:
-%     over 12pt    over (etter kort linje)   7pt
-%     under 12pt   under (alltid)           12pt
+% Delt med notatstilen, så de to leses som en familie.
 %
-% Settes via \AtBeginDocument: LaTeX sin \normalsize (kjørt av
-% \begin{document}) nullstiller alle fire display-skip til
-% klassens standard, så verdier satt her i preamblet ville blitt
-% stille overstyrt. Ved å sette dem etter \normalsize trer de i
-% kraft; senere størrelsesendringer er grupperte og gjenoppretter
-% dem når de avsluttes.
-% =================================================
+%   over   12pt     etter en kort innledende linje   7pt
+%   under  12pt     alltid                          12pt
+%
+% Bare avstanden over krymper etter en kort linje, siden en
+% kort linje allerede gir luft av seg selv — og den krymper
+% aldri til null. Avstanden under er alltid full, så luften
+% under en ligning avhenger aldri av hva som kom før.
+%
+% \AtBeginDocument er ikke pynt. \begin{document} kjører
+% \normalsize, som nullstiller alle fire skipene til
+% klassens standard, så verdier satt i preamblet blir stille
+% forkastet. Senere størrelsesendringer er grupperte og
+% gjenoppretter disse når de avsluttes.
+% ============================================================
 \AtBeginDocument{%
   \setlength{\abovedisplayskip}{12pt plus 3pt minus 3pt}%
   \setlength{\belowdisplayskip}{12pt plus 3pt minus 3pt}%
@@ -155,28 +147,31 @@
 }
 
 
-% =================================================
+% ============================================================
 % FIGURTEKSTER
 %
-% font=small      -- ett steg under kroppstekst (JHEP/CUP-standard)
-% labelfont=bf    -- fet «Figur 1.»-etikett (JHEP/CUP-standard)
-% labelsep=period -- punktum etter nummeret, ikke kolon (JHEP-stil)
-% justification: default (singlelinecheck=true) -- enkeltlinjer
-%   sentreres automatisk; flerlinjers tekst justeres
-% =================================================
+%   font=small       ett steg under kroppsteksten
+%   labelfont=bf     fet «Figur 1.»-etikett
+%   labelsep=period  punktum etter nummeret, ikke kolon
+%
+% Figurtekster på én linje sentrerer seg selv; lengre tekst
+% blir justert. Begge deler er caption sin standard.
+% ============================================================
 \RequirePackage[font=small,labelfont=bf,labelsep=period]{caption}
 
 
-% =================================================
-% SEKSJONERING OG KAPITTELDESIGN (HOVEDMATERIALE)
+% ============================================================
+% SEKSJONERING
 %
-% titlesec gir full kontroll over hierarki og avstander,
-% uavhengig av basisklassen.
-% =================================================
+% Et kapittel åpner på en egen side: «Kapittel N» i kapiteler
+% over tittelen i store versaler. Seksjoner og nedover er
+% fete og oppreiste, med ett størrelsessteg mellom.
+% \chaptername og \partname kommer fra babel og følger
+% derfor dokumentspråket.
+% ============================================================
 \RequirePackage{titlesec}
 
 % ------------------ Hovedkapitler ----------------
-% Bruker \chaptername (babel-lokalisert: "Kapittel" / "Chapter" / ...)
 \titleformat{\chapter}[display]
   {\normalfont}
   {\filcenter\scshape \chaptername\ \thechapter}
@@ -203,23 +198,23 @@
   {0pt}{2ex plus .8ex minus .2ex}{1.2ex plus .2ex}
 
 
-% =================================================
+% ============================================================
 % SEKSJONSNUMMERERING
 %
-% Seksjoner, underseksjoner og dypere er unummererte
-% men vises fortsatt i innholdsfortegnelsen.
-% Deler og kapitler beholder nummereringen.
-% =================================================
+% Deler og kapitler er nummererte; seksjoner og nedover er
+% det ikke, men de står fortsatt i innholdsfortegnelsen.
+% Sett secnumdepth til 2 om du vil ha nummererte seksjoner.
+% ============================================================
 \setcounter{secnumdepth}{0}
 
 
-% =================================================
+% ============================================================
 % DELSIDER
 %
-% Stille, sentrerte, unummererte sider.
-% Visuell rytme matcher kapittel- og tittelsider.
-% =================================================
-% Bruker \partname (babel-lokalisert: "Del" / "Part" / ...)
+% En deltittel alene på en unummerert side, satt en
+% tredjedel ned — samme rytme som kapittelåpningene og
+% tittelsiden.
+% ============================================================
 \titleformat{\part}[display]
   {\normalfont}
   {\filcenter\scshape \partname\ \thepart}
@@ -232,12 +227,19 @@
 \assignpagestyle{\part}{empty}
 
 
-% =================================================
-% INITIALER FOR KAPITTELÅPNING
+% ============================================================
+% INITIAL VED KAPITTELÅPNING
 %
-% Eksplisitt makro holder bruken bevisst.
-% Ingen automatisk innsetting.
-% =================================================
+%   \chapter{Kapitteltittel}
+%   \chapteropening{D}{en første setningen}
+%   fortsetter her.
+%
+% Tre linjer dyp, med resten av åpningsfrasen i kapiteler.
+% Ingenting settes inn automatisk — et kapittel uten
+% \chapteropening starter bare som vanlig tekst. Hold
+% åpningsavsnittet langt nok til å fylle høyden av
+% initialen, ellers krasjer neste overskrift med den.
+% ============================================================
 \RequirePackage{lettrine}
 
 \newcommand{\chapteropening}[2]{%
@@ -251,14 +253,13 @@
 }
 
 
-% =================================================
-% INNHOLDSFORTEGNELSE (BOKSTIL)
+% ============================================================
+% INNHOLDSFORTEGNELSE
 %
-% Rent, stille hierarki:
-%  - ingen rammer
-%  - tilbakeholdne avstander
-%  - tittel formatert som et kapittel
-% =================================================
+% Ingen punktledere og ingen rammer: sidetallene står mot
+% høyre marg og tittelen er satt som et kapittel. Kalles med
+% \booktoc.
+% ============================================================
 \RequirePackage{tocloft}
 
 \renewcommand{\cfttoctitlefont}{\Huge\scshape}
@@ -281,21 +282,22 @@
 }
 
 
-% =================================================
+% ============================================================
 % TOPPTEKST OG SIDESTILER
 %
-% fancyhdr brukes eksplisitt og lokalt.
-% Ingen global redefinering av 'plain'.
+% Sidetallene står mot ytterkanten, det løpende kapittel-
+% eller seksjonsmerket i midten. Kapittelåpningssider dropper
+% toppteksten og får sidetallet sentrert nederst i stedet.
+% 'plain' er urørt, så frontmaterialet er upåvirket.
 %
-% Posisjonskoder brukt nedenfor:
-%   L = venstre, C = midten, R = høyre
-%   E = partallsside (verso), O = oddetallsside (recto)
-% I tosidig oppsett står sidetallene mot ytterkanten,
-% og seksjons-/kapittelmerker mot innerkanten.
-% =================================================
+% Posisjonskoder i definisjonene nedenfor:
+%   L venstre, C midten, R høyre
+%   E partallsside (verso), O oddetallsside (recto)
+% ============================================================
 \RequirePackage{fancyhdr}
-% 15pt: Garamond Libre på 12 pt trenger den ekstra
-% plassen; fancyhdr klager ved 14pt.
+% 15pt i stedet for klassens standard: med Garamond Libres
+% overlengder på 12 pt vil fancyhdr ha minst 14,5 pt og
+% klager under det. 15pt er første hele punkt over.
 \setlength{\headheight}{15pt}
 
 \renewcommand{\headrulewidth}{0pt}
@@ -331,12 +333,13 @@
 }
 
 
-% =================================================
-% PATCH KUN HOVEDMATERIALE-KAPITTELÅPNINGER
+% ============================================================
+% SIDESTIL FOR KAPITTELÅPNINGER
 %
-% Omdirigerer kapittelåpningssider bort fra 'plain'
-% uten å påvirke frontmateriale-oppførselen.
-% =================================================
+% \chapter hardkoder \thispagestyle{plain} på åpningssiden.
+% Denne patchen omdirigerer den til 'chapteropen' uten å
+% røre 'plain' selv, som frontmaterialet fortsatt bruker.
+% ============================================================
 \RequirePackage{etoolbox}
 \makeatletter
 
@@ -348,22 +351,17 @@
 \makeatother
 
 
-% =================================================
-% MAKRO FOR FRONTMATERIALE-KAPITLER
+% ============================================================
+% FRONTMATERIALE-KAPITLER
 %
-% Brukes til Forord, Takk, osv.
+%   \frontchapter{Forord}
 %
-% Designmål:
-%  - unummerert
-%  - litt mindre enn hovedkapitler
-%  - venstrejustert
-%  - tilbakeholdne avstander
-%  - korrekt sidestil-oppførsel
-%
-% MERK:
-%  - Innrykk av første avsnitt håndteres eksplisitt
-%    i dokumentet med \noindent.
-% =================================================
+% En unummerert, venstrejustert overskrift ett steg mindre
+% enn et hovedkapittel, til forord, takk og lignende. Den
+% setter toppteksten selv, og det er dét som hindrer at
+% «Kapittel 0» dukker opp. Start første avsnitt med
+% \noindent.
+% ============================================================
 \makeatletter
 
 \newcommand{\frontchapter}[1]{%
@@ -382,23 +380,30 @@
 \makeatother
 
 
-% =================================================
-% TOPPTEKSTMARKERINGER
+% ============================================================
+% LØPENDE TOPPTEKST
 %
-% Rene, minimale løpende topptekster.
-% =================================================
+% Kapitteltittel på verso, seksjonstittel på recto, ingen av
+% dem i versaler.
+% ============================================================
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 \renewcommand{\sectionmark}[1]{\markright{#1}}
 
 \pagestyle{chapterstyle}
 
 
-% =================================================
+% ============================================================
 % TITTELSIDE
 %
-% Eksplisitt, robust tittelside.
-% Ingen avhengighet av \maketitle.
-% =================================================
+%   \title{...}  \author{...}  \date{...}
+%   \subtitle{...}                 % valgfritt
+%   \booktitlepage
+%
+% Tittel i store kapiteler, en kursiv undertittel under om
+% den er satt, forfatter under der igjen, dato nederst.
+% Skrevet ut i stedet for bygget på \maketitle, slik at hver
+% avstand er synlig her.
+% ============================================================
 \makeatletter
 
 \def\@subtitle{}
@@ -433,16 +438,14 @@
 \makeatother
 
 
-% =================================================
+% ============================================================
 % DEDIKASJONSSIDE
 %
-% Recto-side med en kort linje i kursiv,
-% sentrert horisontalt, plassert i øvre tredjedel
-% av siden. Følges av en tom verso.
-%
-% Bruk:
 %   \dedicationpage{Til mine foreldre.}
-% =================================================
+%
+% Én kort kursiv linje, sentrert en fjerdedel ned på en
+% recto-side, fulgt av en tom verso.
+% ============================================================
 \newcommand{\dedicationpage}[1]{%
   \cleardoublepage
   \thispagestyle{empty}
@@ -455,18 +458,17 @@
 }
 
 
-% =================================================
+% ============================================================
 % SITERINGER
 %
-% Numeriske superskrift-siteringer, plassert akkurat
-% der de er skrevet i kilden (ingen automatisk flytting
-% forbi tegnsetting). Flere nøkler sorteres og
-% komprimeres til intervaller, f.eks. \cite{a,b,c} -> 1-3.
+%   \cite{nokkel}         superskript ¹
+%   \cite{a,b,c}          sortert og komprimert, ¹⁻³
+%   \bibliography{...}    i bakmaterialet i main.tex
 %
-% Bruk:
-%   \cite{nokkel}      i teksten
-%   \bibliography{...} i main.tex bakmateriale
-% =================================================
+% Opsjonen 'nomove' holder en sitering nøyaktig der du
+% skrev den i stedet for å flytte den forbi tegnsetting,
+% så sett den rett etter ordet den hører til.
+% ============================================================
 \RequirePackage[superscript,nomove]{cite}
 
 % Etiketter i bibliografilisten: "1." istedenfor "[1]",
@@ -476,12 +478,14 @@
 \makeatother
 
 
-% =================================================
+% ============================================================
 % HYPERLENKER
 %
-% MÅ LASTES SIST.
-% Subtilt, trygt for trykk.
-% =================================================
+% Lastes sist, fordi hyperref patcher kommandoer andre
+% pakker definerer. Lenkene er svarte og ikke fargede, så
+% siden trykkes nøyaktig som den ville gjort uten dem, mens
+% de fortsatt er aktive i en PDF-leser.
+% ============================================================
 \RequirePackage{xcolor}
 \definecolor{linkblack}{RGB}{0,0,0}
 
@@ -494,9 +498,8 @@
   linktoc=page
 }
 
-% Overstyrer hyperrefs standard om å fargelegge
-% sidetall i innholdsfortegnelsen — beholdes svarte
-% slik at de matcher resten.
+% hyperref fargelegger sidetall i innholdsfortegnelsen som
+% standard; disse tre holder dem svarte som alt annet.
 \makeatletter
 \renewcommand{\cftchappagefont}{\normalfont\color{black}}
 \renewcommand{\cftsecpagefont}{\normalfont\color{black}}
@@ -504,7 +507,7 @@
 \makeatother
 
 
-% =================================================
+% ============================================================
 % SLUTT PÅ FIL
-% =================================================
+% ============================================================
 \endinput

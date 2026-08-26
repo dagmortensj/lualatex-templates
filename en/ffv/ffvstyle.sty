@@ -1,50 +1,49 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ffvstyle}[2026/08/26 v1.2 Article style — two-column]
 
-% =================================================
-% PHILOSOPHY
+% ============================================================
+% ffvstyle.sty — a two-column article
 %
-% This style is made for two-column articles in
-% theoretical physics and mathematics, with an
-% essayistic character.
+% For essayistic articles in theoretical physics and
+% mathematics. Everything about how the article looks is set
+% here; main.tex holds only the content.
 %
-% Design priorities:
-%  - clean two-column layout
-%  - readable mathematics
-%  - clear but quiet structure
-%  - typographic consistency
+% Engine: LuaLaTeX. The fonts are OpenType and load through
+% unicode-math, which pdflatex cannot do.
 %
-% The style is intentionally conservative.
-% =================================================
+% Order below: language, fonts, geometry, spacing,
+% sectioning, floats, page furniture, natbib, hyperref last.
+% ============================================================
 
 
-% =================================================
+% ============================================================
 % LANGUAGE
 %
-% Unlike the other templates in this collection,
-% babel is loaded inside the style file rather than
-% in main.tex. This keeps a fresh main.tex minimal —
-% loading the style is enough to pick up the
-% language settings.
-% =================================================
+% babel is loaded here rather than in main.tex — unlike the
+% other templates in the collection — so that loading the
+% style is enough to get hyphenation and punctuation right.
+% Change the language on the line below.
+% ============================================================
 \RequirePackage[english]{babel}
 
 
-% =================================================
-% FONT AND MICROTYPOGRAPHY
+% ============================================================
+% FONTS & MICROTYPOGRAPHY
 %
-% ENGINE: LuaLaTeX (not pdflatex).
+% STIX Two throughout, text and mathematics from one
+% family — a Times-like face with a complete maths
+% companion, which is what keeps symbols in running text
+% from standing out against the prose.
 %
-% Same typeface as before -- STIX Two, complete for
-% text and mathematics -- now loaded as OpenType
-% through unicode-math rather than as the Type1
-% stix2 package. Sizes and spacing are unchanged.
+% Bold maths is \symbf, \symbfit, \symbfup. They pull STIX
+% Two's drawn Unicode bold alphabets out of the same file,
+% so they work on Greek as well as Latin. \bm and \boldmath
+% belong to pdflatex and do not work here — see the README.
 %
-% BOLD MATHS is \symbf / \symbfit / \symbfup, which
-% select STIX Two's Unicode bold alphabets from the
-% same file. \bm and \boldmath are pdflatex-era tools
-% and do not work here -- see the README.
-% =================================================
+% protrusion hangs punctuation into the margin, expansion
+% stretches glyphs by fractions of a percent to avoid loose
+% lines — both earn their keep in narrow columns.
+% ============================================================
 \RequirePackage{unicode-math}
 
 \setmainfont{STIXTwoText}[
@@ -63,12 +62,15 @@
 ]{microtype}
 
 
-% =================================================
+% ============================================================
 % PAGE GEOMETRY (A4, TWO-COLUMN)
 %
-% Tighter margins suit a two-column layout better
-% than the defaults.
-% =================================================
+% 2 cm margins and a 7 mm gutter give two columns of
+% 81.5 mm. That is a short measure by design: a narrow column
+% needs less leading and tolerates more hyphenation than a
+% full-width page, and it is what the two-column format buys
+% you.
+% ============================================================
 \RequirePackage[
   a4paper,
   left=2.0cm,
@@ -79,16 +81,16 @@
 ]{geometry}
 
 
-% =================================================
-% PARAGRAPHS AND LINE SPACING
+% ============================================================
+% PARAGRAPHS & LEADING
 %
-% STIX2 at 10pt gives a natural \baselineskip of
-% 12pt. With \setstretch{1.05} the effective baseline
-% is ~12.6pt — generous enough for mathematics
-% without making the body text feel airy.
+% STIX Two at 10pt has a natural baseline of 12pt.
+% \setstretch{1.05} takes it to about 12.6pt — enough for
+% inline mathematics to sit in the column without pushing
+% the prose apart.
 %
-% Classical indented paragraphs, no paragraph skip.
-% =================================================
+% Indented paragraphs, no space between them.
+% ============================================================
 \setlength{\parindent}{12pt}
 \setlength{\parskip}{0pt}
 
@@ -96,33 +98,27 @@
 \setstretch{1.05}
 
 
-% =================================================
-% EQUATION SPACING
+% ============================================================
+% DISPLAYED EQUATION SPACING
 %
-% Principle: equation spacing should resonate with
-% the baseline (~12.6pt) so that mathematics sits
-% naturally in the text.
+% Tuned against the 12.6pt baseline, so displayed maths
+% keeps the rhythm of the column.
 %
-% abovedisplayskip / belowdisplayskip:
-%   Used when the line above the equation is long
-%   (fills the column width). 10pt fixed is a bit
-%   under one baseline — enough air for the equation
-%   to breathe without detaching from context.
+%   above  10pt     after a short lead-in line   4pt
+%   below  10pt     always                      10pt
 %
-% abovedisplayshortskip:
-%   Used when the line above is short — i.e. there
-%   is already air to the right of the text. We then
-%   need substantially less extra space above.
+% 10pt is a little under one baseline: enough for the
+% equation to breathe without detaching from its sentence.
+% Only the space above shrinks after a short line, since a
+% short line already leaves air of its own. The space below
+% is always full, so the gap under an equation never depends
+% on what came before.
 %
-% belowdisplayshortskip:
-%   After an equation there should always be the
-%   same amount of air, regardless of what came above.
-%
-% Applied via \AtBeginDocument: LaTeX's \normalsize (run by
-% \begin{document}) resets all four display skips to the class
-% defaults, so values set here in the preamble would be silently
-% overridden. Setting them after \normalsize makes them take effect.
-% =================================================
+% \AtBeginDocument is not decoration. \begin{document} runs
+% \normalsize, which resets all four skips to the class
+% defaults, so values set in the preamble are silently
+% discarded.
+% ============================================================
 \AtBeginDocument{%
   \setlength{\abovedisplayskip}{10pt plus 3pt minus 2pt}%
   \setlength{\belowdisplayskip}{10pt plus 3pt minus 2pt}%
@@ -131,12 +127,14 @@
 }
 
 
-% =================================================
+% ============================================================
 % SECTIONING
 %
-% Bold headings without small caps — clear
-% hierarchy in narrow columns.
-% =================================================
+% Two levels, both bold upright and numbered. A narrow
+% column has no room for display sizes, so the hierarchy is
+% carried by one step down from body size at the subsection
+% and by the space above each heading.
+% ============================================================
 \RequirePackage{titlesec}
 
 % Sections: bold, slightly larger
@@ -156,19 +154,22 @@
   {0pt}{3.0ex plus 0.8ex minus .3ex}{1.2ex plus .3ex}
 
 
-% =================================================
+% ============================================================
 % FLOAT PARAMETERS
 %
-% LaTeX's defaults are too conservative for
-% two-column articles and often produce large empty
-% spaces. These values let figures fill more of the
-% page when necessary.
+% LaTeX's defaults are cautious enough that a two-column
+% article often ends up with half-empty pages. These let a
+% figure claim more of the page before LaTeX gives up and
+% defers it.
 %
-%  topfraction:    max share of page top for floats
-%  bottomfraction: max share of page bottom for floats
-%  textfraction:   minimum text share on a float page
-%  floatpagefraction: minimum fill for a dedicated float page
-% =================================================
+%   topfraction         most of a page top floats may take
+%   bottomfraction      most of a page bottom they may take
+%   textfraction        least text a mixed page must keep
+%   floatpagefraction   least a float-only page must fill
+%
+% The dbl* versions are the same limits for figure*, which
+% spans both columns.
+% ============================================================
 \renewcommand{\topfraction}{0.90}
 \renewcommand{\bottomfraction}{0.80}
 \renewcommand{\textfraction}{0.10}
@@ -184,16 +185,17 @@
 \setlength{\dblfloatsep}{12pt plus 3pt minus 2pt}
 
 
-% =================================================
+% ============================================================
 % CAPTIONS
 %
-% font=small      -- one step below body text (JHEP/CUP standard)
-% labelfont=bf    -- bold "Figure 1." label (JHEP/CUP standard)
-% labelsep=period -- period after number, not colon (JHEP style)
-% justification: default (singlelinecheck=true) -- single-line captions
-%   are centred automatically; multi-line captions are justified
-% skip=6pt        -- tighter gap suits the two-column layout
-% =================================================
+%   font=small       one step below body text
+%   labelfont=bf     bold "Figure 1." label
+%   labelsep=period  a period after the number, not a colon
+%   skip=6pt         a tighter gap, to suit the narrow column
+%
+% Single-line captions centre themselves; longer ones are
+% justified.
+% ============================================================
 \RequirePackage[
   font=small,
   labelfont=bf,
@@ -203,36 +205,43 @@
 ]{caption}
 
 
-% =================================================
+% ============================================================
 % TABLES
 %
-% booktabs gives professional horizontal rules
-% (\toprule, \midrule, \bottomrule — never vertical).
-% A bit of extra vertical air around rows gives
-% tables breathing room.
-% =================================================
+% booktabs: \toprule, \midrule, \bottomrule, and no vertical
+% rules at all. arraystretch opens the rows by 15%, which a
+% ruled-only table needs to stay readable.
+% ============================================================
 \RequirePackage{booktabs}
 \renewcommand{\arraystretch}{1.15}
 
 
-% =================================================
+% ============================================================
 % GRAPHICS
-% =================================================
+%
+% \includegraphics. main.tex sets \graphicspath if figures
+% live in their own folder.
+% ============================================================
 \RequirePackage{graphicx}
 
 
-% =================================================
+% ============================================================
 % PAGE STYLE
-% =================================================
+%
+% No running headers; page number centred at the foot.
+% ============================================================
 \pagestyle{plain}
 
 
-% =================================================
+% ============================================================
 % TITLE BLOCK
 %
-% Title in full width above the two-column body.
-% Uses the \twocolumn[\maketitle] idiom.
-% =================================================
+%   \twocolumn[\maketitle \begin{lead} ... \end{lead}]
+%
+% The title spans the full page width above the columns,
+% which is what the \twocolumn[...] argument is for. Title in
+% small caps, author and date below.
+% ============================================================
 \makeatletter
 \renewcommand{\maketitle}{%
   \thispagestyle{plain}
@@ -248,13 +257,16 @@
 \makeatother
 
 
-% =================================================
-% LEAD-IN ENVIRONMENT
+% ============================================================
+% LEAD-IN PARAGRAPH
 %
-% Bold opening paragraph in full page width.
-% Placed immediately after \maketitle, inside
-% the \twocolumn[...] argument.
-% =================================================
+%   \begin{lead} ... \end{lead}
+%
+% A bold opening paragraph across the full page width, set
+% at 92% of the measure so it reads as a block rather than a
+% first paragraph. Goes immediately after \maketitle, inside
+% the same \twocolumn[...] argument.
+% ============================================================
 \newenvironment{lead}{%
   \par
   \centering
@@ -268,20 +280,25 @@
 }
 
 
-% =================================================
-% REFERENCES
+% ============================================================
+% CITATIONS
 %
-% natbib must be loaded before hyperref.
-% =================================================
+%   \cite{key}            [1]
+%   \cite{a,b,c}          sorted and compressed, [1-3]
+%   \bibliographystyle{unsrtnat}   in main.tex
+%
+% natbib has to come before hyperref.
+% ============================================================
 \RequirePackage[numbers,sort&compress]{natbib}
 
 
-% =================================================
+% ============================================================
 % HYPERLINKS
 %
-% Dark red, print-safe.
-% Loaded last.
-% =================================================
+% Loaded last, because hyperref patches commands that other
+% packages define. Dark red rather than the default blue: it
+% stays legible when the article is printed in grey.
+% ============================================================
 \RequirePackage{xcolor}
 \definecolor{darkred}{RGB}{120,20,20}
 
@@ -295,7 +312,7 @@
 }
 
 
-% =================================================
+% ============================================================
 % END OF FILE
-% =================================================
+% ============================================================
 \endinput

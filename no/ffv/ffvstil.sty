@@ -1,49 +1,50 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ffvstil}[2026/08/26 v1.2 Artikkelstil — tokolonne]
 
-% =================================================
-% FILOSOFI
+% ============================================================
+% ffvstil.sty — en tokolonnes artikkel
 %
-% Denne stilen er laget for tokolonne artikler i
-% teoretisk fysikk og matematikk, med essayistisk
-% preg.
+% Til essayistiske artikler i teoretisk fysikk og
+% matematikk. Alt om hvordan artikkelen ser ut settes her;
+% main.tex inneholder bare innholdet.
 %
-% Designprioriteringer:
-%  - ren tokolonne-layout
-%  - lesbar matematikk
-%  - tydelig, men dempet struktur
-%  - typografisk konsistens
+% Motor: LuaLaTeX. Fontene er OpenType og lastes gjennom
+% unicode-math, og det kan ikke pdflatex.
 %
-% Stilen er bevisst konservativ.
-% =================================================
+% Rekkefølgen nedenfor: språk, fonter, geometri, avstander,
+% seksjonering, flyt, sidemøblering, natbib, hyperref sist.
+% ============================================================
 
 
-% =================================================
+% ============================================================
 % SPRÅK
 %
-% I motsetning til de andre malene i samlingen, lastes
-% babel inne i stilfilen i stedet for i main.tex. Dette
-% holder en fersk main.tex minimal — det å laste stilen
-% er nok til å plukke opp språkinnstillingene.
-% =================================================
+% babel lastes her og ikke i main.tex — i motsetning til de
+% andre malene i samlingen — slik at det å laste stilen er
+% nok til å få orddeling og tegnsetting riktig. Bytt språk
+% på linja under.
+% ============================================================
 \RequirePackage[norsk]{babel}
 
 
-% =================================================
-% FONT OG MIKROTYPOGRAFI
+% ============================================================
+% FONTER OG MIKROTYPOGRAFI
 %
-% MOTOR: LuaLaTeX (ikke pdflatex).
+% STIX Two hele veien, tekst og matematikk fra samme
+% familie — en Times-lignende skrift med en komplett
+% matteledsager, og det er dét som hindrer at symboler i
+% løpende tekst skiller seg ut fra prosaen.
 %
-% Samme skrift som før -- STIX Two, komplett for tekst
-% og matematikk -- nå lastet som OpenType gjennom
-% unicode-math i stedet for som Type1-pakken stix2.
-% Størrelser og avstander er uendret.
+% Fet matematikk er \symbf, \symbfit, \symbfup. De henter
+% STIX Two sine tegnede fete Unicode-alfabeter fra samme
+% fil, og virker derfor på gresk så vel som latinsk. \bm og
+% \boldmath hører pdflatex-tida til og virker ikke her — se
+% README.
 %
-% FET MATEMATIKK er \symbf / \symbfit / \symbfup, som
-% henter STIX Two sine fete Unicode-alfabeter fra
-% samme fil. \bm og \boldmath hører pdflatex-tida til
-% og virker ikke her -- se README.
-% =================================================
+% protrusion henger tegnsetting ut i margen, expansion
+% strekker glyffene brøkdeler av en prosent for å unngå løse
+% linjer — begge gjør nytte for seg i smale spalter.
+% ============================================================
 \RequirePackage{unicode-math}
 
 \setmainfont{STIXTwoText}[
@@ -62,12 +63,15 @@
 ]{microtype}
 
 
-% =================================================
+% ============================================================
 % SIDEGEOMETRI (A4, TOKOLONNE)
 %
-% Strammere marger er bedre tilpasset tokolonne-
-% formatet enn standardverdiene.
-% =================================================
+% 2 cm marger og 7 mm spaltemellomrom gir to spalter på
+% 81,5 mm. Det er en kort satsbredde med vilje: en smal
+% spalte trenger mindre kjegle og tåler mer orddeling enn en
+% side i full bredde, og det er dét tokolonneformatet kjøper
+% deg.
+% ============================================================
 \RequirePackage[
   a4paper,
   left=2.0cm,
@@ -78,16 +82,16 @@
 ]{geometry}
 
 
-% =================================================
-% AVSNITT OG LINJEAVSTAND
+% ============================================================
+% AVSNITT OG KJEGLE
 %
-% STIX2 ved 10pt gir en naturlig \baselineskip på
-% 12pt. Med \setstretch{1.05} blir den effektive
-% grunnlinjen ~12,6 pt — romslig nok for matematikk
-% uten at brødteksten virker luftig.
+% STIX Two ved 10pt har en naturlig grunnlinje på 12pt.
+% \setstretch{1.05} tar den til rundt 12,6 pt — nok til at
+% matematikk i løpende tekst får plass i spalta uten å
+% skyve prosaen fra hverandre.
 %
-% Klassiske innrykkede avsnitt, ingen avsnittshopp.
-% =================================================
+% Innrykkede avsnitt, ingen luft mellom dem.
+% ============================================================
 \setlength{\parindent}{12pt}
 \setlength{\parskip}{0pt}
 
@@ -95,33 +99,27 @@
 \setstretch{1.05}
 
 
-% =================================================
-% LIGNINGSAVSTANDER
+% ============================================================
+% AVSTAND RUNDT VISTE LIGNINGER
 %
-% Grunnprinsipp: ligningsavstander bør resonere med
-% grunnlinjen (~12,6 pt) slik at matematikken sitter
-% naturlig i teksten.
+% Stemt mot grunnlinjen på 12,6 pt, så vist matematikk
+% holder rytmen i spalta.
 %
-% abovedisplayskip / belowdisplayskip:
-%   Brukes når linjen over ligningen er lang (fyller
-%   kolonnebredden). 10pt fast er litt under én
-%   grunnlinje — nok luft til at ligningen puster,
-%   men ikke så mye at den løsrives fra konteksten.
+%   over   10pt     etter en kort innledende linje   4pt
+%   under  10pt     alltid                          10pt
 %
-% abovedisplayshortskip:
-%   Brukes når linjen over er kort — dvs. det er
-%   allerede luft til høyre for teksten. Da trenger
-%   vi vesentlig mindre ekstra plass over ligningen.
+% 10pt er litt under én grunnlinje: nok til at ligningen
+% puster uten å løsrive seg fra setningen sin. Bare
+% avstanden over krymper etter en kort linje, siden en kort
+% linje allerede gir luft av seg selv. Avstanden under er
+% alltid full, så luften under en ligning avhenger aldri av
+% hva som kom før.
 %
-% belowdisplayshortskip:
-%   Etter en ligning bør det alltid være lik luft
-%   uansett hva som stod over.
-%
-% Settes via \AtBeginDocument: LaTeX sin \normalsize (kjørt av
-% \begin{document}) nullstiller alle fire display-skip til
-% klassens standard, så verdier satt her i preamblet ville blitt
-% stille overstyrt. Ved å sette dem etter \normalsize trer de i kraft.
-% =================================================
+% \AtBeginDocument er ikke pynt. \begin{document} kjører
+% \normalsize, som nullstiller alle fire skipene til
+% klassens standard, så verdier satt i preamblet blir stille
+% forkastet.
+% ============================================================
 \AtBeginDocument{%
   \setlength{\abovedisplayskip}{10pt plus 3pt minus 2pt}%
   \setlength{\belowdisplayskip}{10pt plus 3pt minus 2pt}%
@@ -130,12 +128,14 @@
 }
 
 
-% =================================================
+% ============================================================
 % SEKSJONERING
 %
-% Fete overskrifter uten kapitéler — tydelig
-% hierarki i smale kolonner.
-% =================================================
+% To nivåer, begge fete og oppreiste, og nummererte. En smal
+% spalte har ikke plass til displaystørrelser, så hierarkiet
+% bæres av ett steg ned fra kroppsstørrelse på underseksjonen
+% og av luften over hver overskrift.
+% ============================================================
 \RequirePackage{titlesec}
 
 % Seksjoner: fete, litt større
@@ -155,19 +155,22 @@
   {0pt}{3.0ex plus 0.8ex minus .3ex}{1.2ex plus .3ex}
 
 
-% =================================================
+% ============================================================
 % FLYTPARAMETERE
 %
-% LaTeX sine standardverdier er for konservative for
-% tokolonne-artikler og gir ofte store tomrom.
-% Disse verdiene tillater figurer å fylle mer av
-% siden når det er nødvendig.
+% LaTeX sine standardverdier er forsiktige nok til at en
+% tokolonneartikkel ofte ender med halvtomme sider. Disse
+% lar en figur ta mer av siden før LaTeX gir opp og utsetter
+% den.
 %
-%  topfraction:    maks andel av sidetopp til floats
-%  bottomfraction: maks andel av sidebunn til floats
-%  textfraction:   minste andel tekst på side med floats
-%  floatpagefraction: minst fylling for egen float-side
-% =================================================
+%   topfraction         mest floats kan ta av en sidetopp
+%   bottomfraction      mest de kan ta av en sidebunn
+%   textfraction        minst tekst en blandet side må ha
+%   floatpagefraction   minst en ren float-side må fylle
+%
+% dbl*-variantene er de samme grensene for figure*, som
+% spenner over begge spaltene.
+% ============================================================
 \renewcommand{\topfraction}{0.90}
 \renewcommand{\bottomfraction}{0.80}
 \renewcommand{\textfraction}{0.10}
@@ -183,16 +186,17 @@
 \setlength{\dblfloatsep}{12pt plus 3pt minus 2pt}
 
 
-% =================================================
+% ============================================================
 % FIGURTEKSTER
 %
-% font=small      -- ett steg under kroppstekst (JHEP/CUP-standard)
-% labelfont=bf    -- fet «Figur 1.»-etikett (JHEP/CUP-standard)
-% labelsep=period -- punktum etter nummeret, ikke kolon (JHEP-stil)
-% justification: default (singlelinecheck=true) -- enkeltlinjer
-%   sentreres automatisk; flerlinjers tekst justeres
-% skip=6pt        -- tettere luft passer tospaltesoppsettet
-% =================================================
+%   font=small       ett steg under kroppsteksten
+%   labelfont=bf     fet «Figur 1.»-etikett
+%   labelsep=period  punktum etter nummeret, ikke kolon
+%   skip=6pt         tettere luft, tilpasset den smale spalta
+%
+% Figurtekster på én linje sentrerer seg selv; lengre tekst
+% blir justert.
+% ============================================================
 \RequirePackage[
   font=small,
   labelfont=bf,
@@ -202,36 +206,44 @@
 ]{caption}
 
 
-% =================================================
+% ============================================================
 % TABELLER
 %
-% booktabs gir profesjonelle horisontale streker
-% (\toprule, \midrule, \bottomrule — aldri vertikale).
-% Litt ekstra vertikal luft rundt radene gir tabellene
-% pusterom.
-% =================================================
+% booktabs: \toprule, \midrule, \bottomrule, og ingen
+% vertikale streker i det hele tatt. arraystretch åpner
+% radene 15 %, som en tabell uten vertikale streker trenger
+% for å holde seg lesbar.
+% ============================================================
 \RequirePackage{booktabs}
 \renewcommand{\arraystretch}{1.15}
 
 
-% =================================================
+% ============================================================
 % GRAFIKK
-% =================================================
+%
+% \includegraphics. main.tex setter \graphicspath om
+% figurene ligger i en egen mappe.
+% ============================================================
 \RequirePackage{graphicx}
 
 
-% =================================================
+% ============================================================
 % SIDESTIL
-% =================================================
+%
+% Ingen løpende topptekst; sidetallet sentrert nederst.
+% ============================================================
 \pagestyle{plain}
 
 
-% =================================================
+% ============================================================
 % TITTELBLOKK
 %
-% Tittel i full bredde over tokolonne-kroppen.
-% Bruker \twocolumn[\maketitle]-idiomet.
-% =================================================
+%   \twocolumn[\maketitle \begin{ingress} ... \end{ingress}]
+%
+% Tittelen spenner over hele sidebredden over spaltene, og
+% det er dét \twocolumn[...]-argumentet er til for. Tittel i
+% kapiteler, forfatter og dato under.
+% ============================================================
 \makeatletter
 \renewcommand{\maketitle}{%
   \thispagestyle{plain}
@@ -247,13 +259,16 @@
 \makeatother
 
 
-% =================================================
-% INGRESSMILJØ
+% ============================================================
+% INGRESS
 %
-% Fett innledningsavsnitt i full sidebredde.
-% Plasseres rett etter \maketitle, inne i
-% \twocolumn[...]-argumentet.
-% =================================================
+%   \begin{ingress} ... \end{ingress}
+%
+% Et fett innledningsavsnitt over hele sidebredden, satt til
+% 92 % av satsbredden så det leses som en blokk og ikke som
+% et første avsnitt. Plasseres rett etter \maketitle, inne i
+% det samme \twocolumn[...]-argumentet.
+% ============================================================
 \newenvironment{ingress}{%
   \par
   \centering
@@ -267,20 +282,25 @@
 }
 
 
-% =================================================
-% REFERANSER
+% ============================================================
+% SITERINGER
+%
+%   \cite{nokkel}         [1]
+%   \cite{a,b,c}          sortert og komprimert, [1-3]
+%   \bibliographystyle{unsrtnat}   i main.tex
 %
 % natbib må lastes før hyperref.
-% =================================================
+% ============================================================
 \RequirePackage[numbers,sort&compress]{natbib}
 
 
-% =================================================
+% ============================================================
 % HYPERLENKER
 %
-% Mørk rødfarge, trygg for utskrift.
-% Lastes sist.
-% =================================================
+% Lastes sist, fordi hyperref patcher kommandoer andre
+% pakker definerer. Mørkerød i stedet for standardblå: den
+% holder seg lesbar når artikkelen trykkes i gråtoner.
+% ============================================================
 \RequirePackage{xcolor}
 \definecolor{darkred}{RGB}{120,20,20}
 
@@ -294,7 +314,7 @@
 }
 
 
-% =================================================
+% ============================================================
 % SLUTT PÅ FIL
-% =================================================
+% ============================================================
 \endinput

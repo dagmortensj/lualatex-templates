@@ -2,38 +2,45 @@
 \ProvidesPackage{handoutstyle}[2026/08/26 v1.3 Handout-stil — rolig klassisk typografi for oppgavesett]
 
 % ============================================================
-% FILOSOFI
+% handoutstyle.sty — handouts og oppgavesett
 %
-% Denne stilen er for fysikk- / matematikknotater og
-% oppgavesett (ikke artikler eller monografier).
+% Til handouts i fysikk og matematikk: noen få sider, trykt
+% og delt ut. Samme familie som notat- og bokstilen, men
+% lettere — stille overskrifter, ingen innholdsfortegnelse,
+% ingen bibliografi. Legg til natbib og en .bib-fil om en
+% handout skulle trenge det.
 %
-% Typografisk hører den til samme familie som notat- og
-% bokstilen — rolig og klassisk — men lettere:
-% stille overskrifter, romslige marger, og ingen
-% innholdsfortegnelse eller bibliografi som standard.
+% Alt om hvordan handout-en ser ut settes her; main.tex
+% inneholder innholdet og eventuelle ekstra pakker.
 %
-% Designprinsipper:
-%  - konservativ typografi
-%  - forutsigbar avstand
-%  - minimale redefinisjoner
-%  - ingen skjøre liste-triks
+% Motor: LuaLaTeX. Fonten er OpenType og lastes gjennom
+% unicode-math, og det kan ikke pdflatex.
 %
-% Når du er i tvil, foretrekk stabilitet framfor lurerier.
+% Rekkefølgen nedenfor: fonter, geometri, avstander,
+% seksjonering, sidemøblering, farger, strukturerte
+% omgivelser, kodeeksempler, hyperref sist.
 % ============================================================
 
 
 % ============================================================
-% FONT & MIKROTYPOGRAFI
+% FONT OG MIKROTYPOGRAFI
+%
+% NewComputerModern, tekst og matematikk fra samme familie.
+% Det er Computer Modern tegnet på nytt med mer tyngde på
+% arket, noe som overlever laserutskrift der Latin Modern
+% blir tynn — og en handout blir nesten alltid skrevet ut.
+% Pakka gir deg Book-vekta som standard; [regular] ville
+% hentet tilbake den tynnere originalen.
+%
+% Den laster unicode-math selv, så det står ingen egen
+% \setmathfont her. Fet matematikk er \symbf, \symbfit,
+% \symbfup — \bm og \boldmath hører pdflatex-tida til og
+% virker ikke her. Se README.
+%
+% protrusion henger tegnsetting ut i margen, expansion
+% strekker glyffene brøkdeler av en prosent for å unngå løse
+% linjer, og tracking sperrer kapitelene i tittelblokka.
 % ============================================================
-% MOTOR: LuaLaTeX (ikke pdflatex).
-%
-% NewComputerModern beholder det velkjente TeX-uttrykket
-% uten Latin Moderns tynnhet. Pakka har Book-vekta som
-% standard; [regular] gir den gamle, tynnere CM-vekta.
-%
-% Fet matematikk er \symbf / \symbfit / \symbfup. \bm og
-% \boldmath hører pdflatex-tida til og virker ikke her
-% -- se README.
 \RequirePackage{newcomputermodern}
 
 \RequirePackage[
@@ -44,12 +51,18 @@
 
 
 % ============================================================
-% SIDEGEOMETRI
+% SIDEGEOMETRI (A4, SYMMETRISK)
+%
+% 3 cm hele veien rundt gir en satsbredde på 150 mm. Ved
+% 11pt er det 3,06 lilleboksalfabeter — bredere enn vinduet
+% på 1,8–2,4 som Bringhurst gir for løpende prosa. En
+% handout er mest oppgaver og viste ligninger heller enn
+% løpende prosa, og de vil ha bredden; kjegla nedenfor er
+% åpnet litt for å kompensere.
+%
+% Utvid margene til 4 cm for en satsbredde på 130 mm (2,65)
+% hvis en handout viser seg å bli mest tekst.
 % ============================================================
-%
-% A4-oppsett med romslige marger.
-% Optimalisert for utskrift og annotering.
-%
 \RequirePackage[
   a4paper,
   left=3.0cm,
@@ -60,40 +73,40 @@
 
 
 % ============================================================
-% AVSNITT & LINJEAVSTAND
+% AVSNITT OG KJEGLE
+%
+% Innrykkede avsnitt uten luft mellom dem, som i en bok.
+% \setstretch{1.04} tar grunnlinjen fra 13,6 pt til
+% 14,14 pt — litt mindre åpent enn notatstilen, noe som
+% passer et kortere dokument.
 % ============================================================
-%
-% Klassiske boklige avsnitt:
-%  - innrykk
-%  - ingen vertikal avsnittsavstand
-%
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{0pt}
 
-% Litt slakkere linjeavstand for lesbarhet
 \RequirePackage{setspace}
 \setstretch{1.04}
 
 
 % ============================================================
-% AVSTAND VED FRAMHEVEDE LIGNINGER
+% AVSTAND RUNDT VISTE LIGNINGER
+%
+% Ett hakk strammere enn bok- og notatstilen, for å passe et
+% dokument på noen få sider.
+%
+%   over   10pt     etter en kort innledende linje   6pt
+%   under  10pt     alltid                          10pt
+%
+% Bare avstanden over krymper etter en kort linje, siden en
+% kort linje allerede gir luft av seg selv — og den krymper
+% aldri til null, som er det klemte uttrykket klassens
+% standard (0pt) gir. Avstanden under er alltid full, så
+% luften under en ligning avhenger aldri av hva som kom før.
+%
+% \AtBeginDocument er ikke pynt. \begin{document} kjører
+% \normalsize, som nullstiller alle fire skipene til
+% klassens standard, så verdier satt i preamblet blir stille
+% forkastet.
 % ============================================================
-%
-% Litt luft rundt framhevede ligninger, ett hakk strammere enn
-% book-/notes-stilene for å passe kortere dokumenter. Bare OVER-
-% skipet krymper etter en kort innledende linje (en kort linje gir
-% allerede luft der), og aldri til null; UNDER-skipet er alltid
-% full verdi, så luften under en ligning aldri avhenger av hva som
-% stod over:
-%     over 10pt    over (etter kort linje)   6pt
-%     under 10pt   under (alltid)           10pt
-%
-% Settes via \AtBeginDocument: LaTeX sin \normalsize (kjørt av
-% \begin{document}) nullstiller alle fire display-skip til
-% klassens standard (der \abovedisplayshortskip er 0pt), så
-% verdier satt i preamblet ville blitt stille overstyrt. Ved å
-% sette dem etter \normalsize trer de i kraft.
-%
 \AtBeginDocument{%
   \setlength{\abovedisplayskip}{10pt plus 3pt minus 2pt}%
   \setlength{\belowdisplayskip}{10pt plus 3pt minus 2pt}%
@@ -105,30 +118,30 @@
 % ============================================================
 % FIGURTEKSTER
 %
-% font=small      -- ett steg under kroppstekst (JHEP/CUP-standard)
-% labelfont=bf    -- fet «Figur 1.»-etikett (JHEP/CUP-standard)
-% labelsep=period -- punktum etter nummeret, ikke kolon (JHEP-stil)
-% justification: default (singlelinecheck=true) -- enkeltlinjer
-%   sentreres automatisk; flerlinjers tekst justeres
+%   font=small       ett steg under kroppsteksten
+%   labelfont=bf     fet «Figur 1.»-etikett
+%   labelsep=period  punktum etter nummeret, ikke kolon
+%
+% Figurtekster på én linje sentrerer seg selv; lengre tekst
+% blir justert. Begge deler er caption sin standard.
 % ============================================================
 \RequirePackage[font=small,labelfont=bf,labelsep=period]{caption}
 
 
 % ============================================================
 % SEKSJONSOVERSKRIFTER
+%
+% To nivåer, fete og oppreiste, uten streker og uten
+% displaystørrelser:
+%
+%   seksjon        \large       ett steg over kroppstekst
+%   underseksjon   \normalsize  kroppsstørrelse
+%
+% Ett størrelsessteg er hele hierarkiet — på en handout på
+% to sider leses noe mer som roping. Luften over en
+% overskrift gjør resten av jobben. Nivå to er der for at
+% samme stil skal kunne bære forelesningsnotater.
 % ============================================================
-%
-% Overskrifter er bevisst stille:
-%  - ingen overdimensjonerte fonter
-%  - ingen dekorative streker
-%
-% To nivåer, slik at handout-en også kan brukes som
-% forelesningsnotater. Begge holder seg på eller over
-% kroppsstørrelse; hierarkiet bæres av ett størrelsessteg,
-% ikke av store displayfonter:
-%   seksjon     \large       (ett steg over kroppstekst)
-%   underseksjon \normalsize  (lik kroppstekst)
-%
 \RequirePackage{titlesec}
 
 % Seksjoner
@@ -141,7 +154,7 @@
   {6ex plus 2ex minus .8ex}
   {2ex plus .5ex}
 
-% Underseksjoner: mindre enn seksjoner, men ikke under kroppsstørrelse
+% Underseksjoner
 \titleformat{\subsection}
   {\normalfont\normalsize\bfseries}
   {\thesubsection}{0.6em}{}
@@ -154,20 +167,26 @@
 
 % ============================================================
 % SIDESTIL
+%
+% Ingen løpende topptekst; sidetallet sentrert nederst. For
+% å fjerne tallet helt trenger du både \pagestyle{empty} og
+% \thispagestyle{empty} etter \maketitle — se main.tex.
 % ============================================================
-%
-% Enkle sider: ingen topptekst, sentrert sidetall.
-%
 \pagestyle{plain}
 
 
 % ============================================================
 % TITTELBLOKK
+%
+%   \title{...}  \date{...}
+%   \maketitle
+%
+% Tittel og dato sentrert i sperrede kapiteler, ingen
+% forfatterlinje — en handout kjennes vanligvis igjen på
+% kurset sitt, og det hører hjemme i \date. \lsstyle er
+% microtypes tracking, og det er derfor microtype lastes med
+% tracking=true over.
 % ============================================================
-%
-% Enkelt, rolig titteloppsett.
-% Bruker \maketitle for robusthet.
-%
 \makeatletter
 \renewcommand{\maketitle}{%
   \thispagestyle{plain}
@@ -184,13 +203,18 @@
 
 % ============================================================
 % FARGER
+%
+% Tre farger med faste roller, så et dokument aldri trenger
+% å finne på en ny:
+%
+%   darkred      hyperlenker, fotnotelinje, \separator
+%   darkorange   figurer: streker, noder, fylte områder
+%   darkolive    figurer: andrefarge til kurver og fyll
+%
+% Hold darkred utenfor figurer — den leses som struktur, ikke
+% innhold. Svart og grå er tilgjengelig til akser og
+% sekundære etiketter.
 % ============================================================
-%
-% Trefargerspalett for figurer: darkred / darkorange / darkolive.
-%   darkred    -- fotnotelinje, strukturaksenter
-%   darkorange -- figuraksent: streker, noder, fyllte områder (TikZ)
-%   darkolive  -- figuraksent: andrefarge for kurver og fyll
-%
 \RequirePackage{xcolor}
 \definecolor{darkred}   {RGB}{120, 20,  20}
 \definecolor{darkorange}{RGB}{184, 92,   0}
@@ -199,32 +223,35 @@
 
 % ============================================================
 % TEOREMOMGIVELSER
+%
+%   \begin{teorem} ... \end{teorem}
+%   \begin{definisjon} ... \end{definisjon}
+%   \begin{merknad} ... \end{merknad}
+%
+% Alle tre deler én teller, knyttet til seksjonen: Teorem
+% 1.1, Definisjon 1.2, Merknad 1.3. Legg til flere med
+% \newtheorem{lemma}[teorem]{Lemma} i main.tex for å holde
+% dem i samme rekke.
+%
+% \proofname settes til «Bevis» her, siden babel ikke
+% nødvendigvis oversetter den.
+%
+% amsthm lastes én gang her; oppgaveomgivelsen lenger ned
+% bruker den også.
 % ============================================================
-%
-% Standard strukturerte omgivelser for matematiske handouts:
-%   teorem       nummerert per seksjon (Teorem 1.1, ...)
-%   definisjon   deler teller med teorem
-%   merknad      deler teller med teorem
-%
-% amsthm ligger også til grunn for oppgaveomgivelsen nedenfor,
-% så den lastes én gang her. Etikettene er på norsk; bevis-
-% etiketten settes også her.
-%
 \RequirePackage{amsthm}
 
-% --- Luft rundt teorem-omgivelsene ---
-% amsthm setter avstanden over/under disse omgivelsene gjennom
-% hooken \thm@space@setup (standard: \topsep, en ganske stram
-% gummilengde). Vi hever den til en romsligere, utjevnet verdi slik
-% at teoremer, definisjoner og merknader leses som tydelige blokker
-% i stedet for å trenge seg mot teksten rundt. Bare den vertikale
-% avstanden røres — fonter, hode og innrykk forblir nøyaktig som
-% amsthm definerer dem.
+% --- Luft rundt dem ---
+% amsthms standard er \topsep, stram nok til at et teorem
+% trenger seg mot prosaen rundt. \thm@space@setup hever den
+% og jevner ut over og under. Bare vertikal avstand røres:
+% fonter, hode og innrykk står som amsthm setter dem.
 %
-% amsthms 'remark'-stil halverer i tillegg den arvede avstanden;
-% \th@remark settes på nytt for å droppe kun den halveringen (den
-% kursiverte hodefonten og den oppreiste brødfonten beholdes), slik
-% at merknader får samme avstand som teoremer og definisjoner.
+% amsthms 'remark'-stil halverer så det den arver.
+% \th@remark defineres på nytt for å droppe kun den
+% halveringen — den kursiverte hodefonten og den oppreiste
+% brødfonten beholdes — så en merknad sitter på siden slik
+% et teorem gjør.
 \makeatletter
 \def\thm@space@setup{%
   \setlength\thm@preskip{2.8ex plus 1ex minus .4ex}%
@@ -247,21 +274,20 @@
 
 % ============================================================
 % SEPARATORLINJE
+%
+%   \separator
+%
+% En kort mørkerød linje med luft på begge sider, til et
+% temaskifte inne i en seksjon, eller mellom eksempler og
+% etter oppgaver. Den er stillere enn en overskrift, og det
+% er poenget: den markerer et brudd uten å ta et nivå i
+% hierarkiet.
+%
+% Den låner fotnotelinjens bredde, lagret her som
+% \orig@footnoterule før hyperref lenger ned kan redefinere
+% \footnoterule. Den innledende \par lukker et åpent avsnitt,
+% så \separator er trygg rett etter løpende tekst.
 % ============================================================
-%
-% En linje med samme bredde som fotnotelinjen, satt i
-% mørkerød. Bruk mellom innholdsblokker (etter oppgaver,
-% mellom eksempler, temaskifter innen en seksjon, ...).
-% Et visuelt signal som ikke konkurrerer med overskriftene.
-%
-% \let\orig@footnoterule\footnoterule
-%   Lagrer den opprinnelige fotnotelinjen før en senere
-%   pakke kan redefinere \footnoterule, så vi kan gjenbruke
-%   bredden her uansett.
-%
-% Den innledende \par lukker et åpent avsnitt, så \separator
-% er trygg å kalle rett etter løpende tekst.
-%
 \makeatletter
 \let\orig@footnoterule\footnoterule
 \newcommand{\separator}{%
@@ -274,15 +300,24 @@
 
 
 % ============================================================
-% OPPGAVEOMGIVELSE
+% OPPGAVER
+%
+%   \begin{oppgave}[Valgfri tittel]
+%   Oppgavetekst.
+%   \begin{deloppgaver}
+%     \item Første del.
+%     \item Andre del.
+%   \end{deloppgaver}
+%   \end{oppgave}
+%
+% Nummerert per seksjon og talt uavhengig av teoremer, så
+% Oppgave 1.1 kan stå ved siden av Teorem 1.4. Med tittel
+% leser hodet «Oppgave 1.1 - Tittel». Kroppen ligger i en
+% quote-omgivelse, så den er innrykket fra prosaen.
+%
+% Delt med notatstilen, så et oppgavesett kan flyttes mellom
+% de to uendret.
 % ============================================================
-%
-% Oppgaver er implementert med amsthm (lastet ovenfor):
-%  - nummerert per seksjon (Oppgave 2.1, 2.2, ...)
-%  - valgfri tittel: \begin{oppgave}[Tittel] gir
-%    "Oppgave 1.1 - Tittel" med tittelen i fet
-%  - lett innrykket via en quote-omgivelse
-%
 \newtheoremstyle{handoutex}
   {1ex}              % avstand over
   {1ex}              % avstand under
@@ -297,19 +332,16 @@
 \newtheorem{oppgaveinner}{Oppgave}[section]
 \renewcommand{\theoppgaveinner}{\thesection.\arabic{oppgaveinner}}
 
-% Gjenopprett amsthms vanlige standard, så en eventuell
-% teoremomgivelse lagt til senere (i main.tex) starter fra
-% \theoremstyle{plain} i stedet for oppgavestilen.
+% Tilbake til amsthms standard, så en \newtheorem lagt til
+% senere i main.tex starter fra 'plain' og ikke fra
+% oppgavestilen.
 \theoremstyle{plain}
 
-% amsthm-stilen setter kroppen på en ny linje etter den fete
-% etiketten ({\newline}-skillet over). \leavevmode\par\vspace{-2ex}
-% trekker så kroppen opp til et tett mellomrom under etiketten.
-% -2ex er font-relativ, så den følger linjehøyden på tvers av
+% {\newline}-skillet over setter kroppen på egen linje under
+% den fete etiketten; \leavevmode\par\vspace{-2ex} trekker
+% den så opp igjen til et tett mellomrom. -2ex er
+% font-relativ, så den følger linjehøyden på tvers av
 % størrelser.
-%
-% Støtter valgfri tittel: \begin{oppgave}[Tittel]
-% gir "Oppgave 1.1 - Tittel" med tittelen i fet.
 \newenvironment{oppgave}[1][]
 {%
   \par
@@ -328,21 +360,17 @@
 
 
 % ============================================================
-% DELOPPGAVER (a), b), c))
-% ============================================================
+% DELOPPGAVER — a), b), c)
 %
-% Deloppgaver bruker en egen 'deloppgaver'-liste i stedet for
-% å redefinere enumerate, så vanlige nummererte lister fortsatt
-% er tilgjengelige til vanlig bruk.
-%
-% Forklarende tekst mellom deloppgaver skrives som vanlig tekst
-% utenfor omgivelsen; nummereringen gjenopptas så med
+% En egen liste i stedet for en global \setlist, så vanlige
+% enumerate-lister ellers beholder standardnummereringen.
+% Skriv forklarende tekst mellom delene som vanlig tekst
+% utenfor omgivelsen, og ta bokstavene opp igjen med
 % \begin{deloppgaver}[resume].
-%
+% ============================================================
 \RequirePackage{enumitem}
 
 % \newlist{<navn>}{<type>}{<maks dybde>}
-% Definerer 'deloppgaver' som en enumerate-type liste, ett nivå.
 \newlist{deloppgaver}{enumerate}{1}
 
 \setlist[deloppgaver]{%
@@ -357,24 +385,26 @@
 
 % ============================================================
 % KODEEKSEMPLER
-% ============================================================
 %
-% Python-kodeblokker med Gruvbox Light syntaksutheving via
-% listings-pakken. Krever ingen shell-escape eller eksterne
-% verktøy; alt er selvforsynt.
+%   \begin{python}
+%   def f(x):
+%       return x**2
+%   \end{python}
 %
-% Gruvbox Light Hard-palett (gruvbox.dayle.io):
+% Python med Gruvbox Light-utheving, linjenummer og en linje
+% over og under. listings gjør parsingen selv, så det trengs
+% ingen shell-escape og ingen eksterne verktøy — dokumentet
+% kompilerer hvor som helst.
+%
+% æ, ø og å er kartlagt eksplisitt nederst i stilen:
+% listings leser inndata byte for byte og ville ellers
+% mistet dem i kodekommentarer.
+%
+% Gruvbox Light Hard (gruvbox.dayle.io):
 %   bakgrunn    #fdfcf2   forgrunn    #3c3836
 %   nøkkelord   #9d0006   strenger    #79740e
 %   kommentarer #928374   tall        #b57614
-%   innebygde   #076678
-%
-% Bruk:
-%   \begin{python}
-%     def f(x):
-%         return x**2
-%   \end{python}
-%
+% ============================================================
 \RequirePackage{listings}
 
 \definecolor{gruvbg}    {HTML}{fdfcf2}
@@ -419,10 +449,13 @@
 
 % ============================================================
 % HYPERLENKER
+%
+% Lastes sist, fordi hyperref patcher kommandoer andre
+% pakker definerer. Mørkerød i stedet for standardblå: den
+% holder seg lesbar når handout-en kopieres. Sett
+% \hypersetup{hidelinks} i main.tex for ingen farge i det
+% hele tatt.
 % ============================================================
-%
-% Lastet til slutt. Mørkerøde lenker, egnet for trykk.
-%
 \RequirePackage{hyperref}
 \hypersetup{
   colorlinks=true,
