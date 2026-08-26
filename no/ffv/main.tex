@@ -1,0 +1,171 @@
+\documentclass[a4paper,10pt,twocolumn]{article}
+
+% =================================================
+% ARTIKKELSTIL
+% =================================================
+\usepackage{ffvstil}
+% Kommenter inn for å fjerne lenkefarger (ren typografi, ingen farger):
+% \hypersetup{hidelinks}
+
+% =================================================
+% FYSIKK OG MATEMATIKK
+% =================================================
+\usepackage{amsmath}       % ikke amssymb: unicode-math leverer
+                           % symbolene, og lastes begge brekker
+                           % bygget (\eth already defined)
+                           % mathtools lastes IKKE: se README for
+                           % alternativene som er native i unicode-math
+                           % ikke bm: inkompatibel med unicode-math.
+                           % Fet matte er \symbf / \symbfit / \symbfup.
+
+% =================================================
+% EGNE PAKKER OG KOMMANDOER
+%
+% Legg inn ekstra pakker og egendefinerte kommandoer
+% her. Eksempler som ofte er nyttige er kommentert ut
+% nedenfor — fjern %-tegnet for å aktivere dem.
+% =================================================
+
+% --- Ekstra matematiske pakker ---
+% \usepackage{slashed}        % Feynman-slash for Dirac-matriser
+% \usepackage{tensor}         % Pene tensorindekser
+% \usepackage{physics2}       % så \usephysicsmodule{braket,ab.legacy}
+%                             % for \ket, \bra, \abs, \norm
+% \usepackage{cancel}         % Overstrøket matematikk
+
+% --- Ekstra tekst- og layoutpakker ---
+% \usepackage{enumitem}       % Finkontroll over lister
+% \usepackage{siunitx}        % SI-enheter: \qty{9.81}{\metre\per\second\squared}
+% \usepackage{epigraph}       % Sitater ved seksjonsstart
+
+% --- Egne kommandoer ---
+% \newcommand{\R}{\mathbb{R}}
+% \newcommand{\C}{\mathbb{C}}
+% \newcommand{\mean}[1]{\langle #1 \rangle}
+
+% --- Egne operatorer ---
+% \DeclareMathOperator{\Tr}{Tr}
+% \DeclareMathOperator{\sgn}{sgn}
+
+% =================================================
+% METADATA — fyll inn her
+% =================================================
+\title{ARTIKKELTITTEL\\[0.4em]
+{\large Undertittel om ønskelig}}
+\author{Fornavn Etternavn}
+\date{\today}
+
+% =================================================
+% DOKUMENT
+% =================================================
+\begin{document}
+
+\twocolumn[
+  \maketitle
+  \begin{ingress}
+    Skriv ingressen her. Ingressen er et kort, selvstendig avsnitt i
+    fet skrift som gir leseren et raskt overblikk over hva artikkelen
+    handler om, hva som er det sentrale argumentet, og hvorfor det
+    er interessant. To til fire setninger er vanligvis passe.
+    Siteringer er tillatt også her~\cite{eksempel2024}.
+  \end{ingress}
+]
+
+% =================================================
+\section{Innledning}
+
+Skriv innledningen her. Introduser problemstillingen, gi nødvendig
+bakgrunn, og avslutt gjerne med en kort oversikt over artikkelens
+struktur. Avsnitt markeres med innrykk --- ikke med ekstra
+linjeskift.
+
+% =================================================
+\section{Seksjon to}
+
+Matematikk settes inline som $E = mc^2$ eller som nummererte
+ligninger:
+\begin{equation}
+  \hat{H}\psi = E\psi.
+  \label{eq:eksempel}
+\end{equation}
+Referer til ligninger med \eqref{eq:eksempel} og til
+referanser med \cite{eksempel2024}.
+
+% -------------------------------------------------
+% FIGUR — enkolonne (flyter inn i én kolonne)
+% -------------------------------------------------
+\begin{figure}[t]
+  \centering
+  % Bytt ut med din egen figur:
+  % \includegraphics[width=\linewidth]{filnavn}
+  \rule{0.9\linewidth}{3cm}     % plassholder
+  \caption{Dette er en figurtekst for en enkolonne-figur.
+           Teksten brytes automatisk og innrykkes pent under
+           etiketten.}
+  \label{fig:enkel}
+\end{figure}
+
+Henvis til figurer i teksten: figur~\ref{fig:enkel} viser et
+eksempel. Plasseringsargumentet \texttt{[t]} ber LaTeX om å
+plassere figuren øverst på en kolonne --- de vanligste
+alternativene er \texttt{t} (topp), \texttt{b} (bunn),
+\texttt{h} (her om mulig), og \texttt{p} (egen side).
+
+\subsection{Underseksjon}
+
+Bruk underseksjoner for å strukturere lengre seksjoner.
+
+% -------------------------------------------------
+% FIGUR — tokolonne (spenner over begge kolonner)
+% -------------------------------------------------
+\begin{figure*}[t]
+  \centering
+  % Bytt ut med din egen figur:
+  % \includegraphics[width=0.9\linewidth]{filnavn}
+  \rule{0.9\linewidth}{3.5cm}   % plassholder
+  \caption{Dette er en tokolonne-figur som spenner over hele
+           sidebredden. Brukes for brede illustrasjoner, plott
+           med mange paneler, eller figurer som krever mye plass
+           for å være lesbare. \texttt{figure*}-miljøet flyter
+           kun til topp eller bunn av sider.}
+  \label{fig:bred}
+\end{figure*}
+
+% -------------------------------------------------
+% TABELL
+% -------------------------------------------------
+\begin{table}[t]
+  \centering
+  \caption{Et eksempel på en smakfull tabell med \texttt{booktabs}.
+           Vertikale streker unngås; horisontale streker brukes
+           sparsomt (topp, mellom hode og data, bunn).}
+  \label{tab:eksempel}
+  \begin{tabular}{lcr}
+    \toprule
+    Størrelse & Symbol & Verdi \\
+    \midrule
+    Lysets hastighet   & $c$      & $2{,}998 \times 10^8$ m/s \\
+    Plancks konstant   & $\hbar$  & $1{,}055 \times 10^{-34}$ Js \\
+    Elementærladning   & $e$      & $1{,}602 \times 10^{-19}$ C \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% =================================================
+\section{Avslutning}
+
+Oppsummer hovedresultatene og pek gjerne mot åpne spørsmål eller
+videre arbeid.
+
+% =================================================
+% REFERANSER
+% Kompileringsrekkefølge:
+%   lualatex main
+%   bibtex   main
+%   lualatex main
+%   lualatex main
+% =================================================
+\bibliographystyle{unsrtnat}
+\bibliography{referanser}
+
+\end{document}

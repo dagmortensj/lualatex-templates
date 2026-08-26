@@ -1,0 +1,187 @@
+% =================================================
+% HOVEDDOKUMENT (BOKMAL)
+% =================================================
+%
+% Denne filen definerer den logiske og strukturelle
+% oppbyggingen av boken.
+%
+% Det typografiske utseendet er definert i sin helhet
+% i bookstyle.sty og bør ikke endres her.
+%
+% =================================================
+
+
+% MOTOR: kompiler med LuaLaTeX, f.eks.
+%   latexmk -lualatex main.tex
+
+% ------------------ Endelig trykk -----------------
+\documentclass[12pt,twoside,b5paper]{book}
+
+% ------------------ Utkast / skriving -------------
+% Samme satsbredde og ombrekking som B5, med 4 cm
+% marger til notater.
+% \documentclass[12pt,twoside,a4paper]{book}
+
+
+% =================================================
+% LAST INN BOKSTIL
+% =================================================
+\usepackage{bokstil}
+
+
+% =================================================
+% SPRÅK
+% =================================================
+\usepackage[norsk]{babel}
+
+
+% =================================================
+% EGENDEFINERTE PAKKER
+%
+% Legg til prosjektspesifikke pakker her.
+% Ikke sett pakker andre steder i filen.
+% =================================================
+
+\usepackage{amsmath}                 % matematikk
+                                     % (ikke amssymb: unicode-math
+                                     %  leverer symbolene)
+\usepackage{graphicx}                % figurer
+\graphicspath{{figurer/}}            % figurer ligger i figurer/
+\usepackage{booktabs}                % tabeller
+
+
+% =================================================
+% EGENDEFINERTE KOMMANDOER
+%
+% Prosjektspesifikke makroer.
+% =================================================
+
+% \newcommand{\dd}{\mathrm{d}}
+% \newcommand{\ii}{\mathrm{i}}
+
+
+% =================================================
+% DOKUMENT
+% =================================================
+\begin{document}
+
+
+% =================================================
+% FRONTMATERIALE
+% =================================================
+\frontmatter
+\pagenumbering{roman}
+\pagestyle{frontmatterstyle}
+
+
+% ------------------ Tittelside --------------------
+\title{Boktittel}
+\subtitle{En valgfri undertittel}
+\author{Forfatternavn}
+\date{\the\year}
+
+\booktitlepage
+\thispagestyle{empty}
+
+
+% ------------------ Tom verso ---------------------
+\clearpage
+\null
+\thispagestyle{empty}
+\clearpage
+
+
+% ------------------ Dedikasjon --------------------
+\dedicationpage{Til noen.}
+
+
+% ------------------ Innholdsfortegnelse -----------
+\booktoc
+\cleardoublepage
+
+
+% ------------------ Forord ------------------------
+\frontchapter{Forord}
+\noindent
+Dette er forordet til boken. Det introduserer forfatterens
+motivasjon, tiltenkte leserkrets og tilnærming. Et forord
+taler i forfatterens egen stemme og er vanligvis kort ---
+to til fire sider.
+
+Et nytt avsnitt fortsetter samtalen. Forordet er stedet
+hvor man kan forklare hvordan boken ble til, hva som gjør
+denne behandlingen forskjellig, og hvilke forutsetninger
+som gjøres om leseren.
+
+En bokmal bruker plassholdertekst som dette slik at
+oppsettet kan inspiseres før selve skrivingen begynner.
+Bytt ut denne teksten med ditt eget forord.
+
+\cleardoublepage
+
+
+% ------------------ Takk --------------------------
+\frontchapter{Takk}
+\noindent
+Takksigelser plasseres konvensjonelt i frontmaterialet,
+like etter forordet. De takker kolleger, institusjoner,
+finansieringsorganer og familiemedlemmer som har støttet
+arbeidet.
+
+En kort, oppriktig takk er generelt å foretrekke fremfor
+en uttømmende. To til fire avsnitt er typisk.
+
+\cleardoublepage
+
+
+% =================================================
+% HOVEDMATERIALE
+% =================================================
+\mainmatter
+\pagestyle{chapterstyle}
+
+
+% ------------------ Innledning --------------------
+\chapter{Innledning}
+\chapteropening{D}{ette er åpningssetningen}
+til innledningen, satt med initial og kapiteler på de
+første ordene. Innledningen legger ut bokens struktur,
+motiverer de sentrale spørsmålene, og forhåndsviser
+argumentene som vil bli utviklet i kapitlene som følger.
+
+I et arbeidsmanuskript ville dette kapittelet kartlegge
+landskapet, definere nøkkelbegreper, og sette forventninger
+til leseren. Det kan ende med en kort oversikt over
+kapitlene som kommer --- et veikart som orienterer leseren
+før de møter det tekniske stoffet.
+
+
+% ------------------ Del I -------------------------
+\part{Første del}
+
+\chapter{Kapitteltittel}
+\input{innhold/kapittel1}
+
+
+% ------------------ Del II ------------------------
+\part{Andre del}
+
+
+% ------------------ Del III -----------------------
+\part{Tredje del}
+
+
+% =================================================
+% BAKMATERIALE
+% =================================================
+\backmatter
+
+% ------------------ Bibliografi -------------------
+\bibliographystyle{unsrt}
+\bibliography{referanser}
+
+% ------------------ Indeks ------------------------
+% \printindex
+
+
+\end{document}

@@ -1,0 +1,560 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notesstyle}[2026/08/26 v1.6 Notes style — CUP-inspired book typography in article form]
+
+% ============================================================
+% PHILOSOPHY
+%
+% This style is for long-form theoretical physics and
+% mathematics NOTES (article length, not monographs or
+% papers).
+%
+% Typographically it mirrors the companion book style:
+% a CUP-inspired classic look adapted to article format,
+% with a JHEP-style framed table of contents and numbered
+% citations in brackets.
+%
+% Design priorities:
+%  - calm vertical rhythm
+%  - readable mathematics
+%  - strong but quiet structure
+%  - typographic consistency
+%
+% The style is intentionally conservative.
+%
+% Load order follows the usual convention:
+% encoding/fonts, colours, geometry and spacing,
+% sectioning, page furniture, structured environments,
+% citations, and hyperref last.
+% ============================================================
+
+
+% ============================================================
+% FONT & MICROTYPOGRAPHY
+% ============================================================
+% ENGINE: LuaLaTeX (not pdflatex).
+%
+% NewComputerModern keeps the familiar TeX look without
+% Latin Modern's thinness. The package defaults to the
+% Book weight; [regular] would give the old, thinner CM.
+%
+% Bold maths is \symbf / \symbfit / \symbfup. \bm and
+% \boldmath are pdflatex-era tools and do not work here
+% -- see the README.
+\RequirePackage{newcomputermodern}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% COLORS
+%
+% Three-color figure palette: darkred / darkorange / darkolive.
+%   darkred    -- hyperlinks, footnote rule, structural accents
+%   darkorange -- figure accent: strokes, nodes, filled areas (TikZ)
+%   darkolive  -- figure accent: second color for curves and fills
+%
+% Defined early so darkred is available to the separator
+% rule and to hyperref alike.
+% ============================================================
+\RequirePackage{xcolor}
+\definecolor{darkred}   {RGB}{120, 20,  20}
+\definecolor{darkorange}{RGB}{184, 92,   0}
+\definecolor{darkolive} {RGB}{ 74,107,  18}
+
+
+% ============================================================
+% PAGE GEOMETRY (A4, SYMMETRIC)
+%
+% Optimized for:
+%  - printed notes
+%  - long derivations
+%  - margin annotations if needed
+% ============================================================
+\RequirePackage[
+  a4paper,
+  left=3.0cm,
+  right=3.0cm,
+  top=2.7cm,
+  bottom=3.0cm
+]{geometry}
+
+
+% ============================================================
+% PARAGRAPH & LINE SPACING
+%
+% Classical book-like paragraphs:
+%  - indentation
+%  - no paragraph skip
+% ============================================================
+\setlength{\parindent}{15pt}
+\setlength{\parskip}{0pt}
+
+\RequirePackage{setspace}
+\setstretch{1.07}
+
+
+% ============================================================
+% DISPLAYED EQUATION SPACING
+%
+% Gentle, CUP/JHEP-style spacing, shared with the book style so the
+% two read as a family. Only the ABOVE skip shrinks after a short
+% lead-in line (a short line already leaves trailing space), and
+% never to zero; the BELOW skip is always the full value, so the
+% gap under an equation never depends on what came above it:
+%     above 12pt   above (after short line)  7pt
+%     below 12pt   below (always)           12pt
+%
+% These MUST be applied via \AtBeginDocument. LaTeX's \normalsize
+% — invoked by \begin{document} — resets all four display skips to
+% the class defaults (whose \abovedisplayshortskip is 0pt, the
+% cramped look we are avoiding), so values set here in the preamble
+% would be silently overridden. Applying them after \normalsize has
+% run makes them take effect; later size changes are grouped and
+% restore these values on exit.
+% ============================================================
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{12pt plus 3pt minus 3pt}%
+  \setlength{\belowdisplayskip}{12pt plus 3pt minus 3pt}%
+  \setlength{\abovedisplayshortskip}{7pt plus 3pt minus 3pt}%
+  \setlength{\belowdisplayshortskip}{12pt plus 3pt minus 3pt}%
+}
+
+
+% ============================================================
+% CAPTIONS
+%
+% font=small      -- one step below body text (JHEP/CUP standard)
+% labelfont=bf    -- bold "Figure 1." label (JHEP/CUP standard)
+% labelsep=period -- period after number, not colon (JHEP style)
+% justification: default (singlelinecheck=true) -- single-line captions
+%   are centred automatically; multi-line captions are justified
+% ============================================================
+\RequirePackage[font=small,labelfont=bf,labelsep=period]{caption}
+
+
+% ============================================================
+% SECTIONING
+%
+% Structural hierarchy is indicated by:
+%  - size
+%  - weight
+%
+% Headings are bold upright; small caps are reserved for
+% the title block.
+%
+% Subsubsections exist only as a quiet run-in level (see
+% below) and are kept out of the table of contents.
+% ============================================================
+\RequirePackage{titlesec}
+
+% Sections
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}{0.8em}{}
+
+\titlespacing*{\section}
+  {0pt}{4.5ex plus 1.5ex minus .5ex}{2.4ex plus .4ex}
+
+% Subsections
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}{0.8em}{}
+
+\titlespacing*{\subsection}
+  {0pt}{4.0ex plus 1.2ex minus .4ex}{1.8ex plus .4ex}
+
+% Subsubsections: a deliberately quiet run-in heading — the
+% title begins the paragraph and the text follows on the same
+% line. This signals the lowest level and discourages deeper
+% nesting. Kept out of the framed ToC via tocdepth below.
+\titleformat{\subsubsection}[runin]
+  {\normalfont\normalsize\bfseries}
+  {\thesubsubsection}{0.5em}{}
+
+\titlespacing*{\subsubsection}
+  {0pt}{2.2ex plus .6ex minus .2ex}{0.6em}
+
+% Number sections down to subsubsection, but list only
+% sections and subsections in the table of contents.
+\setcounter{tocdepth}{2}
+
+
+% ============================================================
+% PAGE STYLE
+%
+% Notes use plain pages:
+%  - no running headers
+%  - page number centered at bottom
+% ============================================================
+\pagestyle{plain}
+
+
+% ============================================================
+% TITLE BLOCK
+%
+% Calm, book-inspired title layout.
+% Uses \maketitle for simplicity and robustness.
+% ============================================================
+\makeatletter
+\renewcommand{\maketitle}{%
+  \thispagestyle{plain}
+  \vspace*{0.22\textheight}
+  \begingroup
+    % Title-page footnotes (\thanks) use symbols: *, \dag, \ddag, ...
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \begin{center}
+      {\huge\scshape \@title \par}
+      \vspace{2.8em}
+      {\large \@author \par}
+      \vspace{0.7em}
+      {\normalsize \@date \par}
+    \end{center}
+    \@thanks
+  \endgroup
+  \vspace{4.5em}%
+  \setcounter{footnote}{0}%
+  \global\let\@thanks\@empty
+}
+\makeatother
+
+
+% ============================================================
+% ABSTRACT
+%
+% Narrower text block, classic style.
+% Spacing is matched to overall notes rhythm.
+%
+% We redefine the abstract environment to:
+%  - centre a bold "Abstract" label
+%  - constrain the body to 88% of the text width
+%  - reset line spacing inside the block
+% ============================================================
+\makeatletter
+\renewenvironment{abstract}{%
+  \par
+  \centering
+  {\small\bfseries \abstractname\par}
+  \vspace{10pt}
+  \begin{minipage}{0.88\textwidth}
+    \small
+    \setstretch{1.0}
+}{%
+  \end{minipage}
+  \par
+  \vspace{2.2em}
+}
+\makeatother
+
+
+% ============================================================
+% TABLE OF CONTENTS
+%
+% JHEP-style frame: a horizontal rule above the "Contents"
+% title and another below the entries.
+%
+% ----------------------------
+% Contents
+% sections
+% ----------------------------
+%
+% Dot leaders are removed via tocloft's documented hooks.
+% The notes place the ToC on its own page (see main.tex).
+% ============================================================
+\RequirePackage{tocloft}
+
+% No dot leaders
+\renewcommand{\cftsecleader}{\hfill}
+\renewcommand{\cftsubsecleader}{\hfill}
+
+% Optional width tuning (safe defaults)
+\setlength{\cftsecnumwidth}{2.5em}
+\setlength{\cftsubsecnumwidth}{3.0em}
+
+% Framing rules, exposed as \framedtoc. We deliberately do NOT
+% redefine \tableofcontents: wrapping it races with hyperref's
+% own setup of the coloured ToC links. Instead \framedtoc calls
+% the fully-initialised \tableofcontents at use time, with a rule
+% above the title and another below the entries. \rule boxes are
+% used because a bare \hrule before the title is dropped.
+% main.tex places \framedtoc on its own page.
+\newlength{\tocrulewidth}
+\setlength{\tocrulewidth}{0.4pt}
+
+\newcommand{\framedtoc}{%
+  \noindent\rule{\linewidth}{\tocrulewidth}\par
+  \vspace{1.0ex}%
+  \tableofcontents
+  \par\vspace{1.0ex}%
+  \noindent\rule{\linewidth}{\tocrulewidth}\par
+}
+
+
+% ============================================================
+% THEOREM-LIKE ENVIRONMENTS
+%
+% Standard structured environments for notes:
+%   theorem      numbered per section (Theorem 2.1, ...)
+%   definition   shares the theorem counter
+%   remark       shares the theorem counter
+%
+% amsthm also underpins the exercise environment below,
+% so it is loaded once here.
+%
+% Label names use \providecommand so they can be
+% localized before this style is loaded, e.g.
+%   \providecommand{\theoremname}{Teorem}
+% (matching the \exercisename hook used below).
+% ============================================================
+\RequirePackage{amsthm}
+
+\providecommand{\theoremname}{Theorem}
+\providecommand{\definitionname}{Definition}
+\providecommand{\remarkname}{Remark}
+
+% --- Breathing room around theorem-like environments ---
+% amsthm sets the space above/below these environments through the
+% \thm@space@setup hook (default: \topsep, a fairly tight rubber
+% length). We raise it to a more generous, equalized value so
+% theorems, definitions and remarks read as distinct blocks rather
+% than crowding the surrounding prose. Only vertical spacing is
+% touched — fonts, head format and indentation stay exactly as
+% amsthm defines them.
+%
+% amsthm's 'remark' style additionally halves the inherited space;
+% \th@remark is reset to drop only that halving (its italic head and
+% upright body are kept), so remarks match theorems and definitions.
+\makeatletter
+\def\thm@space@setup{%
+  \setlength\thm@preskip{2.8ex plus 1ex minus .4ex}%
+  \setlength\thm@postskip{\thm@preskip}%
+}
+\def\th@remark{\thm@headfont{\itshape}\normalfont}
+\makeatother
+
+\theoremstyle{plain}
+\newtheorem{theorem}{\theoremname}[section]
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{\definitionname}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{\remarkname}
+
+
+% ============================================================
+% SEPARATOR RULE
+%
+% A rule identical in width to the footnote rule, set in
+% dark red. Use between content blocks (after exercises,
+% between examples, topic shifts within a section, ...).
+% A visual cue that does not compete with the small-caps
+% section headings.
+%
+% \orig@footnoterule saves the original footnote rule
+% before hyperref (loaded below) can touch it, so the
+% separator width stays stable regardless of load order.
+%
+% The leading \par closes any open paragraph, so \separator
+% is safe to call directly after running text.
+% ============================================================
+\makeatletter
+\let\orig@footnoterule\footnoterule
+\newcommand{\separator}{%
+  \par
+  \vspace{3.5ex plus 1.5ex minus .5ex}
+  {\color{darkred}\orig@footnoterule}
+  \vspace{1.2ex}
+}
+\makeatother
+
+
+% ============================================================
+% EXERCISES
+%
+% Ported from handoutstyle so that notes can carry
+% problems alongside the main exposition.
+%
+% Provides:
+%   - exercise environment, numbered per section (Exercise 2.1, ...)
+%   - optional title: \begin{exercise}[Title] renders as
+%     "Exercise 1.1 - Title" with the title in bold
+%   - subproblems environment for a), b), c) parts
+%
+% The exercise label defaults to "Exercise". Override before
+% loading this style to use a different name:
+%   \providecommand{\exercisename}{Problem}
+%
+% amsthm is loaded above (THEOREM-LIKE ENVIRONMENTS);
+% enumitem powers the subproblems list.
+% ============================================================
+\RequirePackage{enumitem}
+
+% --- Exercise environment ---
+%
+% Numbered independently of theorems, per section (Exercise 2.1, ...).
+% Label name is overridable — see section comment above.
+\newtheoremstyle{notesex}
+  {1ex}              % space above
+  {1ex}              % space below
+  {\normalfont}      % body font
+  {0pt}              % indent
+  {\bfseries}        % head font
+  {}                 % head punctuation
+  {\newline}         % space between head and body
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ - \bfseries#3}}
+
+% Label name — override before \usepackage{notesstyle} to change.
+\providecommand{\exercisename}{Exercise}
+
+\theoremstyle{notesex}
+\newtheorem{exerciseinner}{\exercisename}[section]
+\renewcommand{\theexerciseinner}{\thesection.\arabic{exerciseinner}}
+
+% Restore amsthm's conventional default, so any extra
+% theorem-like environment added later (in main.tex) starts
+% from \theoremstyle{plain} rather than the exercise style.
+\theoremstyle{plain}
+
+% The amsthm style sets the body on a new line after the bold
+% label (the {\newline} head/body separator above). The
+% \leavevmode\par\vspace{-2ex} then pulls the body up to a
+% tight gap under the label. -2ex is font-relative, so it
+% tracks the line height across sizes.
+%
+% Supports an optional title: \begin{exercise}[Title]
+% renders as "Exercise 1.1 - Title" with the title in bold.
+\newenvironment{exercise}[1][]
+{%
+  \par
+  \begin{quote}
+  \def\tmp{#1}\ifx\tmp\empty
+    \begin{exerciseinner}\leavevmode\par\vspace{-2ex}
+  \else
+    \begin{exerciseinner}[#1]\leavevmode\par\vspace{-2ex}
+  \fi
+}
+{%
+  \end{exerciseinner}
+  \end{quote}
+  \vspace{3.5ex plus 1.5ex minus .8ex}
+}
+
+% --- Subproblems: a), b), c) ---
+%
+% A dedicated environment rather than a global \setlist
+% redefinition, so ordinary enumerate lists elsewhere in
+% the notes keep their default numbering. Numbering can be
+% resumed after intervening prose with [resume].
+\newlist{subproblems}{enumerate}{1}
+\setlist[subproblems]{%
+  label=\alph*),
+  leftmargin=2.2em,
+  labelsep=0.6em,
+  itemsep=0.8ex,
+  parsep=0.8ex,
+  topsep=0.8ex
+}
+
+
+% ============================================================
+% CODE LISTINGS
+%
+% Python code blocks with Gruvbox Light syntax highlighting
+% via the listings package. No shell-escape or external tools
+% required; everything is self-contained.
+%
+% Gruvbox Light Hard palette (gruvbox.dayle.io):
+%   background  #fdfcf2   foreground  #3c3836
+%   keywords    #9d0006   strings     #79740e
+%   comments    #928374   numbers     #b57614
+%   builtins    #076678
+%
+% Usage:
+%   \begin{python}
+%     def f(x):
+%         return x**2
+%   \end{python}
+% ============================================================
+\RequirePackage{listings}
+
+\definecolor{gruvbg}    {HTML}{fdfcf2}
+\definecolor{gruvfg}    {HTML}{3c3836}
+\definecolor{gruvkw}    {HTML}{9d0006}
+\definecolor{gruvstr}   {HTML}{79740e}
+\definecolor{gruvcom}   {HTML}{928374}
+\definecolor{gruvnum}   {HTML}{b57614}
+\definecolor{gruvbi}    {HTML}{076678}
+
+\lstdefinestyle{gruvboxlight}{
+  backgroundcolor   = \color{gruvbg},
+  basicstyle        = \small\ttfamily\color{gruvfg},
+  keywordstyle      = \color{gruvkw}\bfseries,
+  stringstyle       = \color{gruvstr},
+  commentstyle      = \color{gruvcom}\itshape,
+  numberstyle       = \color{gruvnum},
+  identifierstyle   = \color{gruvfg},
+  breaklines        = true,
+  showstringspaces  = false,
+  numbers           = left,
+  numbersep         = 10pt,
+  frame             = tb,
+  xleftmargin       = 2em,
+  xrightmargin      = 0em,
+  framexleftmargin  = 2em,
+  framexrightmargin = 0em,
+  aboveskip         = 2.4ex,
+  belowskip         = 2.4ex,
+  extendedchars     = true,
+  inputencoding     = utf8,
+  literate          =
+    {æ}{{\ae}}1 {ø}{{\o}}1 {å}{{\aa}}1
+    {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
+}
+
+\lstnewenvironment{python}
+  {\lstset{language=Python, style=gruvboxlight,
+           morekeywords={True,False,None,self}}}
+  {}
+
+
+% ============================================================
+% CITATIONS
+%
+% Numerical citations in square brackets, sorted and
+% compressed into ranges, e.g. \cite{a,b,c} -> [1-3].
+%
+% natbib must be loaded before hyperref.
+%
+% Usage:
+%   \cite{key}             [1]
+%   \cite{k1,k2,k3}        [1-3]
+%   \bibliographystyle{unsrtnat} in main.tex
+%   \bibliography{...}     in main.tex
+% ============================================================
+\RequirePackage[numbers,sort&compress]{natbib}
+
+
+% ============================================================
+% HYPERLINKS
+%
+% Dark red, print-safe. Loaded last, after all other
+% packages, as hyperref requires.
+% ============================================================
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkred,
+  citecolor=darkred,
+  urlcolor=darkred,
+  linktoc=page
+}
+
+
+% ============================================================
+% END OF FILE
+% ============================================================
+\endinput

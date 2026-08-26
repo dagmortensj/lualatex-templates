@@ -1,0 +1,302 @@
+% =================================================
+% HOVEDDOKUMENT (HANDOUT-MAL)
+% =================================================
+%
+% Notater og oppgavesett i fysikk og matematikk.
+%
+% Det typografiske utseendet er definert i handoutstyle.sty
+% og bør ikke endres her.
+%
+% =================================================
+
+
+\documentclass[11pt]{article}
+
+
+% =================================================
+% LAST INN HANDOUT-STIL
+% =================================================
+\usepackage{handoutstyle}
+
+
+% =================================================
+% SPRÅK
+% =================================================
+\usepackage[norsk]{babel}
+
+
+% =================================================
+% VALGFRIE HANDOUT-JUSTERINGER  (fjern % for å slå på)
+% =================================================
+
+% --- Av med avsnittsinnrykk ---
+% Bruk parskip, ikke bare \parindent=0pt: malen nuller også
+% \parskip, så parindent alene gir avsnitt uten luft mellom.
+% \usepackage{parskip}
+
+% --- Av med sidetall (trenger BEGGE linjer) ---
+% \maketitle tvinger "plain" på side 1, så fjern også %-tegnet på
+% \thispagestyle{empty} etter \maketitle for å fjerne tallet der.
+% \pagestyle{empty}
+
+
+% =================================================
+% EGENDEFINERTE PAKKER
+%
+% Legg til prosjektspesifikke pakker her.
+% Ikke sett pakker andre steder i filen.
+% =================================================
+
+% --- Matematikk (standard) ---
+\usepackage{amsmath}                % ikke amssymb: unicode-math
+                                    % leverer symbolene
+% mathtools lastes IKKE -- se README for alternativene
+% som er native i unicode-math
+
+% --- Vektorer: \vv{F}, flat pil som spenner over hele symbolet ---
+\usepackage[e]{esvect}
+% esvect sin fontdefinisjon lister bare eksakte størrelser
+% (5, 6, ..., 10 pt), mens unicode-math ber om brøkne mattestørrelser
+% -- NewCM sin scriptscript er 0,50 x 10,95 = 5,475 pt -- og LaTeX
+% bytter bare stille innenfor 0,4 pt. Sammenhengende intervaller
+% dekker alle størrelser. Dette er samme fiks som forfatteren av
+% overarrows tok inn upstream.
+\DeclareFontFamily{U}{esvect}{}
+\DeclareFontShape{U}{esvect}{m}{n}{%
+  <-5.5>    vect5
+  <5.5-6.5> vect6
+  <6.5-7.5> vect7
+  <7.5-8.5> vect8
+  <8.5-9.5> vect9
+  <9.5->    vect10
+}{}
+
+% --- Enheter: \qty{9.81}{\metre\per\second\squared} ---
+\usepackage{siunitx}
+\sisetup{output-decimal-marker={,},   % norsk desimalkomma
+         range-phrase={ til },        % \qtyrange: "10 km til 20 km"
+         list-final-separator={ og }, % \qtylist: "1 V, 2 V og 3 V"
+         list-pair-separator={ og },
+         per-mode=symbol,             % m/s^2, ikke m s^-2
+         separate-uncertainty=true}   % (25,3 +- 0,4) grader C
+
+% --- Tensorindekser: \tensor{R}{^\rho_\sigma_\mu_\nu} ---
+\usepackage{tensor}
+
+% --- Bra-ket: \bra{\psi}, \ket{\phi}, \braket{\psi}{\phi} ---
+\usepackage{physics2}
+\usephysicsmodule{braket}
+
+% Den gamle `physics`-pakka brukes ikke her: den er uten vedlikehold og
+% skrevet for pdflatex-tida. Den virker riktignok sammen med siunitx om
+% du legger til \AtBeginDocument{\RenewCommandCopy\qty\SI}, mot én
+% siunitx-advarsel -- men physics2 dekker det samme uten.
+
+% --- Figurer ---
+\usepackage{graphicx}                % figurer
+\graphicspath{{figurer/}}            % figurer ligger i figurer/
+
+% --- Annet ---
+\usepackage{tikz}                   % native TikZ-figurer
+
+
+% =================================================
+% EGENDEFINERTE KOMMANDOER
+%
+% Prosjektspesifikke makroer.
+%
+% \separator-linjen leveres av handoutstyle.sty.
+% =================================================
+
+% Oppreist d og i: \symup er unicode-math-formen (\mathrm virker også).
+% \newcommand{\dd}{\symup{d}}
+% \newcommand{\ii}{\symup{i}}
+% \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
+% \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+
+% =================================================
+% METADATA
+% =================================================
+\title{Handouttittel}
+\date{Våren 2026 $\cdot$ Kursnavn}
+
+
+% =================================================
+% DOKUMENT
+% =================================================
+\begin{document}
+
+\maketitle
+% \thispagestyle{empty}   % side 1: fjerner tallet (se \pagestyle over)
+
+
+% =================================================
+% SEKSJON
+% =================================================
+\section{Energi og bevaring}
+
+En partikkel med masse $m$ beveger seg i et endimensjonalt
+potensial $V(x)$. Den totale mekaniske energien er
+\begin{equation}
+  E = \tfrac{1}{2} m v^2 + V(x),
+\end{equation}
+som er bevart når ingen ytre krefter virker.
+
+\begin{definisjon}
+En kraft er \emph{konservativ} dersom den kan skrives som den
+negative gradienten av et potensial, $F(x) = -\,\mathrm{d}V/\mathrm{d}x$.
+\end{definisjon}
+
+\begin{teorem}
+For en konservativ kraft er den totale mekaniske energien $E$
+konstant langs enhver løsning av bevegelsesligningen.
+\end{teorem}
+
+\begin{merknad}
+Det omvendte holder ikke generelt: dissipative systemer har
+ikke noe slikt potensial, og $E$ er ikke bevart.
+\end{merknad}
+
+\subsection{Potensialenergidiagrammer}
+
+En graf av $V(x)$ mot $x$ oppsummerer den kvalitative bevegelsen
+med ett blikk: partikkelen er begrenset til områder der
+$E \ge V(x)$, og vendepunkter opptrer der $E = V(x)$,
+som illustrert i figur~\ref{fig:potensial}.
+
+% TikZ-figureksempel: bruk darkorange til energinivåer / strukturelementer,
+% darkolive til kurver, svart til akser,
+% grå til sekundære etiketter. darkred er reservert for
+% separatorlinjen -- bruk den ikke i figurer.
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[>=stealth]
+    % Akser
+    \draw[->,thick] (-2.2,0) -- (2.2,0) node[right,font=\small] {$x$};
+    \draw[->,thick] (0,-0.2) -- (0,3.5) node[above,font=\small] {$V$};
+    % Parabel V(x) ~ x^2 (darkolive)
+    \draw[darkolive,thick,domain=-1.85:1.85,samples=60]
+      plot (\x, {\x*\x});
+    \node[darkolive,right,font=\small] at (1.7,3.1) {$V(x)$};
+    % Energinivå (darkorange)
+    \draw[darkorange,thick] (-1.6,2.56) -- (1.6,2.56);
+    \node[right,font=\small,darkorange] at (1.65,2.56) {$E$};
+    % Klassiske vendepunkter (grå stiplet)
+    \draw[gray,thin,dashed] (-1.6,0) -- (-1.6,2.56);
+    \draw[gray,thin,dashed] ( 1.6,0) -- ( 1.6,2.56);
+    \node[below,font=\small,gray] at (-1.6,0) {$-x_0$};
+    \node[below,font=\small,gray] at ( 1.6,0) {$x_0$};
+  \end{tikzpicture}
+  \caption{Harmonisk potensial (\textcolor{darkolive}{olivengrønn}) med
+           energinivå $E$ (\textcolor{darkorange}{oransje}) og klassiske
+           vendepunkter $\pm x_0$ (grå).}
+  \label{fig:potensial}
+\end{figure}
+
+Underseksjonsoverskriften over ligger ett størrelsessteg under
+seksjonstittelen, men holder seg på kroppsstørrelse --- nok til
+å markere et finere nivå når handout-en brukes som
+forelesningsnotater.
+
+
+% =================================================
+% OPPGAVE
+% =================================================
+\begin{oppgave}[Harmonisk oscillator]
+Betrakt en partikkel med masse $m$ i potensialet
+$V(x) = \tfrac{1}{2}kx^2$.
+
+\begin{deloppgaver}
+  \item Skriv opp bevegelsesligningen ved hjelp av Newtons
+        andre lov.
+  \item Vis at
+        $E = \tfrac{1}{2}mv^2 + \tfrac{1}{2}kx^2$
+        er bevart langs løsningene.
+\end{deloppgaver}
+
+Resultatet kan verifiseres ved å derivere $E$ med hensyn på
+tid og bruke bevegelsesligningen fra deloppgave~(a).
+
+\begin{deloppgaver}[resume]
+  \item Finn vinkelfrekvensen for små svingninger.
+\end{deloppgaver}
+\end{oppgave}
+
+\separator
+
+
+% =================================================
+% OPPGAVE
+% =================================================
+\begin{oppgave}[Skråplan]
+En kloss med masse $m$ glir nedover et friksjonsfritt
+skråplan som danner vinkelen $\theta$ med horisontalen.
+
+\begin{deloppgaver}
+  \item Finn akselerasjonen langs skråplanet.
+  \item Hvor lang tid tar det å gli en strekning $L$ fra ro?
+  \item Hva er farten ved bunnen?
+\end{deloppgaver}
+\end{oppgave}
+
+
+% =================================================
+% SEKSJON
+% =================================================
+\section{Sirkelbevegelse}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.5\linewidth]{Energy_levels}
+  \caption{Skjematisk figur for temaet.}
+  \label{fig:sirkel}
+\end{figure}
+
+Ved jevn sirkelbevegelse har sentripetalakselerasjonen
+størrelsen $a_s = v^2/r$, rettet inn mot sentrum av sirkelen.
+
+
+% =================================================
+% OPPGAVE
+% =================================================
+\begin{oppgave}[Sirkulær bane]
+En satellitt går i en sirkulær bane med radius $r$ rundt en
+planet med masse $M$.
+
+\begin{deloppgaver}
+  \item Vis at banehastigheten er $v = \sqrt{GM/r}$, hvor
+        $G$ er Newtons gravitasjonskonstant.
+  \item Uttrykk omløpstiden $T$ ved $r$, $M$ og $G$.
+\end{deloppgaver}
+\end{oppgave}
+
+
+% =================================================
+% SEKSJON
+% =================================================
+\section{Numerisk eksempel}
+
+\verb|python|-omgivelsen setter kode med Gruvbox Light
+syntaksutheving. Det korte skriptet nedenfor verifiserer
+banehastigheten og omløpstiden fra oppgave~3 numerisk for
+tre representative radier.
+
+\begin{python}
+import numpy as np
+
+G = 6.674e-11   # gravitasjonskonstant  (m^3 kg^-1 s^-2)
+M = 5.972e24    # jordmasse             (kg)
+
+baner = {"Lav bane":   6.40e6,
+         "ISS (ca.)":  6.78e6,
+         "GEO":        4.22e7}
+
+for navn, r in baner.items():
+    v = np.sqrt(G * M / r)           # banehastighet  [m/s]
+    T = 2 * np.pi * r / v / 3600    # omløpstid      [timer]
+    print(f"{navn:12s}  v = {v/1e3:.3f} km/s   T = {T:.2f} t")
+\end{python}
+
+
+\end{document}

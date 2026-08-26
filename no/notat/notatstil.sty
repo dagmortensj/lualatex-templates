@@ -1,0 +1,552 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notatstil}[2026/08/26 v1.6 Notatstil — CUP-inspirert boktypografi i artikkelformat]
+
+% ============================================================
+% FILOSOFI
+%
+% Denne stilen er for langformede notater i teoretisk fysikk
+% og matematikk (artikkellengde, ikke monografier eller
+% artikler).
+%
+% Typografisk speiler den den tilhørende bokstilen: et
+% CUP-inspirert klassisk uttrykk tilpasset artikkelformat,
+% med en JHEP-aktig innrammet innholdsfortegnelse og
+% nummererte siteringer i hakeparenteser.
+%
+% Designprioriteringer:
+%  - rolig vertikal rytme
+%  - lesbar matematikk
+%  - tydelig, men stille struktur
+%  - typografisk konsistens
+%
+% Stilen er bevisst konservativ.
+%
+% Lasterekkefølgen følger vanlig konvensjon:
+% koding/fonter, farger, geometri og avstand, seksjonering,
+% sidemøblering, strukturerte omgivelser, siteringer, og
+% hyperref til slutt.
+% ============================================================
+
+
+% ============================================================
+% FONT & MIKROTYPOGRAFI
+% ============================================================
+% MOTOR: LuaLaTeX (ikke pdflatex).
+%
+% NewComputerModern beholder det velkjente TeX-uttrykket
+% uten Latin Moderns tynnhet. Pakka har Book-vekta som
+% standard; [regular] gir den gamle, tynnere CM-vekta.
+%
+% Fet matematikk er \symbf / \symbfit / \symbfup. \bm og
+% \boldmath hører pdflatex-tida til og virker ikke her
+% -- se README.
+\RequirePackage{newcomputermodern}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% FARGER
+%
+% Trefargerspalett for figurer: darkred / darkorange / darkolive.
+%   darkred    -- hyperlenker, fotnotelinje, strukturaksenter
+%   darkorange -- figuraksent: streker, noder, fyllte områder (TikZ)
+%   darkolive  -- figuraksent: andrefarge for kurver og fyll
+%
+% Definert tidlig så darkred er tilgjengelig både for
+% separatorlinjen og for hyperref.
+% ============================================================
+\RequirePackage{xcolor}
+\definecolor{darkred}   {RGB}{120, 20,  20}
+\definecolor{darkorange}{RGB}{184, 92,   0}
+\definecolor{darkolive} {RGB}{ 74,107,  18}
+
+
+% ============================================================
+% SIDEGEOMETRI (A4, SYMMETRISK)
+%
+% Optimalisert for:
+%  - notater på trykk
+%  - lange utledninger
+%  - margnotater ved behov
+% ============================================================
+\RequirePackage[
+  a4paper,
+  left=3.0cm,
+  right=3.0cm,
+  top=2.7cm,
+  bottom=3.0cm
+]{geometry}
+
+
+% ============================================================
+% AVSNITT & LINJEAVSTAND
+%
+% Klassiske boklige avsnitt:
+%  - innrykk
+%  - ingen avsnittsavstand
+% ============================================================
+\setlength{\parindent}{15pt}
+\setlength{\parskip}{0pt}
+
+\RequirePackage{setspace}
+\setstretch{1.07}
+
+
+% ============================================================
+% AVSTAND VED FRAMHEVEDE LIGNINGER
+%
+% Mild, CUP/JHEP-aktig avstand, delt med bokstilen så de to leses
+% som en familie. Bare OVER-skipet krymper etter en kort innledende
+% linje (en kort linje gir allerede luft der), og aldri til null;
+% UNDER-skipet er alltid full verdi, så luften under en ligning
+% aldri avhenger av hva som stod over:
+%     over 12pt    over (etter kort linje)   7pt
+%     under 12pt   under (alltid)           12pt
+%
+% Disse MÅ settes via \AtBeginDocument. LaTeX sin \normalsize —
+% som kjøres av \begin{document} — nullstiller alle fire
+% display-skip til klassens standardverdier (der
+% \abovedisplayshortskip er 0pt, det klemte uttrykket vi unngår),
+% så verdier satt her i preamblet ville blitt stille overstyrt.
+% Ved å sette dem etter at \normalsize har kjørt, trer de i kraft;
+% senere størrelsesendringer er grupperte og gjenoppretter disse
+% verdiene når de avsluttes.
+% ============================================================
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{12pt plus 3pt minus 3pt}%
+  \setlength{\belowdisplayskip}{12pt plus 3pt minus 3pt}%
+  \setlength{\abovedisplayshortskip}{7pt plus 3pt minus 3pt}%
+  \setlength{\belowdisplayshortskip}{12pt plus 3pt minus 3pt}%
+}
+
+
+% ============================================================
+% FIGURTEKSTER
+%
+% font=small      -- ett steg under kroppstekst (JHEP/CUP-standard)
+% labelfont=bf    -- fet «Figur 1.»-etikett (JHEP/CUP-standard)
+% labelsep=period -- punktum etter nummeret, ikke kolon (JHEP-stil)
+% justification: default (singlelinecheck=true) -- enkeltlinjer
+%   sentreres automatisk; flerlinjers tekst justeres
+% ============================================================
+\RequirePackage[font=small,labelfont=bf,labelsep=period]{caption}
+
+
+% ============================================================
+% SEKSJONERING
+%
+% Strukturhierarkiet markeres med:
+%  - størrelse
+%  - vekt
+%
+% Overskrifter er fete og oppreiste; kapiteler er
+% reservert for tittelblokka.
+%
+% Underunderseksjoner finnes kun som et stille innrykksløst
+% (run-in) nivå (se nedenfor) og holdes utenfor
+% innholdsfortegnelsen.
+% ============================================================
+\RequirePackage{titlesec}
+
+% Seksjoner
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}{0.8em}{}
+
+\titlespacing*{\section}
+  {0pt}{4.5ex plus 1.5ex minus .5ex}{2.4ex plus .4ex}
+
+% Underseksjoner
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}
+  {\thesubsection}{0.8em}{}
+
+\titlespacing*{\subsection}
+  {0pt}{4.0ex plus 1.2ex minus .4ex}{1.8ex plus .4ex}
+
+% Underunderseksjoner: en bevisst stille run-in-overskrift —
+% tittelen starter avsnittet og teksten følger på samme linje.
+% Dette signaliserer laveste nivå og motvirker dypere nøsting.
+% Holdes utenfor den innrammede innholdsfortegnelsen via
+% tocdepth nedenfor.
+\titleformat{\subsubsection}[runin]
+  {\normalfont\normalsize\bfseries}
+  {\thesubsubsection}{0.5em}{}
+
+\titlespacing*{\subsubsection}
+  {0pt}{2.2ex plus .6ex minus .2ex}{0.6em}
+
+% Nummerer seksjoner ned til underunderseksjon, men før opp
+% bare seksjoner og underseksjoner i innholdsfortegnelsen.
+\setcounter{tocdepth}{2}
+
+
+% ============================================================
+% SIDESTIL
+%
+% Notater bruker enkle sider:
+%  - ingen løpende topptekst
+%  - sidetall sentrert nederst
+% ============================================================
+\pagestyle{plain}
+
+
+% ============================================================
+% TITTELBLOKK
+%
+% Rolig, bokinspirert tittelside. Tittelen er forstørret og
+% skjøvet ned, med god luft mot sammendraget, så forsiden får
+% et balansert preg (innholdsfortegnelsen ligger på egen side).
+% ============================================================
+\makeatletter
+\renewcommand{\maketitle}{%
+  \thispagestyle{plain}
+  \vspace*{0.22\textheight}
+  \begingroup
+    % Tittelside-fotnoter (\thanks) bruker symboler: *, \dag, \ddag, ...
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \begin{center}
+      {\huge\scshape \@title \par}
+      \vspace{2.8em}
+      {\large \@author \par}
+      \vspace{0.7em}
+      {\normalsize \@date \par}
+    \end{center}
+    \@thanks
+  \endgroup
+  \vspace{4.5em}%
+  \setcounter{footnote}{0}%
+  \global\let\@thanks\@empty
+}
+\makeatother
+
+
+% ============================================================
+% SAMMENDRAG
+%
+% Smalere tekstblokk, klassisk stil.
+% Avstanden er tilpasset notatenes generelle rytme.
+%
+% Vi redefinerer abstract-omgivelsen til å:
+%  - sentrere en fet "Sammendrag"-etikett
+%  - begrense kroppen til 88 % av tekstbredden
+%  - nullstille linjeavstanden i blokken
+% ============================================================
+\makeatletter
+\renewenvironment{abstract}{%
+  \par
+  \centering
+  {\small\bfseries \abstractname\par}
+  \vspace{10pt}
+  \begin{minipage}{0.88\textwidth}
+    \small
+    \setstretch{1.0}
+}{%
+  \end{minipage}
+  \par
+  \vspace{2.2em}
+}
+\makeatother
+
+
+% ============================================================
+% INNHOLDSFORTEGNELSE
+%
+% JHEP-aktig ramme: en vannrett linje over "Innhold"-tittelen
+% og en under oppføringene.
+%
+% ----------------------------
+% Innhold
+% seksjoner
+% ----------------------------
+%
+% Punktledere fjernes via toclofts dokumenterte kroker.
+% Notatene legger innholdsfortegnelsen på egen side (se main.tex).
+% ============================================================
+\RequirePackage{tocloft}
+
+% Ingen punktledere
+\renewcommand{\cftsecleader}{\hfill}
+\renewcommand{\cftsubsecleader}{\hfill}
+
+% Valgfri breddejustering (trygge standardverdier)
+\setlength{\cftsecnumwidth}{2.5em}
+\setlength{\cftsubsecnumwidth}{3.0em}
+
+% Rammelinjer, eksponert som \framedtoc. Vi redefinerer
+% bevisst IKKE \tableofcontents: å pakke den inn kolliderer
+% med hyperrefs eget oppsett av de fargede TOC-lenkene. I
+% stedet kaller \framedtoc den ferdig-initialiserte
+% \tableofcontents ved bruk, med en linje over tittelen og en
+% under oppføringene. \rule-bokser brukes fordi en ren \hrule
+% før tittelen blir slukt. main.tex legger \framedtoc på egen side.
+\newlength{\tocrulewidth}
+\setlength{\tocrulewidth}{0.4pt}
+
+\newcommand{\framedtoc}{%
+  \noindent\rule{\linewidth}{\tocrulewidth}\par
+  \vspace{1.0ex}%
+  \tableofcontents
+  \par\vspace{1.0ex}%
+  \noindent\rule{\linewidth}{\tocrulewidth}\par
+}
+
+
+% ============================================================
+% TEOREMOMGIVELSER
+%
+% Standard strukturerte omgivelser for notater:
+%   teorem       nummerert per seksjon (Teorem 2.1, ...)
+%   definisjon   deler teller med teorem
+%   merknad      deler teller med teorem
+%
+% amsthm ligger også til grunn for oppgaveomgivelsen nedenfor,
+% så den lastes én gang her.
+%
+% Etikettene er på norsk. (Bevis-etiketten settes også her,
+% siden babel ikke nødvendigvis oversetter \proofname.)
+% ============================================================
+\RequirePackage{amsthm}
+
+% --- Luft rundt teorem-omgivelsene ---
+% amsthm setter avstanden over/under disse omgivelsene gjennom
+% hooken \thm@space@setup (standard: \topsep, en ganske stram
+% gummilengde). Vi hever den til en romsligere, utjevnet verdi slik
+% at teoremer, definisjoner og merknader leses som tydelige blokker
+% i stedet for å trenge seg mot teksten rundt. Bare den vertikale
+% avstanden røres — fonter, hode og innrykk forblir nøyaktig som
+% amsthm definerer dem.
+%
+% amsthms 'remark'-stil halverer i tillegg den arvede avstanden;
+% \th@remark settes på nytt for å droppe kun den halveringen (den
+% kursiverte hodefonten og den oppreiste brødfonten beholdes), slik
+% at merknader får samme avstand som teoremer og definisjoner.
+\makeatletter
+\def\thm@space@setup{%
+  \setlength\thm@preskip{2.8ex plus 1ex minus .4ex}%
+  \setlength\thm@postskip{\thm@preskip}%
+}
+\def\th@remark{\thm@headfont{\itshape}\normalfont}
+\makeatother
+
+\theoremstyle{plain}
+\newtheorem{teorem}{Teorem}[section]
+
+\theoremstyle{definition}
+\newtheorem{definisjon}[teorem]{Definisjon}
+
+\theoremstyle{remark}
+\newtheorem{merknad}[teorem]{Merknad}
+
+\renewcommand{\proofname}{Bevis}
+
+
+% ============================================================
+% SEPARATORLINJE
+%
+% En linje med samme bredde som fotnotelinjen, satt i
+% mørkerød. Bruk mellom innholdsblokker (etter oppgaver,
+% mellom eksempler, temaskifter innen en seksjon, ...).
+% Et visuelt signal som ikke konkurrerer med overskriftene.
+%
+% \orig@footnoterule lagrer den opprinnelige fotnotelinjen
+% før hyperref (lastet nedenfor) kan røre den, så bredden på
+% separatoren holder seg stabil uavhengig av lasterekkefølge.
+%
+% Den innledende \par lukker et åpent avsnitt, så \separator
+% er trygg å kalle rett etter løpende tekst.
+% ============================================================
+\makeatletter
+\let\orig@footnoterule\footnoterule
+\newcommand{\separator}{%
+  \par
+  \vspace{3.5ex plus 1.5ex minus .5ex}
+  {\color{darkred}\orig@footnoterule}
+  \vspace{1.2ex}
+}
+\makeatother
+
+
+% ============================================================
+% OPPGAVER
+%
+% Portert fra handoutstil slik at notater kan bære oppgaver
+% ved siden av selve framstillingen.
+%
+% Gir:
+%   - oppgave-omgivelse, nummerert per seksjon (Oppgave 2.1, ...)
+%   - valgfri tittel: \begin{oppgave}[Tittel] gir
+%     "Oppgave 1.1 - Tittel" med tittelen i fet
+%   - deloppgaver-omgivelse for a), b), c)-deler
+%
+% amsthm lastes ovenfor (TEOREMOMGIVELSER);
+% enumitem driver deloppgaver-listen.
+% ============================================================
+\RequirePackage{enumitem}
+
+% --- Oppgave-omgivelse ---
+%
+% Nummerert uavhengig av teoremer, per seksjon (Oppgave 2.1, ...).
+\newtheoremstyle{notatex}
+  {1ex}              % avstand over
+  {1ex}              % avstand under
+  {\normalfont}      % kroppsfont
+  {0pt}              % innrykk
+  {\bfseries}        % hodefont
+  {}                 % hodetegnsetting
+  {\newline}         % avstand mellom hode og kropp
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ - \bfseries#3}}
+
+\theoremstyle{notatex}
+\newtheorem{oppgaveinner}{Oppgave}[section]
+\renewcommand{\theoppgaveinner}{\thesection.\arabic{oppgaveinner}}
+
+% Gjenopprett amsthms vanlige standard, så en eventuell
+% teoremomgivelse lagt til senere (i main.tex) starter fra
+% \theoremstyle{plain} i stedet for oppgavestilen.
+\theoremstyle{plain}
+
+% amsthm-stilen setter kroppen på en ny linje etter den fete
+% etiketten ({\newline}-skillet over). \leavevmode\par\vspace{-2ex}
+% trekker så kroppen opp til et tett mellomrom under etiketten.
+% -2ex er font-relativ, så den følger linjehøyden på tvers av
+% størrelser.
+%
+% Støtter valgfri tittel: \begin{oppgave}[Tittel]
+% gir "Oppgave 1.1 - Tittel" med tittelen i fet.
+\newenvironment{oppgave}[1][]
+{%
+  \par
+  \begin{quote}
+  \def\tmp{#1}\ifx\tmp\empty
+    \begin{oppgaveinner}\leavevmode\par\vspace{-2ex}
+  \else
+    \begin{oppgaveinner}[#1]\leavevmode\par\vspace{-2ex}
+  \fi
+}
+{%
+  \end{oppgaveinner}
+  \end{quote}
+  \vspace{3.5ex plus 1.5ex minus .8ex}
+}
+
+% --- Deloppgaver: a), b), c) ---
+%
+% En egen omgivelse i stedet for en global \setlist-overstyring,
+% så vanlige enumerate-lister ellers i notatene beholder sin
+% standardnummerering. Nummereringen kan gjenopptas etter
+% mellomliggende tekst med [resume].
+\newlist{deloppgaver}{enumerate}{1}
+\setlist[deloppgaver]{%
+  label=\alph*),
+  leftmargin=2.2em,
+  labelsep=0.6em,
+  itemsep=0.8ex,
+  parsep=0.8ex,
+  topsep=0.8ex
+}
+
+
+% ============================================================
+% KODEEKSEMPLER
+%
+% Python-kodeblokker med Gruvbox Light syntaksutheving via
+% listings-pakken. Krever ingen shell-escape eller eksterne
+% verktøy; alt er selvforsynt.
+%
+% Gruvbox Light Hard-palett (gruvbox.dayle.io):
+%   bakgrunn    #fdfcf2   forgrunn    #3c3836
+%   nøkkelord   #9d0006   strenger    #79740e
+%   kommentarer #928374   tall        #b57614
+%   innebygde   #076678
+%
+% Bruk:
+%   \begin{python}
+%     def f(x):
+%         return x**2
+%   \end{python}
+% ============================================================
+\RequirePackage{listings}
+
+\definecolor{gruvbg}    {HTML}{fdfcf2}
+\definecolor{gruvfg}    {HTML}{3c3836}
+\definecolor{gruvkw}    {HTML}{9d0006}
+\definecolor{gruvstr}   {HTML}{79740e}
+\definecolor{gruvcom}   {HTML}{928374}
+\definecolor{gruvnum}   {HTML}{b57614}
+\definecolor{gruvbi}    {HTML}{076678}
+
+\lstdefinestyle{gruvboxlight}{
+  backgroundcolor   = \color{gruvbg},
+  basicstyle        = \small\ttfamily\color{gruvfg},
+  keywordstyle      = \color{gruvkw}\bfseries,
+  stringstyle       = \color{gruvstr},
+  commentstyle      = \color{gruvcom}\itshape,
+  numberstyle       = \color{gruvnum},
+  identifierstyle   = \color{gruvfg},
+  breaklines        = true,
+  showstringspaces  = false,
+  numbers           = left,
+  numbersep         = 10pt,
+  frame             = tb,
+  xleftmargin       = 2em,
+  xrightmargin      = 0em,
+  framexleftmargin  = 2em,
+  framexrightmargin = 0em,
+  aboveskip         = 2.4ex,
+  belowskip         = 2.4ex,
+  extendedchars     = true,
+  inputencoding     = utf8,
+  literate          =
+    {æ}{{\ae}}1 {ø}{{\o}}1 {å}{{\aa}}1
+    {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
+}
+
+\lstnewenvironment{python}
+  {\lstset{language=Python, style=gruvboxlight,
+           morekeywords={True,False,None,self}}}
+  {}
+
+
+% ============================================================
+% SITERINGER
+%
+% Numeriske siteringer i hakeparenteser, sortert og
+% komprimert til intervaller, f.eks. \cite{a,b,c} -> [1-3].
+%
+% natbib må lastes før hyperref.
+%
+% Bruk:
+%   \cite{nokkel}          [1]
+%   \cite{n1,n2,n3}        [1-3]
+%   \bibliographystyle{unsrtnat} i main.tex
+%   \bibliography{...}     i main.tex
+% ============================================================
+\RequirePackage[numbers,sort&compress]{natbib}
+
+
+% ============================================================
+% HYPERLENKER
+%
+% Mørkerøde, trygge for trykk. Lastet til slutt, etter alle
+% andre pakker, slik hyperref krever.
+% ============================================================
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkred,
+  citecolor=darkred,
+  urlcolor=darkred,
+  linktoc=page
+}
+
+
+% ============================================================
+% SLUTT PÅ FIL
+% ============================================================
+\endinput

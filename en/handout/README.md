@@ -1,0 +1,265 @@
+# handout-template
+
+LaTeX template for physics and mathematics handouts and problem sheets.
+Calm, classic typography with theorem and exercise environments, lettered
+subproblems, and dark red separator rules.
+
+## Files
+
+| File              | Description                                |
+|-------------------|--------------------------------------------|
+| `main.tex`        | Starting point — content lives here        |
+| `handoutstyle.sty`| All formatting; rarely changed             |
+| `figures/`        | Folder for figures; loaded automatically   |
+
+## Getting started
+
+1. Copy the entire folder to a new project
+2. Open `main.tex` and fill in title, date, content
+3. Compile with **lualatex**, not pdflatex:
+
+```
+latexmk -lualatex main
+```
+
+Or by hand:
+
+```
+lualatex main
+lualatex main
+```
+
+The engine is not optional. The template loads NewComputerModern as an
+OpenType font through `unicode-math`, which pdflatex cannot use.
+
+(No bibliography by default — handouts and problem sheets
+typically don't need one. Add `natbib` and a `.bib` file
+if you ever do.)
+
+## Useful commands
+
+### Exercises
+
+```latex
+\begin{exercise}
+Prompt for the exercise.
+
+\begin{subproblems}
+  \item First subproblem.
+  \item Second subproblem.
+\end{subproblems}
+\end{exercise}
+```
+
+Exercises are numbered per section (e.g. Exercise 2.1, 2.2)
+and use lowercase letter labels for subproblems (a, b, c).
+The `subproblems` environment leaves ordinary `enumerate`
+lists untouched for normal use.
+
+Use `\begin{subproblems}[resume]` to continue the same letter
+sequence after explanatory prose between subproblems.
+
+### Theorem-like environments
+
+```latex
+\begin{theorem}
+  Statement of the theorem.
+\end{theorem}
+
+\begin{definition}
+  Definition text.
+\end{definition}
+
+\begin{remark}
+  A remark.
+\end{remark}
+```
+
+All three share a single counter scoped to the section,
+e.g. Theorem 1.1, Definition 1.2, Remark 1.3.
+
+### Python code
+
+```latex
+\begin{python}
+import numpy as np
+
+def f(x):
+    return np.sin(x)   # example function
+
+print(f(np.pi / 2))
+\end{python}
+```
+
+Typesets Python with Gruvbox Light syntax highlighting: coloured
+keywords, strings, comments, and line numbers on a warm cream background,
+framed top and bottom. UTF-8 input is enabled, so Norwegian characters
+(æ, ø, å) work in surrounding text and in code comments.
+
+### Separator
+
+```latex
+\separator
+```
+
+A thin dark red rule with vertical space on either side.
+Use between content blocks — after an exercise, between
+examples, or at a topic shift within a section.
+
+### Equations
+
+```latex
+\begin{equation}
+  E = mc^2.
+  \label{eq:einstein}
+\end{equation}
+% Reference with \eqref{eq:einstein}
+```
+
+### Figures
+
+```latex
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.8\linewidth]{filename}
+  \caption{Figure caption.}
+  \label{fig:label}
+\end{figure}
+```
+
+### TikZ figures
+
+`handoutstyle.sty` does not load TikZ — add `\usepackage{tikz}` to the
+custom packages block in `main.tex` when you need native figures.
+
+The style file defines three named colors. Their roles are fixed:
+
+| Color        | RGB          | Role                                                         |
+|--------------|--------------|--------------------------------------------------------------|
+| `darkorange` | 184, 92, 0   | Primary figure accent: strokes, nodes, bars                  |
+| `darkolive`  | 74, 107, 18  | Secondary figure accent: curves, fills                       |
+| `darkred`    | 120, 20, 20  | Reserved — footnote rule and structural accents; not for figures |
+
+Black and gray are available for axes, walls, and secondary labels.
+Typical usage:
+
+```latex
+\draw[very thick, darkorange] (0,0) -- (2,0);
+\node[circle, fill=darkorange, inner sep=1.4pt] at (1,0) {};
+\fill[darkorange!12] (0,0) rectangle (2,1);
+\draw[darkolive, thick, domain=0:3, samples=60]
+    plot (\x, {sin(deg(\x))});
+\draw[->, darkolive!75] (0,0) -- (1,1);
+```
+
+## Mathematics
+
+The engine change swaps the old `amsmath` + `amssymb` + `bm` stack for
+`unicode-math`. What that means in practice:
+
+| Instead of | Use | Why |
+|---|---|---|
+| `\bm{v}`, `\boldsymbol{v}` | `\symbf{v}`, `\symbfit`, `\symbfup` | `bm` is incompatible with `unicode-math`: silently un-bold on Latin letters, a hard error on Greek |
+| `\boldmath` | `\symbf` | NewCM Math has no bold weight, so `\boldmath` sets regular-weight maths |
+| `\usepackage{amssymb}` | nothing | `unicode-math` supplies the symbols; loading both breaks the build (`\eth already defined`) |
+
+`\symbf` selects NewCM Math's designed Unicode bold alphabets from the same
+font file, so it works for Greek as well as Latin.
+
+More generally: this is a `unicode-math` document compiled with LuaLaTeX.
+Maths packages written for pdflatex may or may not work, and the list above
+is not exhaustive. The four packages the template loads (listed below)
+are verified, as are `listings` and `tikz`.
+
+`mathtools` is deliberately **not** loaded. It works under LuaLaTeX, but
+loading it makes `unicode-math` emit two notices about commands it takes
+over, and silencing those needs machinery the style file has no business
+carrying. What it offers has native or better-maintained equivalents:
+
+| `mathtools` | Use instead |
+|---|---|
+| `\DeclarePairedDelimiter` | `physics2` with the `ab.legacy` module — `\abs`, `\abs*`, `\norm`, `\eval` |
+| `\prescript` | `tensor` — `\tensor*[^{14}_{6}]{C}{}` |
+| `\dcases` | `cases` with `\displaystyle` in each row |
+| `\coloneqq`, `\eqqcolon` | `\coloneq`, `\eqcolon`, `\Coloneq` — `unicode-math`'s own, single q |
+| `\overbracket` | `\overbrace` |
+
+All five verified under `unicode-math`. If you want `mathtools` anyway,
+load it **above** the style file — that avoids its load-order warning,
+though the two `unicode-math` notices remain:
+
+```latex
+\usepackage{mathtools}
+\usepackage{handoutstyle}
+```
+
+### Maths packages the template loads for you
+
+| Package | For | Example |
+|---|---|---|
+| `esvect` | vectors | `$\vv{F} = m\vv{a}$`, `$\vv{AB}$` |
+| `siunitx` | units and numbers | `\qty{9.81}{\metre\per\second\squared}`, `\num{6.022e23}`, `\qtyrange{10}{20}{\kilo\metre}` |
+| `tensor` | indexed tensors | `$\tensor{R}{^\rho_\sigma_\mu_\nu}$`, `$\tensor*[^{14}_{6}]{C}{}$` |
+| `physics2` (`braket`) | bra-ket | `$\bra{\psi}$`, `$\ket{\phi}$`, `$\braket{\psi}{\phi}$` |
+
+All four are verified under `unicode-math` with LuaLaTeX, and together they
+add about 50 ms to a build — measurement noise.
+
+`siunitx` keeps its English defaults in `main.tex` — decimal point, "to" in
+`\qtyrange`, "and" in `\qtylist`. The `\sisetup` block sets only
+`per-mode=symbol` (`m/s^2` rather than `m s^-2`) and `separate-uncertainty`.
+The Norwegian templates set a decimal comma there instead.
+
+The old `physics` package is not used here — it is unmaintained and written
+for the pdflatex era. It does still work alongside `siunitx` if you add
+`\AtBeginDocument{\RenewCommandCopy\qty\SI}`, at the cost of one `siunitx`
+warning, but `physics2` covers the same ground without it. Add more of its
+modules (`ab.legacy`, `nabla.legacy`, `op.legacy`, `diagmat`, `xmat`, …) as needed.
+
+`physics2` has no derivatives, deliberately. Define your own — under
+`unicode-math` the upright d is `\symup{d}`:
+
+```latex
+\newcommand{\dd}{\symup{d}}
+\newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+```
+
+The `derivative` package is a fuller ready-made alternative if you prefer one.
+
+`esvect` carries a five-line font-shape declaration in `main.tex`. It is not
+decoration: the package's own font definition lists exact sizes only, while
+`unicode-math` asks for fractional maths sizes, and without it the arrows in
+subscripts come out about 9 % too small with a warning. It is the same fix
+the `overarrows` author later adopted upstream.
+
+## Typography
+
+- **Font:** NewComputerModern (Book weight), text and mathematics
+- **Engine:** LuaLaTeX (`unicode-math`, OpenType)
+- **Page size:** A4, symmetric margins (3.0 cm L/R)
+- **Line spacing:** 1.04
+- **Paragraphs:** indented, no line break
+- **Microtypography:** protrusion, expansion, tracking enabled
+- **Headings:** two quiet levels — section (`\large`) and subsection (body size), bold; no oversized fonts or rules. The subsection lets the handout double as lecture notes.
+- **Title block:** small caps, letterspaced, centered
+- **Hyperlinks and rules:** dark red, print-safe
+
+## Localizing labels
+
+`handoutstyle.sty` sets the structured-environment labels in
+English by default. To adapt this English template to another
+language, override any of them *before* loading the style:
+
+```latex
+\providecommand{\theoremname}{Teorem}
+\providecommand{\definitionname}{Definisjon}
+\providecommand{\remarkname}{Merknad}
+\providecommand{\exercisename}{Oppgave}
+\usepackage{handoutstyle}
+```
+
+(If you just want Norwegian, use the bundled `no/handout`
+template instead — it ships fully localized, with the theorem
+and exercise environments defined under Norwegian names rather
+than via these override hooks.)

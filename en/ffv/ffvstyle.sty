@@ -1,0 +1,301 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ffvstyle}[2026/08/26 v1.2 Article style — two-column]
+
+% =================================================
+% PHILOSOPHY
+%
+% This style is made for two-column articles in
+% theoretical physics and mathematics, with an
+% essayistic character.
+%
+% Design priorities:
+%  - clean two-column layout
+%  - readable mathematics
+%  - clear but quiet structure
+%  - typographic consistency
+%
+% The style is intentionally conservative.
+% =================================================
+
+
+% =================================================
+% LANGUAGE
+%
+% Unlike the other templates in this collection,
+% babel is loaded inside the style file rather than
+% in main.tex. This keeps a fresh main.tex minimal —
+% loading the style is enough to pick up the
+% language settings.
+% =================================================
+\RequirePackage[english]{babel}
+
+
+% =================================================
+% FONT AND MICROTYPOGRAPHY
+%
+% ENGINE: LuaLaTeX (not pdflatex).
+%
+% Same typeface as before -- STIX Two, complete for
+% text and mathematics -- now loaded as OpenType
+% through unicode-math rather than as the Type1
+% stix2 package. Sizes and spacing are unchanged.
+%
+% BOLD MATHS is \symbf / \symbfit / \symbfup, which
+% select STIX Two's Unicode bold alphabets from the
+% same file. \bm and \boldmath are pdflatex-era tools
+% and do not work here -- see the README.
+% =================================================
+\RequirePackage{unicode-math}
+
+\setmainfont{STIXTwoText}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic ]
+
+\setmathfont{STIXTwoMath-Regular.otf}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% =================================================
+% PAGE GEOMETRY (A4, TWO-COLUMN)
+%
+% Tighter margins suit a two-column layout better
+% than the defaults.
+% =================================================
+\RequirePackage[
+  a4paper,
+  left=2.0cm,
+  right=2.0cm,
+  top=2.5cm,
+  bottom=2.7cm,
+  columnsep=0.7cm
+]{geometry}
+
+
+% =================================================
+% PARAGRAPHS AND LINE SPACING
+%
+% STIX2 at 10pt gives a natural \baselineskip of
+% 12pt. With \setstretch{1.05} the effective baseline
+% is ~12.6pt — generous enough for mathematics
+% without making the body text feel airy.
+%
+% Classical indented paragraphs, no paragraph skip.
+% =================================================
+\setlength{\parindent}{12pt}
+\setlength{\parskip}{0pt}
+
+\RequirePackage{setspace}
+\setstretch{1.05}
+
+
+% =================================================
+% EQUATION SPACING
+%
+% Principle: equation spacing should resonate with
+% the baseline (~12.6pt) so that mathematics sits
+% naturally in the text.
+%
+% abovedisplayskip / belowdisplayskip:
+%   Used when the line above the equation is long
+%   (fills the column width). 10pt fixed is a bit
+%   under one baseline — enough air for the equation
+%   to breathe without detaching from context.
+%
+% abovedisplayshortskip:
+%   Used when the line above is short — i.e. there
+%   is already air to the right of the text. We then
+%   need substantially less extra space above.
+%
+% belowdisplayshortskip:
+%   After an equation there should always be the
+%   same amount of air, regardless of what came above.
+%
+% Applied via \AtBeginDocument: LaTeX's \normalsize (run by
+% \begin{document}) resets all four display skips to the class
+% defaults, so values set here in the preamble would be silently
+% overridden. Setting them after \normalsize makes them take effect.
+% =================================================
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\belowdisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\abovedisplayshortskip}{4pt plus 2pt minus 1pt}%
+  \setlength{\belowdisplayshortskip}{10pt plus 3pt minus 2pt}%
+}
+
+
+% =================================================
+% SECTIONING
+%
+% Bold headings without small caps — clear
+% hierarchy in narrow columns.
+% =================================================
+\RequirePackage{titlesec}
+
+% Sections: bold, slightly larger
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries}
+  {\thesection.}{0.6em}{}
+
+\titlespacing*{\section}
+  {0pt}{3.5ex plus 1.0ex minus .4ex}{1.6ex plus .3ex}
+
+% Subsections: bold, same size as body text
+\titleformat{\subsection}
+  {\normalfont\small\bfseries}
+  {\thesubsection.}{0.6em}{}
+
+\titlespacing*{\subsection}
+  {0pt}{3.0ex plus 0.8ex minus .3ex}{1.2ex plus .3ex}
+
+
+% =================================================
+% FLOAT PARAMETERS
+%
+% LaTeX's defaults are too conservative for
+% two-column articles and often produce large empty
+% spaces. These values let figures fill more of the
+% page when necessary.
+%
+%  topfraction:    max share of page top for floats
+%  bottomfraction: max share of page bottom for floats
+%  textfraction:   minimum text share on a float page
+%  floatpagefraction: minimum fill for a dedicated float page
+% =================================================
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.80}
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dbltopfraction}{0.90}       % for figure* (two-column)
+\renewcommand{\dblfloatpagefraction}{0.75}
+
+% Spacing between floats and between floats and text
+\setlength{\textfloatsep}{14pt plus 3pt minus 3pt}
+\setlength{\floatsep}{12pt plus 3pt minus 2pt}
+\setlength{\intextsep}{12pt plus 3pt minus 2pt}
+\setlength{\dbltextfloatsep}{14pt plus 3pt minus 3pt}
+\setlength{\dblfloatsep}{12pt plus 3pt minus 2pt}
+
+
+% =================================================
+% CAPTIONS
+%
+% font=small      -- one step below body text (JHEP/CUP standard)
+% labelfont=bf    -- bold "Figure 1." label (JHEP/CUP standard)
+% labelsep=period -- period after number, not colon (JHEP style)
+% justification: default (singlelinecheck=true) -- single-line captions
+%   are centred automatically; multi-line captions are justified
+% skip=6pt        -- tighter gap suits the two-column layout
+% =================================================
+\RequirePackage[
+  font=small,
+  labelfont=bf,
+  labelsep=period,
+  singlelinecheck=true,
+  skip=6pt
+]{caption}
+
+
+% =================================================
+% TABLES
+%
+% booktabs gives professional horizontal rules
+% (\toprule, \midrule, \bottomrule — never vertical).
+% A bit of extra vertical air around rows gives
+% tables breathing room.
+% =================================================
+\RequirePackage{booktabs}
+\renewcommand{\arraystretch}{1.15}
+
+
+% =================================================
+% GRAPHICS
+% =================================================
+\RequirePackage{graphicx}
+
+
+% =================================================
+% PAGE STYLE
+% =================================================
+\pagestyle{plain}
+
+
+% =================================================
+% TITLE BLOCK
+%
+% Title in full width above the two-column body.
+% Uses the \twocolumn[\maketitle] idiom.
+% =================================================
+\makeatletter
+\renewcommand{\maketitle}{%
+  \thispagestyle{plain}
+  \begin{center}
+    {\large\scshape \@title \par}
+    \vspace{1.4em}
+    {\normalsize \@author \par}
+    \vspace{0.4em}
+    {\small \@date \par}
+  \end{center}
+  \vspace{1.6em}
+}
+\makeatother
+
+
+% =================================================
+% LEAD-IN ENVIRONMENT
+%
+% Bold opening paragraph in full page width.
+% Placed immediately after \maketitle, inside
+% the \twocolumn[...] argument.
+% =================================================
+\newenvironment{lead}{%
+  \par
+  \centering
+  \begin{minipage}{0.92\linewidth}
+    \small\bfseries
+    \setstretch{1.05}
+}{%
+  \end{minipage}
+  \par
+  \vspace{1.8em}
+}
+
+
+% =================================================
+% REFERENCES
+%
+% natbib must be loaded before hyperref.
+% =================================================
+\RequirePackage[numbers,sort&compress]{natbib}
+
+
+% =================================================
+% HYPERLINKS
+%
+% Dark red, print-safe.
+% Loaded last.
+% =================================================
+\RequirePackage{xcolor}
+\definecolor{darkred}{RGB}{120,20,20}
+
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkred,
+  citecolor=darkred,
+  urlcolor=darkred,
+  linktoc=page
+}
+
+
+% =================================================
+% END OF FILE
+% =================================================
+\endinput

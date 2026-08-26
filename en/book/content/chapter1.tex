@@ -1,0 +1,112 @@
+% Example chapter content.
+% Replace with your own.
+
+\chapteropening{T}{his is the opening sentence}
+of the chapter, set with a drop cap and small caps on the
+first few words. The opening paragraph should be long enough
+to fill the vertical space reserved by the drop cap, otherwise
+the next section heading will appear too close to it.
+
+A second paragraph continues without extra spacing. Classical
+book typography uses indented paragraphs and minimal vertical
+white space --- the rhythm of the prose is what carries the
+reader through.
+
+
+\section{First Section}
+
+A section heading without a number. The book template uses
+unnumbered sections so that the chapter and part numbers
+carry the structural hierarchy on their own. Sections still
+appear in the table of contents, so navigation is preserved.
+
+Citations in this template are rendered as small superscript
+numbers, placed exactly where they belong in the text\cite{example-article}.
+Multiple sources can be grouped within a single citation
+and are sorted and compressed automatically\cite{example-article,example-book}.
+
+
+\section{Mathematics}
+
+Mathematics is set inline, $E = mc^2$, or as a numbered
+display:
+\begin{equation}
+  i\hbar \frac{\partial \psi}{\partial t}
+  = \hat{H}\psi.
+  \label{eq:schrodinger}
+\end{equation}
+Equation \eqref{eq:schrodinger} is the time-dependent
+Schr\"odinger equation, written here purely as an example
+of a labeled display that can be referenced from elsewhere
+in the chapter.
+
+A second display can follow with a different label:
+\begin{equation}
+  \langle A \rangle_\psi = \langle \psi | \hat{A} | \psi \rangle.
+  \label{eq:expectation}
+\end{equation}
+The spacing around displays is set in \texttt{bookstyle.sty}
+and gives mathematics enough room to breathe without losing
+contact with the surrounding text.
+
+\subsection{A Subsection}
+
+Subsections nest under sections and are also unnumbered.
+They are useful when a section grows long enough to need
+internal structure but not long enough to deserve its own
+section.
+
+
+\section{Figures and Tables}
+
+A figure is included by placing the file in the \texttt{figures/}
+folder and calling \texttt{\textbackslash includegraphics}:
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.7\linewidth]{Energy_levels}
+  \caption{An example figure showing energy levels.}
+  \label{fig:levels}
+\end{figure}
+
+Refer to figures with figure~\ref{fig:levels}. The float
+placement \texttt{[t]} lets the figure rise to the top of a
+page, which is the typical book convention --- figures rarely
+sit inline in long-form prose.
+
+A table can summarize key values:
+\begin{table}[t]
+  \centering
+  \caption{Fundamental physical constants.}
+  \label{tab:constants}
+  \begin{tabular}{lcr}
+    \toprule
+    Quantity            & Symbol  & Value                         \\
+    \midrule
+    Speed of light      & $c$     & $2.998 \times 10^8$ m/s       \\
+    Planck's constant   & $\hbar$ & $1.055 \times 10^{-34}$ Js    \\
+    Elementary charge   & $e$     & $1.602 \times 10^{-19}$ C     \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% For native TikZ figures in a book, prefer the standalone workflow:
+% compile each figure in its own file with \documentclass{standalone},
+% then include the resulting PDF with \includegraphics.
+% This keeps chapter files clean and avoids slow recompilation of the
+% whole book when a figure changes.  The palette colors (darkred,
+% darkorange, darkolive) defined in bookstyle.sty are available in
+% standalone files via \usepackage{bookstyle} or \usepackage{xcolor}
+% with the same \definecolor definitions.
+
+Tables in this template use the \texttt{booktabs} convention:
+horizontal rules only, used sparingly --- top, middle, and
+bottom. Vertical lines are deliberately omitted.
+
+
+\section{Closing}
+
+A closing section can wrap up the chapter and gesture toward
+the material in the next one. In a longer book, this is where
+you might preview the next chapter or step back to summarize
+what was covered.

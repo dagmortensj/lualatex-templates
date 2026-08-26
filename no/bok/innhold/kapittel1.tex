@@ -1,0 +1,112 @@
+% Eksempel på kapittelinnhold.
+% Bytt ut med ditt eget.
+
+\chapteropening{D}{ette er åpningssetningen}
+til kapittelet, satt med initial og kapiteler på de første
+ordene. Åpningsavsnittet bør være langt nok til å fylle ut
+den vertikale plassen initialen reserverer, ellers vil neste
+seksjonsoverskrift krasje med initialen.
+
+Et nytt avsnitt fortsetter uten ekstra avstand. Klassisk
+boktypografi bruker innrykkede avsnitt og minimalt med
+vertikalt mellomrom --- det er prosaens rytme som drar
+leseren gjennom.
+
+
+\section{Første seksjon}
+
+En seksjonsoverskrift uten nummer. Bokmalen bruker
+unummererte seksjoner slik at kapittel- og delnummerene
+bærer det strukturelle hierarkiet alene. Seksjonene vises
+fortsatt i innholdsfortegnelsen, så navigasjon er bevart.
+
+Siteringer i denne malen vises som små superskript-tall,
+plassert nøyaktig der de hører hjemme i teksten\cite{example-article}.
+Flere kilder kan grupperes innenfor én sitering og blir
+sortert og komprimert automatisk\cite{example-article,example-book}.
+
+
+\section{Matematikk}
+
+Matematikk settes inline, $E = mc^2$, eller som en
+nummerert ligning:
+\begin{equation}
+  i\hbar \frac{\partial \psi}{\partial t}
+  = \hat{H}\psi.
+  \label{eq:schrodinger}
+\end{equation}
+Ligning \eqref{eq:schrodinger} er den tidsavhengige
+Schr\"odingerligningen, skrevet her kun som et eksempel
+på en merket ligning som kan refereres fra andre steder
+i kapittelet.
+
+En andre ligning kan følge med en annen etikett:
+\begin{equation}
+  \langle A \rangle_\psi = \langle \psi | \hat{A} | \psi \rangle.
+  \label{eq:forventning}
+\end{equation}
+Avstanden rundt ligninger er satt i \texttt{bokstil.sty}
+og gir matematikken nok luft til å puste uten å miste
+kontakt med teksten omkring.
+
+\subsection{En underseksjon}
+
+Underseksjoner nestes under seksjoner og er også
+unummererte. De er nyttige når en seksjon blir lang nok
+til å trenge intern struktur, men ikke lang nok til å
+fortjene sin egen seksjon.
+
+
+\section{Figurer og tabeller}
+
+En figur inkluderes ved å plassere filen i \texttt{figurer/}-mappen
+og kalle \texttt{\textbackslash includegraphics}:
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.7\linewidth]{Energy_levels}
+  \caption{Et eksempel på en figur som viser energinivåer.}
+  \label{fig:nivaer}
+\end{figure}
+
+Henvis til figurer med figur~\ref{fig:nivaer}. Plasseringen
+\texttt{[t]} lar figuren stige til toppen av en side, som er
+den vanlige bokkonvensjonen --- figurer sitter sjelden
+inline i langformet prosa.
+
+En tabell kan oppsummere nøkkelverdier:
+\begin{table}[t]
+  \centering
+  \caption{Fundamentale fysiske konstanter.}
+  \label{tab:konstanter}
+  \begin{tabular}{lcr}
+    \toprule
+    Størrelse           & Symbol  & Verdi                         \\
+    \midrule
+    Lysets hastighet    & $c$     & $2{,}998 \times 10^8$ m/s     \\
+    Plancks konstant    & $\hbar$ & $1{,}055 \times 10^{-34}$ Js  \\
+    Elementærladning    & $e$     & $1{,}602 \times 10^{-19}$ C   \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% For native TikZ-figurer i en bok, foretrekk standalone-arbeidsflyten:
+% kompiler hver figur i sin egen fil med \documentclass{standalone},
+% og inkluder den resulterende PDF-en med \includegraphics.
+% Dette holder kapittelfiler rene og unngår treg rekompilering av
+% hele boken når en figur endres. Palettfargene (darkred, darkorange,
+% darkolive) definert i bokstil.sty er tilgjengelige i standalone-filer
+% via \usepackage{bokstil} eller \usepackage{xcolor} med de samme
+% \definecolor-definisjonene.
+
+Tabeller i denne malen bruker \texttt{booktabs}-konvensjonen:
+kun horisontale streker, brukt sparsomt --- topp, midt og
+bunn. Vertikale streker er bevisst utelatt.
+
+
+\section{Avslutning}
+
+En avsluttende seksjon kan runde av kapittelet og peke
+mot stoffet i det neste. I en lengre bok er dette stedet
+hvor man kan forhåndsvise neste kapittel eller ta et
+skritt tilbake for å oppsummere det som er dekket.

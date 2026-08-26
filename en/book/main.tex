@@ -1,0 +1,187 @@
+% =================================================
+% MAIN DOCUMENT (BOOK TEMPLATE)
+% =================================================
+%
+% This file defines the logical and structural layout
+% of the book.
+%
+% Typographic appearance is defined entirely in
+% bookstyle.sty and should not be altered here.
+%
+% =================================================
+
+
+% ENGINE: compile with LuaLaTeX, e.g.
+%   latexmk -lualatex main.tex
+
+% ------------------ Final print -------------------
+\documentclass[12pt,twoside,b5paper]{book}
+
+% ------------------ Draft / writing ---------------
+% Same measure and line breaks as B5, with 4 cm
+% margins for notes.
+% \documentclass[12pt,twoside,a4paper]{book}
+
+
+% =================================================
+% LOAD BOOK STYLE
+% =================================================
+\usepackage{bookstyle}
+
+
+% =================================================
+% LANGUAGE
+% =================================================
+\usepackage[english]{babel}
+
+
+% =================================================
+% CUSTOM PACKAGES
+%
+% Add project-specific packages here.
+% Do not insert packages elsewhere in the file.
+% =================================================
+
+\usepackage{amsmath}                 % mathematics
+                                     % (no amssymb: unicode-math
+                                     %  supplies the symbols)
+\usepackage{graphicx}                % figures
+\graphicspath{{figures/}}            % figures live in figures/
+\usepackage{booktabs}                % tables
+
+
+% =================================================
+% CUSTOM COMMANDS
+%
+% Project-specific macros.
+% =================================================
+
+% \newcommand{\dd}{\mathrm{d}}
+% \newcommand{\ii}{\mathrm{i}}
+
+
+% =================================================
+% DOCUMENT
+% =================================================
+\begin{document}
+
+
+% =================================================
+% FRONT MATTER
+% =================================================
+\frontmatter
+\pagenumbering{roman}
+\pagestyle{frontmatterstyle}
+
+
+% ------------------ Title page -------------------
+\title{Book Title}
+\subtitle{An optional subtitle}
+\author{Author Name}
+\date{\the\year}
+
+\booktitlepage
+\thispagestyle{empty}
+
+
+% ------------------ Blank verso ------------------
+\clearpage
+\null
+\thispagestyle{empty}
+\clearpage
+
+
+% ------------------ Dedication -------------------
+\dedicationpage{To someone.}
+
+
+% ------------------ Table of contents ------------
+\booktoc
+\cleardoublepage
+
+
+% ------------------ Preface ----------------------
+\frontchapter{Preface}
+\noindent
+This is the preface to the book. It introduces the author's
+motivation, intended audience, and approach. A preface speaks
+in the author's own voice and is typically short --- two to
+four pages.
+
+A new paragraph continues the conversation. The preface is
+where one might explain how the book came to be, what makes
+this treatment different, and what assumptions are made of
+the reader.
+
+A book template uses placeholder text like this so the layout
+can be inspected before any real writing begins. Replace this
+text with your own preface.
+
+\cleardoublepage
+
+
+% ------------------ Acknowledgments --------------
+\frontchapter{Acknowledgments}
+\noindent
+Acknowledgments are conventionally placed in the front matter,
+just after the preface. They thank colleagues, institutions,
+funding bodies, and family members who supported the work.
+
+A short, sincere acknowledgment is generally preferred over an
+exhaustive one. Two to four paragraphs is typical.
+
+\cleardoublepage
+
+
+% =================================================
+% MAIN MATTER
+% =================================================
+\mainmatter
+\pagestyle{chapterstyle}
+
+
+% ------------------ Introduction -----------------
+\chapter{Introduction}
+\chapteropening{T}{his is the opening sentence}
+of the introduction, set with a drop cap and small caps on
+the first few words. The introduction lays out the structure
+of the book, motivates the central questions, and previews
+the arguments that will be developed in the chapters that
+follow.
+
+In a working manuscript, this chapter would survey the
+landscape, define key terms, and set expectations for the
+reader. It might end with a brief outline of the chapters
+ahead --- a roadmap that orients the reader before they
+encounter the technical material.
+
+
+% ------------------ Part I -----------------------
+\part{First Part}
+
+\chapter{Chapter Title}
+\input{content/chapter1}
+
+
+% ------------------ Part II ----------------------
+\part{Second Part}
+
+
+% ------------------ Part III ---------------------
+\part{Third Part}
+
+
+% =================================================
+% BACK MATTER
+% =================================================
+\backmatter
+
+% ------------------ Bibliography -----------------
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+% ------------------ Index ------------------------
+% \printindex
+
+
+\end{document}

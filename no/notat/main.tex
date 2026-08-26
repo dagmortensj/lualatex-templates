@@ -1,0 +1,369 @@
+% =================================================
+% HOVEDDOKUMENT (NOTATMAL)
+% =================================================
+%
+% Langformede notater i teoretisk fysikk og matematikk.
+%
+% Det typografiske utseendet er definert i notatstil.sty
+% og bør ikke endres her.
+%
+% =================================================
+
+
+\documentclass[a4paper,11pt]{article}
+
+
+% =================================================
+% LAST INN NOTATSTIL
+% =================================================
+\usepackage{notatstil}
+% Kommenter inn for å fjerne lenkefarger (ren typografi, ingen farger):
+% \hypersetup{hidelinks}
+
+
+% =================================================
+% SPRÅK
+% =================================================
+\usepackage[norsk]{babel}
+
+
+% =================================================
+% EGENDEFINERTE PAKKER
+%
+% Legg til prosjektspesifikke pakker her.
+% Ikke sett pakker andre steder i filen.
+% =================================================
+
+% --- Matematikk (standard) ---
+% amsthm og teorem-/definisjon-/merknad-omgivelsene
+% leveres av notatstil.sty.
+\usepackage{amsmath}                % ikke amssymb: unicode-math
+                                    % leverer symbolene
+% mathtools lastes IKKE -- se README for alternativene
+% som er native i unicode-math
+
+% --- Vektorer: \vv{F}, flat pil som spenner over hele symbolet ---
+\usepackage[e]{esvect}
+% esvect sin fontdefinisjon lister bare eksakte størrelser
+% (5, 6, ..., 10 pt), mens unicode-math ber om brøkne mattestørrelser
+% -- NewCM sin scriptscript er 0,50 x 10,95 = 5,475 pt -- og LaTeX
+% bytter bare stille innenfor 0,4 pt. Sammenhengende intervaller
+% dekker alle størrelser. Dette er samme fiks som forfatteren av
+% overarrows tok inn upstream.
+\DeclareFontFamily{U}{esvect}{}
+\DeclareFontShape{U}{esvect}{m}{n}{%
+  <-5.5>    vect5
+  <5.5-6.5> vect6
+  <6.5-7.5> vect7
+  <7.5-8.5> vect8
+  <8.5-9.5> vect9
+  <9.5->    vect10
+}{}
+
+% --- Enheter: \qty{9.81}{\metre\per\second\squared} ---
+\usepackage{siunitx}
+\sisetup{output-decimal-marker={,},   % norsk desimalkomma
+         range-phrase={ til },        % \qtyrange: "10 km til 20 km"
+         list-final-separator={ og }, % \qtylist: "1 V, 2 V og 3 V"
+         list-pair-separator={ og },
+         per-mode=symbol,             % m/s^2, ikke m s^-2
+         separate-uncertainty=true}   % (25,3 +- 0,4) grader C
+
+% --- Tensorindekser: \tensor{R}{^\rho_\sigma_\mu_\nu} ---
+\usepackage{tensor}
+
+% --- Bra-ket: \bra{\psi}, \ket{\phi}, \braket{\psi}{\phi} ---
+\usepackage{physics2}
+\usephysicsmodule{braket}
+
+% Den gamle `physics`-pakka brukes ikke her: den er uten vedlikehold og
+% skrevet for pdflatex-tida. Den virker riktignok sammen med siunitx om
+% du legger til \AtBeginDocument{\RenewCommandCopy\qty\SI}, mot én
+% siunitx-advarsel -- men physics2 dekker det samme uten.
+
+% --- Valgfritt ---
+% \usepackage{slashed}              % Feynman-skråstrek
+% Ikke bm under unicode-math: fet matte er \symbf.
+
+% --- Annet ---
+\usepackage{graphicx}               % figurer
+\graphicspath{{figurer/}}           % figurer ligger i figurer/
+\usepackage{booktabs}               % tabeller
+\usepackage{float}                  % [H]-plassering for figurer
+\usepackage{tikz}                   % native TikZ-figurer
+% \usepackage{enumitem}             % listetilpasning
+
+
+% =================================================
+% EGENDEFINERTE KOMMANDOER
+%
+% Prosjektspesifikke makroer.
+% =================================================
+
+% Oppreist d og i: \symup er unicode-math-formen (\mathrm virker også).
+% \newcommand{\dd}{\symup{d}}
+% \newcommand{\ii}{\symup{i}}
+% \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
+% \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+
+% =================================================
+% METADATA
+% =================================================
+\title{Notattittel}
+\author{Forfatternavn}
+\date{\today}
+
+
+% =================================================
+% DOKUMENT
+% =================================================
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Disse notatene utvikler en liten bit av teoretisk maskineri og
+arbeider gjennom konsekvensene i detalj. Framstillingen holdes
+selvstendig, med definisjoner, formuleringer, korte bevis og
+gjennomgåtte eksempler vekslet med prosa. De avsluttende
+seksjonene samler noen oppgaver til øving.
+\end{abstract}
+
+\clearpage
+\framedtoc
+\clearpage
+
+
+% =================================================
+\section{Bakgrunn}
+
+Disse notatene utvikler en liten bit av teoretisk maskineri
+for å illustrere strukturen i malen. Framstillingen følger
+det typiske mønsteret for matematikk- og fysikknotater:
+definisjoner, formuleringer av resultater, korte bevis, og
+gjennomgåtte eksempler vekslet med prosa.
+
+Siteringer vises i hakeparenteser, f.eks.\ \cite{eksempel-artikkel},
+og flere kilder kombineres og komprimeres til intervaller
+automatisk~\cite{eksempel-artikkel,eksempel-bok}.
+
+
+% =================================================
+\section{Definisjoner og resultater}
+
+\begin{definisjon}
+  La $\mathcal{H}$ være et komplekst separabelt Hilbertrom. En
+  \emph{tilstand} er en enhetsvektor $\psi \in \mathcal{H}$,
+  betraktet opp til en fasefaktor $e^{i\theta}$.
+\end{definisjon}
+
+\begin{definisjon}
+  En \emph{observabel} er en selvadjungert lineær operator
+  $\hat{A}$ som virker på $\mathcal{H}$.
+\end{definisjon}
+
+Forventningsverdien til en observabel i en gitt tilstand er
+definert ved
+\begin{equation}
+  \langle A \rangle_\psi
+  = \langle \psi | \hat{A} | \psi \rangle .
+  \label{eq:forventning}
+\end{equation}
+
+\begin{teorem}
+  Forventningsverdier av selvadjungerte operatorer er reelle.
+\end{teorem}
+
+\begin{proof}
+  Per definisjon,
+  $\overline{\langle A \rangle_\psi}
+  = \overline{\langle \psi | \hat{A} | \psi \rangle}
+  = \langle \psi | \hat{A}^\dagger | \psi \rangle
+  = \langle \psi | \hat{A} | \psi \rangle
+  = \langle A \rangle_\psi$,
+  hvor vi brukte $\hat{A}^\dagger = \hat{A}$.
+\end{proof}
+
+\begin{merknad}
+  At forventningsverdier er reelle, er det som gjør
+  selvadjungerte operatorer til den naturlige matematiske
+  modellen for observerbare størrelser i kvantemekanikk.
+\end{merknad}
+
+\subsection{Tidsutvikling}
+
+Tidsutvikling i kvantemekanikk styres av Schr\"odinger-ligningen:
+\begin{equation}
+  i\hbar \frac{\partial \psi}{\partial t}
+  = \hat{H}\psi ,
+  \label{eq:schrodinger}
+\end{equation}
+hvor $\hat{H}$ er Hamilton-operatoren. For tidsuavhengig
+$\hat{H}$ integrerer ligning~\eqref{eq:schrodinger} til
+\begin{equation}
+  \psi(t) = e^{-i\hat{H}t/\hbar}\,\psi(0).
+\end{equation}
+
+\subsubsection{Stasjonære tilstander}
+En \emph{stasjonær tilstand} er en egentilstand til $\hat{H}$;
+tidsavhengigheten er en ren fase, så enhver forventningsverdi
+er konstant i tid. Run-in-overskrifter som denne markerer det
+laveste strukturnivået og holdes utenfor innholdsfortegnelsen.
+
+
+% =================================================
+\section{Eksempler}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.7\linewidth]{Energy_levels}
+  \caption{Skjematisk energinivådiagram.}
+  \label{fig:nivaer}
+\end{figure}
+
+Figur~\ref{fig:nivaer} viser en typisk struktur som dukker
+opp gjennom resten av notatene. Noen fundamentale konstanter
+er samlet i tabell~\ref{tab:konstanter} for referanse.
+
+\begin{table}[ht]
+  \centering
+  \caption{Fundamentale fysiske konstanter.}
+  \label{tab:konstanter}
+  \begin{tabular}{lcr}
+    \toprule
+    Størrelse           & Symbol  & Verdi                         \\
+    \midrule
+    Lysets hastighet    & $c$     & $2{,}998 \times 10^8$ m/s     \\
+    Plancks konstant    & $\hbar$ & $1{,}055 \times 10^{-34}$ Js  \\
+    Elementærladning    & $e$     & $1{,}602 \times 10^{-19}$ C   \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+% =================================================
+\section{Numeriske metoder}
+
+% TikZ-figureksempel: bruk darkorange til energinivåer / strukturelementer,
+% darkolive til kurver / bølgefunksjoner, svart til akser og vegger, og grå
+% til sekundære etiketter. darkred er reservert for hyperlenker og
+% separatorlinjen -- bruk den ikke i figurer.
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[>=stealth]
+    % Brønnvegger og gulv
+    \draw[very thick] (0,0) -- (0,4);
+    \draw[very thick] (4,0) -- (4,4);
+    \draw[thick]      (-0.3,0) -- (4.3,0);
+    % Energiakse
+    \draw[->,thick] (-0.8,0) -- (-0.8,4.2)
+      node[above,font=\small] {$E$};
+    % Energinivåer (darkorange)
+    \foreach \n/\y in {1/0.65, 2/1.70, 3/3.10} {
+      \draw[darkorange,thick] (0,\y) -- (4,\y);
+      \node[right,font=\small,darkorange] at (4.15,\y) {$E_{\n}$};
+    }
+    % Bølgefunksjoner (darkolive)
+    \draw[darkolive,thick,domain=0:4,samples=80]
+      plot (\x, {0.65 + 0.38*sin(deg(\x*3.14159/4))});
+    \draw[darkolive,thick,domain=0:4,samples=80]
+      plot (\x, {1.70 + 0.38*sin(deg(2*\x*3.14159/4))});
+    \draw[darkolive,thick,domain=0:4,samples=80]
+      plot (\x, {3.10 + 0.38*sin(deg(3*\x*3.14159/4))});
+    % x-aksemerker (grå for sekundær info)
+    \node[below,font=\small,gray] at (0,-0.1) {$0$};
+    \node[below,font=\small,gray] at (4,-0.1) {$L$};
+  \end{tikzpicture}
+  \caption{Uendelig dyp brønn: energinivåer $E_n \propto n^2$
+           (\textcolor{darkorange}{oransje}) og tilhørende
+           egenfunksjoner $\psi_n$ (\textcolor{darkolive}{olivengrønn}).}
+  \label{fig:bronnn}
+\end{figure}
+
+\verb|python|-omgivelsen setter kode med Gruvbox Light
+syntaksutheving direkte i notatene — godt egnet til korte skript
+som følger en analytisk utledning. Eksempelsystemet gjennom hele
+malen er den uendelig dype brønnen, vist i figur~\ref{fig:bronnn}
+med de tre første energinivåene og egenfunksjonene.
+
+Skriptet nedenfor evaluerer sannsynlighetstettheten
+$|\psi_n(x)|^2$ numerisk, og integrerer
+$\langle x \rangle = \int_0^L x\,|\psi_n|^2\,\mathrm{d}x$
+for de tre første nivåene og bekrefter resultatet $\langle x \rangle = L/2$.
+
+\begin{python}
+import numpy as np
+
+def psi(n, x, L=1.0):
+    """Normert bølgefunksjon for uendelig dyp brønn."""
+    return np.sqrt(2.0 / L) * np.sin(n * np.pi * x / L)
+
+def energi(n, L=1.0, hbar=1.0, m=1.0):
+    """Energiegenverdi E_n i naturlige enheter."""
+    return (n * np.pi * hbar)**2 / (2 * m * L**2)
+
+x = np.linspace(0, 1, 1000)
+for n in range(1, 4):
+    tetthet = psi(n, x)**2          # sannsynlighetstetthet |psi_n|^2
+    middelx = np.trapz(x * tetthet, x)
+    print(f"n={n}  E_n={energi(n):.4f}  <x>={middelx:.4f}")
+\end{python}
+
+Kjøring av dette gir $\langle x \rangle \approx 0{,}5000$ for
+alle~$n$, i samsvar med symmetrien til hver egentilstand om
+midtpunktet av brønnen.
+
+
+% =================================================
+\section{Oppgaver}
+
+Notater kan bære oppgaver ved siden av framstillingen.
+\verb|oppgave|-omgivelsen nummereres per seksjon og skilles
+visuelt fra teksten rundt med \verb|\separator|. Deloppgaver
+bruker \verb|deloppgaver|-omgivelsen, som merker delene a), b), c)
+uten å påvirke vanlige \verb|enumerate|-lister.
+
+\separator
+
+\begin{oppgave}[Egenverdier og ortogonalitet]
+  Vis at egenverdiene til en selvadjungert operator $\hat{A}$
+  er reelle, og at egenvektorer som hører til forskjellige
+  egenverdier er ortogonale.
+\end{oppgave}
+
+\begin{oppgave}[Uendelig dyp brønn]
+  Betrakt en partikkel i en endimensjonal uendelig dyp
+  brønn med bredde $L$.
+  \begin{deloppgaver}
+    \item Skriv opp de normerte energiegenfunksjonene.
+    \item Regn ut energinivåene $E_n$.
+  \end{deloppgaver}
+
+  De resterende delene bygger på spekteret funnet ovenfor; bruk
+  resultatet fra deloppgave~(b) når du skisserer tetthetene.
+
+  \begin{deloppgaver}[resume]
+    \item Skisser sannsynlighetstettheten for $n = 1, 2, 3$.
+    \item Regn ut forventningsverdien $\langle x \rangle$ i
+          grunntilstanden.
+  \end{deloppgaver}
+\end{oppgave}
+
+
+% =================================================
+\section{Avslutning}
+
+Disse notatene er en mal; innholdet over finnes kun for å
+demonstrere typografi. Bytt det ut med ditt eget materiale
+etter hvert som notatene utvikler seg.
+
+
+% =================================================
+% BIBLIOGRAFI
+% =================================================
+\bibliographystyle{unsrtnat}
+\bibliography{referanser}
+
+
+\end{document}

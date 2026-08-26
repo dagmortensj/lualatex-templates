@@ -1,0 +1,300 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ffvstil}[2026/08/26 v1.2 Artikkelstil — tokolonne]
+
+% =================================================
+% FILOSOFI
+%
+% Denne stilen er laget for tokolonne artikler i
+% teoretisk fysikk og matematikk, med essayistisk
+% preg.
+%
+% Designprioriteringer:
+%  - ren tokolonne-layout
+%  - lesbar matematikk
+%  - tydelig, men dempet struktur
+%  - typografisk konsistens
+%
+% Stilen er bevisst konservativ.
+% =================================================
+
+
+% =================================================
+% SPRÅK
+%
+% I motsetning til de andre malene i samlingen, lastes
+% babel inne i stilfilen i stedet for i main.tex. Dette
+% holder en fersk main.tex minimal — det å laste stilen
+% er nok til å plukke opp språkinnstillingene.
+% =================================================
+\RequirePackage[norsk]{babel}
+
+
+% =================================================
+% FONT OG MIKROTYPOGRAFI
+%
+% MOTOR: LuaLaTeX (ikke pdflatex).
+%
+% Samme skrift som før -- STIX Two, komplett for tekst
+% og matematikk -- nå lastet som OpenType gjennom
+% unicode-math i stedet for som Type1-pakken stix2.
+% Størrelser og avstander er uendret.
+%
+% FET MATEMATIKK er \symbf / \symbfit / \symbfup, som
+% henter STIX Two sine fete Unicode-alfabeter fra
+% samme fil. \bm og \boldmath hører pdflatex-tida til
+% og virker ikke her -- se README.
+% =================================================
+\RequirePackage{unicode-math}
+
+\setmainfont{STIXTwoText}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic ]
+
+\setmathfont{STIXTwoMath-Regular.otf}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% =================================================
+% SIDEGEOMETRI (A4, TOKOLONNE)
+%
+% Strammere marger er bedre tilpasset tokolonne-
+% formatet enn standardverdiene.
+% =================================================
+\RequirePackage[
+  a4paper,
+  left=2.0cm,
+  right=2.0cm,
+  top=2.5cm,
+  bottom=2.7cm,
+  columnsep=0.7cm
+]{geometry}
+
+
+% =================================================
+% AVSNITT OG LINJEAVSTAND
+%
+% STIX2 ved 10pt gir en naturlig \baselineskip på
+% 12pt. Med \setstretch{1.05} blir den effektive
+% grunnlinjen ~12,6 pt — romslig nok for matematikk
+% uten at brødteksten virker luftig.
+%
+% Klassiske innrykkede avsnitt, ingen avsnittshopp.
+% =================================================
+\setlength{\parindent}{12pt}
+\setlength{\parskip}{0pt}
+
+\RequirePackage{setspace}
+\setstretch{1.05}
+
+
+% =================================================
+% LIGNINGSAVSTANDER
+%
+% Grunnprinsipp: ligningsavstander bør resonere med
+% grunnlinjen (~12,6 pt) slik at matematikken sitter
+% naturlig i teksten.
+%
+% abovedisplayskip / belowdisplayskip:
+%   Brukes når linjen over ligningen er lang (fyller
+%   kolonnebredden). 10pt fast er litt under én
+%   grunnlinje — nok luft til at ligningen puster,
+%   men ikke så mye at den løsrives fra konteksten.
+%
+% abovedisplayshortskip:
+%   Brukes når linjen over er kort — dvs. det er
+%   allerede luft til høyre for teksten. Da trenger
+%   vi vesentlig mindre ekstra plass over ligningen.
+%
+% belowdisplayshortskip:
+%   Etter en ligning bør det alltid være lik luft
+%   uansett hva som stod over.
+%
+% Settes via \AtBeginDocument: LaTeX sin \normalsize (kjørt av
+% \begin{document}) nullstiller alle fire display-skip til
+% klassens standard, så verdier satt her i preamblet ville blitt
+% stille overstyrt. Ved å sette dem etter \normalsize trer de i kraft.
+% =================================================
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\belowdisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\abovedisplayshortskip}{4pt plus 2pt minus 1pt}%
+  \setlength{\belowdisplayshortskip}{10pt plus 3pt minus 2pt}%
+}
+
+
+% =================================================
+% SEKSJONERING
+%
+% Fete overskrifter uten kapitéler — tydelig
+% hierarki i smale kolonner.
+% =================================================
+\RequirePackage{titlesec}
+
+% Seksjoner: fete, litt større
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries}
+  {\thesection.}{0.6em}{}
+
+\titlespacing*{\section}
+  {0pt}{3.5ex plus 1.0ex minus .4ex}{1.6ex plus .3ex}
+
+% Underseksjoner: fete, samme størrelse som brødtekst
+\titleformat{\subsection}
+  {\normalfont\small\bfseries}
+  {\thesubsection.}{0.6em}{}
+
+\titlespacing*{\subsection}
+  {0pt}{3.0ex plus 0.8ex minus .3ex}{1.2ex plus .3ex}
+
+
+% =================================================
+% FLYTPARAMETERE
+%
+% LaTeX sine standardverdier er for konservative for
+% tokolonne-artikler og gir ofte store tomrom.
+% Disse verdiene tillater figurer å fylle mer av
+% siden når det er nødvendig.
+%
+%  topfraction:    maks andel av sidetopp til floats
+%  bottomfraction: maks andel av sidebunn til floats
+%  textfraction:   minste andel tekst på side med floats
+%  floatpagefraction: minst fylling for egen float-side
+% =================================================
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.80}
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dbltopfraction}{0.90}       % for figure* (tokolonne)
+\renewcommand{\dblfloatpagefraction}{0.75}
+
+% Avstand mellom flere figurer og mellom figurer og tekst
+\setlength{\textfloatsep}{14pt plus 3pt minus 3pt}
+\setlength{\floatsep}{12pt plus 3pt minus 2pt}
+\setlength{\intextsep}{12pt plus 3pt minus 2pt}
+\setlength{\dbltextfloatsep}{14pt plus 3pt minus 3pt}
+\setlength{\dblfloatsep}{12pt plus 3pt minus 2pt}
+
+
+% =================================================
+% FIGURTEKSTER
+%
+% font=small      -- ett steg under kroppstekst (JHEP/CUP-standard)
+% labelfont=bf    -- fet «Figur 1.»-etikett (JHEP/CUP-standard)
+% labelsep=period -- punktum etter nummeret, ikke kolon (JHEP-stil)
+% justification: default (singlelinecheck=true) -- enkeltlinjer
+%   sentreres automatisk; flerlinjers tekst justeres
+% skip=6pt        -- tettere luft passer tospaltesoppsettet
+% =================================================
+\RequirePackage[
+  font=small,
+  labelfont=bf,
+  labelsep=period,
+  singlelinecheck=true,
+  skip=6pt
+]{caption}
+
+
+% =================================================
+% TABELLER
+%
+% booktabs gir profesjonelle horisontale streker
+% (\toprule, \midrule, \bottomrule — aldri vertikale).
+% Litt ekstra vertikal luft rundt radene gir tabellene
+% pusterom.
+% =================================================
+\RequirePackage{booktabs}
+\renewcommand{\arraystretch}{1.15}
+
+
+% =================================================
+% GRAFIKK
+% =================================================
+\RequirePackage{graphicx}
+
+
+% =================================================
+% SIDESTIL
+% =================================================
+\pagestyle{plain}
+
+
+% =================================================
+% TITTELBLOKK
+%
+% Tittel i full bredde over tokolonne-kroppen.
+% Bruker \twocolumn[\maketitle]-idiomet.
+% =================================================
+\makeatletter
+\renewcommand{\maketitle}{%
+  \thispagestyle{plain}
+  \begin{center}
+    {\large\scshape \@title \par}
+    \vspace{1.4em}
+    {\normalsize \@author \par}
+    \vspace{0.4em}
+    {\small \@date \par}
+  \end{center}
+  \vspace{1.6em}
+}
+\makeatother
+
+
+% =================================================
+% INGRESSMILJØ
+%
+% Fett innledningsavsnitt i full sidebredde.
+% Plasseres rett etter \maketitle, inne i
+% \twocolumn[...]-argumentet.
+% =================================================
+\newenvironment{ingress}{%
+  \par
+  \centering
+  \begin{minipage}{0.92\linewidth}
+    \small\bfseries
+    \setstretch{1.05}
+}{%
+  \end{minipage}
+  \par
+  \vspace{1.8em}
+}
+
+
+% =================================================
+% REFERANSER
+%
+% natbib må lastes før hyperref.
+% =================================================
+\RequirePackage[numbers,sort&compress]{natbib}
+
+
+% =================================================
+% HYPERLENKER
+%
+% Mørk rødfarge, trygg for utskrift.
+% Lastes sist.
+% =================================================
+\RequirePackage{xcolor}
+\definecolor{darkred}{RGB}{120,20,20}
+
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkred,
+  citecolor=darkred,
+  urlcolor=darkred,
+  linktoc=page
+}
+
+
+% =================================================
+% SLUTT PÅ FIL
+% =================================================
+\endinput

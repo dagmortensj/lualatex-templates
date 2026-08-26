@@ -1,0 +1,22 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Optional artifacts that may appear with some packages
+*.run.xml
+*.bcf
+*.lof
+*.lot
+
+# OS
+.DS_Store
+
+# Note: main.pdf files are intentionally committed so visitors
+# can preview each template without compiling.

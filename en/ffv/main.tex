@@ -1,0 +1,170 @@
+\documentclass[a4paper,10pt,twocolumn]{article}
+
+% =================================================
+% ARTICLE STYLE
+% =================================================
+\usepackage{ffvstyle}
+% Uncomment to suppress link colours (pure typography, no colour at all):
+% \hypersetup{hidelinks}
+
+% =================================================
+% PHYSICS AND MATHEMATICS
+% =================================================
+\usepackage{amsmath}       % no amssymb: unicode-math supplies the
+                           % symbols, and loading both breaks the
+                           % build (\eth already defined)
+                           % mathtools is NOT loaded: see the README
+                           % for the unicode-math-native alternatives
+                           % no bm: incompatible with unicode-math.
+                           % Bold maths is \symbf / \symbfit / \symbfup.
+
+% =================================================
+% CUSTOM PACKAGES AND COMMANDS
+%
+% Add additional packages and custom commands here.
+% Examples that are often useful are commented out
+% below — remove the % to activate them.
+% =================================================
+
+% --- Additional mathematics packages ---
+% \usepackage{slashed}        % Feynman slash for Dirac matrices
+% \usepackage{tensor}         % Nice tensor indices
+% \usepackage{physics2}       % then \usephysicsmodule{braket,ab.legacy}
+%                             % for \ket, \bra, \abs, \norm
+% \usepackage{cancel}         % Cancelled mathematics
+
+% --- Additional text and layout packages ---
+% \usepackage{enumitem}       % Fine control over lists
+% \usepackage{siunitx}        % SI units: \qty{9.81}{\metre\per\second\squared}
+% \usepackage{epigraph}       % Epigraphs at section starts
+
+% --- Custom commands ---
+% \newcommand{\R}{\mathbb{R}}
+% \newcommand{\C}{\mathbb{C}}
+% \newcommand{\mean}[1]{\langle #1 \rangle}
+
+% --- Custom operators ---
+% \DeclareMathOperator{\Tr}{Tr}
+% \DeclareMathOperator{\sgn}{sgn}
+
+% =================================================
+% METADATA — fill in here
+% =================================================
+\title{ARTICLE TITLE\\[0.4em]
+{\large Optional subtitle}}
+\author{First Last}
+\date{\today}
+
+% =================================================
+% DOCUMENT
+% =================================================
+\begin{document}
+
+\twocolumn[
+  \maketitle
+  \begin{lead}
+    Write the lead paragraph here. The lead is a short, self-contained
+    paragraph in bold that gives the reader a quick overview of what
+    the article is about, what the central argument is, and why it
+    is interesting. Two to four sentences is usually about right.
+    Citations are allowed here too~\cite{example2024}.
+  \end{lead}
+]
+
+% =================================================
+\section{Introduction}
+
+Write the introduction here. State the problem, give the necessary
+background, and end with a short overview of the article's structure
+if useful. Paragraphs are marked with indentation --- not with extra
+line breaks.
+
+% =================================================
+\section{Section Two}
+
+Mathematics is set inline as $E = mc^2$ or as numbered equations:
+\begin{equation}
+  \hat{H}\psi = E\psi.
+  \label{eq:example}
+\end{equation}
+Refer to equations with \eqref{eq:example} and to references with
+\cite{example2024}.
+
+% -------------------------------------------------
+% FIGURE — single column (floats within one column)
+% -------------------------------------------------
+\begin{figure}[t]
+  \centering
+  % Replace with your own figure:
+  % \includegraphics[width=\linewidth]{filename}
+  \rule{0.9\linewidth}{3cm}     % placeholder
+  \caption{This is a caption for a single-column figure.
+           The text wraps automatically and is indented neatly
+           below the label.}
+  \label{fig:simple}
+\end{figure}
+
+Refer to figures in the text: figure~\ref{fig:simple} shows an
+example. The placement argument \texttt{[t]} asks LaTeX to place
+the figure at the top of a column --- the most common options are
+\texttt{t} (top), \texttt{b} (bottom), \texttt{h} (here if possible),
+and \texttt{p} (own page).
+
+\subsection{Subsection}
+
+Use subsections to structure longer sections.
+
+% -------------------------------------------------
+% FIGURE — two-column (spans both columns)
+% -------------------------------------------------
+\begin{figure*}[t]
+  \centering
+  % Replace with your own figure:
+  % \includegraphics[width=0.9\linewidth]{filename}
+  \rule{0.9\linewidth}{3.5cm}   % placeholder
+  \caption{This is a two-column figure that spans the full page
+           width. Use it for wide illustrations, multi-panel plots,
+           or figures that need a lot of space to be readable.
+           The \texttt{figure*} environment floats only to the top
+           or bottom of pages.}
+  \label{fig:wide}
+\end{figure*}
+
+% -------------------------------------------------
+% TABLE
+% -------------------------------------------------
+\begin{table}[t]
+  \centering
+  \caption{An example of a tasteful table with \texttt{booktabs}.
+           Vertical lines are avoided; horizontal lines are used
+           sparingly (top, between header and data, bottom).}
+  \label{tab:example}
+  \begin{tabular}{lcr}
+    \toprule
+    Quantity & Symbol & Value \\
+    \midrule
+    Speed of light       & $c$      & $2.998 \times 10^8$ m/s \\
+    Planck's constant    & $\hbar$  & $1.055 \times 10^{-34}$ Js \\
+    Elementary charge    & $e$      & $1.602 \times 10^{-19}$ C \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% =================================================
+\section{Conclusion}
+
+Summarize the main results and feel free to point toward open
+questions or further work.
+
+% =================================================
+% REFERENCES
+% Compile order:
+%   lualatex main
+%   bibtex   main
+%   lualatex main
+%   lualatex main
+% =================================================
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\end{document}
