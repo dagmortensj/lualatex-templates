@@ -1,22 +1,55 @@
-# LaTeX build artifacts
+# ------------------------------------------------------------
+# Build artifacts
+#
+# main.pdf is NOT ignored: the bundled PDFs let a visitor see
+# what each template produces without compiling anything.
+# ------------------------------------------------------------
+
+# Every run leaves these
 *.aux
-*.bbl
-*.blg
-*.fdb_latexmk
-*.fls
 *.log
 *.out
-*.synctex.gz
-*.toc
+*.fls
+*.fdb_latexmk
 
-# Optional artifacts that may appear with some packages
-*.run.xml
-*.bcf
+# bibtex
+*.bbl
+*.blg
+
+# Table of contents, list of figures / tables
+*.toc
 *.lof
 *.lot
 
-# OS
-.DS_Store
+# makeindex — the book template documents an index in \backmatter
+*.idx
+*.ind
+*.ilg
 
-# Note: main.pdf files are intentionally committed so visitors
-# can preview each template without compiling.
+# Editor <-> PDF sync. The (busy) file is left behind when a
+# build is interrupted.
+*.synctex.gz
+*.synctex
+*.synctex\(busy\)
+
+# biber, if a document swaps natbib for biblatex
+*.bcf
+*.run.xml
+
+# TikZ externalization, if \tikzexternalize is turned on
+*.figlist
+*.makefile
+*.auxlock
+
+# ------------------------------------------------------------
+# Editors and operating system
+# ------------------------------------------------------------
+*~
+*.swp
+.DS_Store
+._*
+
+# Uncomment to keep VS Code settings out of the repo. Left
+# tracked by default: a committed .vscode/settings.json is a
+# convenient place for the latexmk-lualatex recipe.
+# .vscode/
