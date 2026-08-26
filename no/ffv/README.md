@@ -1,4 +1,4 @@
-# artikkel-template
+# ffv-mal
 
 Tokolonne LaTeX-artikkelmal for norskspråklige, essayistiske
 fysikk- og matematikkartikler. Settes med **LuaLaTeX** — STIX Two
@@ -95,8 +95,8 @@ vertikale streker.
 
 ## Matematikk
 
-Motorbyttet erstatter den gamle stabelen `amsmath` + `amssymb` + `bm` med
-`unicode-math`. Hva det betyr i praksis:
+Dette er `unicode-math`-dokumenter. Kommer du fra et pdflatex-preamble,
+er det tre vaner som må endres:
 
 | I stedet for | Bruk | Hvorfor |
 |---|---|---|
@@ -105,18 +105,21 @@ Motorbyttet erstatter den gamle stabelen `amsmath` + `amssymb` + `bm` med
 | `\usepackage{amssymb}` | ingenting | `unicode-math` leverer symbolene; lastes begge, brekker bygget (`\eth already defined`) |
 | `\vec`, `\overrightarrow` | `\usepackage[e]{esvect}`, `\vv{F}` | samlingens vektorkonvensjon, om et dokument vil ha piler |
 
-`\symbf` henter STIX Two sine tegnede fete Unicode-alfabeter fra samme
-fontfil, og virker derfor på gresk så vel som latinsk. Matte inne i en fet
-overskrift står i vanlig vekt — det følger av fonten og er ingen feil.
+`\symbf` når STIX Two sine tegnede fete Unicode-alfabeter i samme fontfil,
+og det er derfor den virker på gresk der `\bm` ikke gjør det. Matte inne i
+en fet overskrift står i vanlig vekt: fonten har ingen fet matematikk, og
+det følger av fonten, ikke av en feil.
 
-Mer generelt: dette er et `unicode-math`-dokument kompilert med LuaLaTeX.
-Mattepakker skrevet for pdflatex kan fungere eller ikke, og lista over er
-ikke uttømmende. `physics2`, `tensor`, `esvect` og `siunitx` er verifisert.
+Tabellen er ikke uttømmende. En mattepakke skrevet for pdflatex kan
+fungere eller ikke — `esvect`, `siunitx`, `tensor` og `physics2` er
+verifisert.
 
-`mathtools` lastes bevisst **ikke**. Den virker under LuaLaTeX, men å laste
-den får `unicode-math` til å melde fra om to kommandoer den overtar, og å
-dempe det krever maskineri stilfila ikke har noe med å bære. Det den
-tilbyr har native eller bedre vedlikeholdte ekvivalenter:
+### mathtools
+
+Lastes bevisst ikke. Den kjører under LuaLaTeX, men å laste den får
+`unicode-math` til å melde fra om to kommandoer den overtar, og å dempe
+det krever maskineri en stilfil ikke har noe med å bære. Alt den tilbyr
+har en ekvivalent som er native eller bedre vedlikeholdt:
 
 | `mathtools` | Bruk i stedet |
 |---|---|
@@ -126,15 +129,10 @@ tilbyr har native eller bedre vedlikeholdte ekvivalenter:
 | `\coloneqq`, `\eqqcolon` | `\coloneq`, `\eqcolon`, `\Coloneq` — `unicode-math` sine egne, enkelt q |
 | `\overbracket` | `\overbrace` |
 
-Alle fem verifisert under `unicode-math`. Vil du ha `mathtools` likevel,
-last den **over** stilfila — det unngår rekkefølge-advarselen, men de to
-`unicode-math`-meldingene består:
-
-```latex
-\usepackage{mathtools}
-\usepackage{ffvstil}
-```
-
+Alle fem verifisert. Vil du ha `mathtools` likevel, last den *over*
+stilfila — `\usepackage{mathtools}` og så `\usepackage{ffvstil}`. Det
+unngår pakkas egen rekkefølge-advarsel; de to `unicode-math`-meldingene
+består, og dem får du leve med.
 
 ## Typografi
 

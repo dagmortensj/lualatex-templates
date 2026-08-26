@@ -1,33 +1,32 @@
-% =================================================
-% HOVEDDOKUMENT (HANDOUT-MAL)
-% =================================================
+% ============================================================
+% main.tex — selve handout-en
 %
-% Notater og oppgavesett i fysikk og matematikk.
+% Denne fila er struktur og innhold. Alle typografiske
+% valg bor i handoutstyle.sty.
 %
-% Det typografiske utseendet er definert i handoutstyle.sty
-% og bør ikke endres her.
-%
-% =================================================
+% Kompiler med LuaLaTeX, ikke pdflatex:
+%   latexmk -lualatex main
+% ============================================================
 
 
 \documentclass[11pt]{article}
 
 
-% =================================================
+% ============================================================
 % LAST INN HANDOUT-STIL
-% =================================================
+% ============================================================
 \usepackage{handoutstyle}
 
 
-% =================================================
+% ============================================================
 % SPRÅK
-% =================================================
+% ============================================================
 \usepackage[norsk]{babel}
 
 
-% =================================================
+% ============================================================
 % VALGFRIE HANDOUT-JUSTERINGER  (fjern % for å slå på)
-% =================================================
+% ============================================================
 
 % --- Av med avsnittsinnrykk ---
 % Bruk parskip, ikke bare \parindent=0pt: malen nuller også
@@ -40,12 +39,12 @@
 % \pagestyle{empty}
 
 
-% =================================================
+% ============================================================
 % EGENDEFINERTE PAKKER
 %
 % Legg til prosjektspesifikke pakker her.
 % Ikke sett pakker andre steder i filen.
-% =================================================
+% ============================================================
 
 % --- Matematikk (standard) ---
 \usepackage{amsmath}                % ikke amssymb: unicode-math
@@ -100,13 +99,13 @@
 \usepackage{tikz}                   % native TikZ-figurer
 
 
-% =================================================
+% ============================================================
 % EGENDEFINERTE KOMMANDOER
 %
 % Prosjektspesifikke makroer.
 %
 % \separator-linjen leveres av handoutstyle.sty.
-% =================================================
+% ============================================================
 
 % Oppreist d og i: \symup er unicode-math-formen (\mathrm virker også).
 % \newcommand{\dd}{\symup{d}}
@@ -115,25 +114,25 @@
 % \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
 
 
-% =================================================
+% ============================================================
 % METADATA
-% =================================================
+% ============================================================
 \title{Handouttittel}
 \date{Våren 2026 $\cdot$ Kursnavn}
 
 
-% =================================================
+% ============================================================
 % DOKUMENT
-% =================================================
+% ============================================================
 \begin{document}
 
 \maketitle
 % \thispagestyle{empty}   % side 1: fjerner tallet (se \pagestyle over)
 
 
-% =================================================
+% ============================================================
 % SEKSJON
-% =================================================
+% ============================================================
 \section{Energi og bevaring}
 
 En partikkel med masse $m$ beveger seg i et endimensjonalt
@@ -200,9 +199,9 @@ seksjonstittelen, men holder seg på kroppsstørrelse --- nok til
 forelesningsnotater.
 
 
-% =================================================
+% ============================================================
 % OPPGAVE
-% =================================================
+% ============================================================
 \begin{oppgave}[Harmonisk oscillator]
 Betrakt en partikkel med masse $m$ i potensialet
 $V(x) = \tfrac{1}{2}kx^2$.
@@ -226,9 +225,9 @@ tid og bruke bevegelsesligningen fra deloppgave~(a).
 \separator
 
 
-% =================================================
+% ============================================================
 % OPPGAVE
-% =================================================
+% ============================================================
 \begin{oppgave}[Skråplan]
 En kloss med masse $m$ glir nedover et friksjonsfritt
 skråplan som danner vinkelen $\theta$ med horisontalen.
@@ -241,9 +240,9 @@ skråplan som danner vinkelen $\theta$ med horisontalen.
 \end{oppgave}
 
 
-% =================================================
+% ============================================================
 % SEKSJON
-% =================================================
+% ============================================================
 \section{Sirkelbevegelse}
 
 \begin{figure}[t]
@@ -257,9 +256,9 @@ Ved jevn sirkelbevegelse har sentripetalakselerasjonen
 størrelsen $a_s = v^2/r$, rettet inn mot sentrum av sirkelen.
 
 
-% =================================================
+% ============================================================
 % OPPGAVE
-% =================================================
+% ============================================================
 \begin{oppgave}[Sirkulær bane]
 En satellitt går i en sirkulær bane med radius $r$ rundt en
 planet med masse $M$.
@@ -272,9 +271,9 @@ planet med masse $M$.
 \end{oppgave}
 
 
-% =================================================
+% ============================================================
 % SEKSJON
-% =================================================
+% ============================================================
 \section{Numerisk eksempel}
 
 \verb|python|-omgivelsen setter kode med Gruvbox Light

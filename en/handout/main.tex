@@ -1,33 +1,32 @@
-% =================================================
-% MAIN DOCUMENT (HANDOUT TEMPLATE)
-% =================================================
+% ============================================================
+% main.tex — the handout itself
 %
-% Physics / mathematics handouts and problem sheets.
+% This file is structure and content. Every typographic
+% decision lives in handoutstyle.sty.
 %
-% Typographic appearance is defined in handoutstyle.sty
-% and should not be altered here.
-%
-% =================================================
+% Compile with LuaLaTeX, not pdflatex:
+%   latexmk -lualatex main
+% ============================================================
 
 
 \documentclass[11pt]{article}
 
 
-% =================================================
+% ============================================================
 % LOAD HANDOUT STYLE
-% =================================================
+% ============================================================
 \usepackage{handoutstyle}
 
 
-% =================================================
+% ============================================================
 % LANGUAGE
-% =================================================
+% ============================================================
 \usepackage[english]{babel}
 
 
-% =================================================
+% ============================================================
 % OPTIONAL HANDOUT TWEAKS  (uncomment to enable)
-% =================================================
+% ============================================================
 
 % --- No paragraph indentation ---
 % Use parskip, not a bare \parindent=0pt: the style also zeroes
@@ -40,12 +39,12 @@
 % \pagestyle{empty}
 
 
-% =================================================
+% ============================================================
 % CUSTOM PACKAGES
 %
 % Add project-specific packages here.
 % Do not insert packages elsewhere in the file.
-% =================================================
+% ============================================================
 
 % --- Mathematics (defaults) ---
 \usepackage{amsmath}                % no amssymb: unicode-math
@@ -94,13 +93,13 @@
 \usepackage{tikz}                   % native TikZ figures
 
 
-% =================================================
+% ============================================================
 % CUSTOM COMMANDS
 %
 % Project-specific macros.
 %
 % The \separator rule is provided by handoutstyle.sty.
-% =================================================
+% ============================================================
 
 % Upright d and i: \symup is the unicode-math form (\mathrm also works).
 % \newcommand{\dd}{\symup{d}}
@@ -109,25 +108,25 @@
 % \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
 
 
-% =================================================
+% ============================================================
 % METADATA
-% =================================================
+% ============================================================
 \title{Handout Title}
 \date{Spring 2026 $\cdot$ Course Name}
 
 
-% =================================================
+% ============================================================
 % DOCUMENT
-% =================================================
+% ============================================================
 \begin{document}
 
 \maketitle
 % \thispagestyle{empty}   % page 1: clears the number (see \pagestyle above)
 
 
-% =================================================
+% ============================================================
 % SECTION
-% =================================================
+% ============================================================
 \section{Energy and Conservation}
 
 A particle of mass $m$ moves in a one-dimensional potential
@@ -193,9 +192,9 @@ title, while remaining at body size --- enough to mark a finer level
 when the handout is used for lecture notes.
 
 
-% =================================================
+% ============================================================
 % EXERCISE
-% =================================================
+% ============================================================
 \begin{exercise}[Simple harmonic oscillator]
 Consider a particle of mass $m$ in the potential
 $V(x) = \tfrac{1}{2}kx^2$.
@@ -219,9 +218,9 @@ to time and using the equation of motion from part~(a).
 \separator
 
 
-% =================================================
+% ============================================================
 % EXERCISE
-% =================================================
+% ============================================================
 \begin{exercise}[Inclined plane]
 A block of mass $m$ slides down a frictionless inclined plane
 that makes an angle $\theta$ with the horizontal.
@@ -234,9 +233,9 @@ that makes an angle $\theta$ with the horizontal.
 \end{exercise}
 
 
-% =================================================
+% ============================================================
 % SECTION
-% =================================================
+% ============================================================
 \section{Circular Motion}
 
 \begin{figure}[t]
@@ -251,9 +250,9 @@ magnitude $a_c = v^2/r$, directed toward the center of the
 circle.
 
 
-% =================================================
+% ============================================================
 % EXERCISE
-% =================================================
+% ============================================================
 \begin{exercise}[Circular orbit]
 A satellite moves in a circular orbit at radius $r$ around a
 planet of mass $M$.
@@ -267,9 +266,9 @@ planet of mass $M$.
 \end{exercise}
 
 
-% =================================================
+% ============================================================
 % SECTION
-% =================================================
+% ============================================================
 \section{Numerical Example}
 
 The \verb|python| environment typesets code with Gruvbox Light

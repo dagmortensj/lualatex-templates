@@ -1,95 +1,90 @@
 # lualatex-templates
 
-A small collection of personal LaTeX templates for academic and
-teaching work — books, articles, lecture notes, problem sheets.
-Each template is self-contained and available in both English and
-Norwegian.
+Four LaTeX templates for academic and teaching work — a monograph, a
+two-column article, lecture notes, and problem sheets — each in English
+and Norwegian. Copy a folder, edit `main.tex`, compile.
 
-They are typeset with **LuaLaTeX** and `unicode-math`, using OpenType
-fonts throughout. An earlier pdflatex edition of the same four templates
-lives in [latex-templates](https://github.com/dagmortensj/latex-templates).
+Typeset with **LuaLaTeX** and `unicode-math`, OpenType fonts throughout.
+An earlier pdflatex edition of the same four lives in
+[latex-templates](https://github.com/dagmortensj/latex-templates).
 
 ## Templates
 
-Each template has an English version in `en/` and a Norwegian
-version in `no/`:
+English in `en/`, Norwegian in `no/`.
 
-| Template    | Description              | Features                                                                    |
-|-------------|--------------------------|-----------------------------------------------------------------------------|
-| **book**    | CUP-style monograph      | parts, chapters, drop caps, superscript citations                           |
-| **ffv**     | JHEP two-column article  | STIX2 typography, numbered citations                                        |
-| **handout** | Problem sheets           | theorem environments, exercises, python code                                |
-| **notes**   | CUP-style lecture notes  | theorem environments, exercises, python code; framed TOC, numbered citations|
+| Template | Format | What it is |
+|---|---|---|
+| **book** / **bok** | B5 or A4 | A monograph in CUP style: parts, chapters, drop caps, superscript citations |
+| **ffv** | A4, two columns | An essayistic physics or mathematics article, numbered citations |
+| **notes** / **notat** | A4 | Long-form notes: theorem and exercise environments, framed contents, Python listings |
+| **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, Python listings |
 
-All templates include figure and table support.
+`notes` and `handout` share their exercise environments, so a problem set
+moves between them unchanged; `book` and `notes` share their equation
+spacing, so the two read as a family.
 
 ## Fonts and engine
 
-**All four templates compile with `lualatex`, not `pdflatex`.** They load
-OpenType fonts through `unicode-math`, which pdflatex cannot use; running
-the wrong engine produces a wall of errors rather than a helpful message.
+**Compile with `lualatex`, not `pdflatex`.** The fonts are OpenType and
+load through `unicode-math`. The wrong engine gives you a wall of errors
+rather than a helpful message.
 
-| Template    | Text                     | Mathematics          |
-|-------------|--------------------------|----------------------|
-| **book**    | Garamond Libre           | STIX Two Math (0.90) |
-| **ffv**     | STIX Two Text            | STIX Two Math        |
-| **handout** | NewComputerModern (Book) | NewCM Math (Book)    |
-| **notes**   | NewComputerModern (Book) | NewCM Math (Book)    |
+| Template | Text | Mathematics |
+|---|---|---|
+| **book** | Garamond Libre, 12 pt | STIX Two Math at `Scale=0.90` |
+| **ffv** | STIX Two Text, 10 pt | STIX Two Math |
+| **notes** | NewComputerModern Book, 11 pt | NewCM Math Book |
+| **handout** | NewComputerModern Book, 11 pt | NewCM Math Book |
 
-All four use `unicode-math`, and share three rules:
+Three rules follow from `unicode-math` and hold for all four:
 
-- **Bold mathematics is `\symbf` / `\symbfit` / `\symbfup`**, never `\bm`.
-  `bm` is incompatible with `unicode-math` and hard-errors on Greek.
-  `\boldmath` does not work either: neither STIX Two Math nor NewCM Math
-  has a bold weight, so it silently sets regular-weight maths.
-- **`amssymb` must not be loaded.** `unicode-math` supplies the symbols,
-  and loading both breaks the build.
-- **`mathtools` is not loaded.** It works under LuaLaTeX, but pulls two
-  `unicode-math` notices with it. `physics2` (module `ab.legacy`) replaces
+- **Bold maths is `\symbf` / `\symbfit` / `\symbfup`**, never `\bm`, which
+  is incompatible and hard-errors on Greek. `\boldmath` does not work
+  either: neither maths face has a bold weight, so it silently sets
+  regular weight.
+- **Do not load `amssymb`.** `unicode-math` supplies the symbols, and
+  loading both breaks the build.
+- **`mathtools` is not loaded.** It runs, but brings two `unicode-math`
+  notices with it. `physics2` (module `ab.legacy`) replaces
   `\DeclarePairedDelimiter`, `tensor` replaces `\prescript`, and
-  `unicode-math` has its own `\coloneq` / `\eqcolon`. Each template's
-  README carries the full table.
+  `unicode-math` has its own `\coloneq` / `\eqcolon`.
 
-More broadly, these are `unicode-math` documents: maths packages written
-for pdflatex may or may not work, and the three rules above are not an
-exhaustive list. Each template's README carries its own table.
+Those three are not the whole story — a maths package written for
+pdflatex may or may not work here. Each template's README carries its own
+table of what was checked.
 
-All four build with no warnings.
+`notes` and `handout` also load `esvect`, `siunitx`, `tensor` and
+`physics2` ready to use, for vectors, units, tensor indices and bra-ket.
+
+All eight build with no warnings.
 
 ## Quick start
 
-1. Copy the template folder you want into a new project
-2. Open the new copy's `README.md` for template-specific guidance
-3. Edit `main.tex` — the document body is sectioned for easy navigation
-4. Compile with `latexmk -lualatex main` (each template's README
-   documents the exact command and run order)
+1. Copy the template folder into a new project
+2. Read the copy's own `README.md`
+3. Edit `main.tex` — the body is sectioned so you can find your way
+4. `latexmk -lualatex main`
 
-Each template ships with:
-
-- `main.tex` — the document body, with example content demonstrating the template's features
-- A style file (`bookstyle.sty`, `notesstyle.sty`, `handoutstyle.sty`, ...) — all formatting lives here
-- A `.bib` file with example bibliography entries
-- A `figures/` (or `figurer/`) folder with a stock figure
-- A `README.md` documenting the template's features and conventions
-
-The bundled `main.pdf` lets you preview what each template produces without compiling.
+Every folder holds `main.tex`, a style file where all the formatting
+lives, and its own `README.md`. `book`, `ffv` and `notes` add a `.bib`
+with example entries; `book`, `notes` and `handout` add a `figures/`
+folder with a stock figure. The bundled `main.pdf` shows what each one
+produces before you compile anything.
 
 ## Languages
 
-The English (`en/`) and Norwegian (`no/`) versions are functionally
-equivalent. The differences are:
+The two versions are functionally equivalent. What differs:
 
 - **Babel** — `[english]` vs `[norsk]`
-- **Filenames** — Norwegian versions use Norwegian names
-  (`bok` instead of `book`, `referanser.bib` instead of `references.bib`,
-  `bokstil.sty` instead of `bookstyle.sty`, etc.)
-- **Comments and placeholder text** — written in the matching language
-- **Number formatting** — the Norwegian `notes` and `handout` set `siunitx`
-  to a decimal comma, «til» in `\qtyrange` and «og» in `\qtylist`; the
-  English ones keep siunitx's defaults (decimal point, "to", "and")
+- **Filenames** — Norwegian folders use Norwegian names: `bok`,
+  `referanser.bib`, `bokstil.sty`. `no/handout` is the exception, since
+  the folder name is not translated and neither is its style file.
+- **Comments and placeholder text** — in the matching language
+- **Numbers** — the Norwegian `notes` and `handout` set `siunitx` to a
+  decimal comma, «til» in `\qtyrange` and «og» in `\qtylist`; the English
+  ones keep siunitx's defaults
 
-The layout, packages, and typography are otherwise identical between the
-two versions.
+Layout, packages and typography are otherwise identical.
 
 ## License
 
@@ -98,12 +93,12 @@ appreciated but not required.
 
 ## Notes
 
-These templates reflect my own conventions and aesthetic preferences
-for academic and teaching documents. They're shared in case they're
-useful to others — feel free to fork and adapt to your own needs.
+These templates reflect my own conventions and aesthetic preferences for
+academic and teaching documents. They are shared in case they are useful
+to others — fork and adapt them freely.
 
 ## Acknowledgements
 
-These templates were developed in collaboration with Claude (Anthropic).
-Comments in style files and README documentation were written by Claude
-and reviewed for accuracy, but may contain errors or imprecisions.
+Developed in collaboration with Claude (Anthropic). The style-file
+comments and README documentation were written by Claude and reviewed for
+accuracy, but may still contain errors.

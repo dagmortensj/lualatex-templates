@@ -1,30 +1,39 @@
+% ============================================================
+% main.tex — selve artikkelen
+%
+% Denne fila er struktur og innhold. Alle typografiske
+% valg bor i ffvstil.sty, som også laster babel.
+%
+% Kompiler med LuaLaTeX, ikke pdflatex:
+%   latexmk -lualatex main
+% ============================================================
 \documentclass[a4paper,10pt,twocolumn]{article}
 
-% =================================================
+% ============================================================
 % ARTIKKELSTIL
-% =================================================
+% ============================================================
 \usepackage{ffvstil}
-% Kommenter inn for å fjerne lenkefarger (ren typografi, ingen farger):
+% Kommenter inn for lenker uten farge i det hele tatt:
 % \hypersetup{hidelinks}
 
-% =================================================
-% FYSIKK OG MATEMATIKK
-% =================================================
-\usepackage{amsmath}       % ikke amssymb: unicode-math leverer
-                           % symbolene, og lastes begge brekker
-                           % bygget (\eth already defined)
-                           % mathtools lastes IKKE: se README for
-                           % alternativene som er native i unicode-math
-                           % ikke bm: inkompatibel med unicode-math.
-                           % Fet matte er \symbf / \symbfit / \symbfup.
+% ============================================================
+% MATEMATIKK
+%
+% Ikke amssymb: unicode-math leverer symbolene, og lastes
+% begge brekker bygget (\eth already defined). Ikke bm
+% heller — fet matte er \symbf / \symbfit / \symbfup.
+% mathtools lastes ikke; README lister erstatningene som er
+% native i unicode-math.
+% ============================================================
+\usepackage{amsmath}
 
-% =================================================
+% ============================================================
 % EGNE PAKKER OG KOMMANDOER
 %
 % Legg inn ekstra pakker og egendefinerte kommandoer
 % her. Eksempler som ofte er nyttige er kommentert ut
 % nedenfor — fjern %-tegnet for å aktivere dem.
-% =================================================
+% ============================================================
 
 % --- Ekstra matematiske pakker ---
 % \usepackage{slashed}        % Feynman-slash for Dirac-matriser
@@ -47,17 +56,17 @@
 % \DeclareMathOperator{\Tr}{Tr}
 % \DeclareMathOperator{\sgn}{sgn}
 
-% =================================================
+% ============================================================
 % METADATA — fyll inn her
-% =================================================
+% ============================================================
 \title{ARTIKKELTITTEL\\[0.4em]
 {\large Undertittel om ønskelig}}
 \author{Fornavn Etternavn}
 \date{\today}
 
-% =================================================
+% ============================================================
 % DOKUMENT
-% =================================================
+% ============================================================
 \begin{document}
 
 \twocolumn[
@@ -71,7 +80,7 @@
   \end{ingress}
 ]
 
-% =================================================
+% ============================================================
 \section{Innledning}
 
 Skriv innledningen her. Introduser problemstillingen, gi nødvendig
@@ -79,7 +88,7 @@ bakgrunn, og avslutt gjerne med en kort oversikt over artikkelens
 struktur. Avsnitt markeres med innrykk --- ikke med ekstra
 linjeskift.
 
-% =================================================
+% ============================================================
 \section{Seksjon to}
 
 Matematikk settes inline som $E = mc^2$ eller som nummererte
@@ -151,20 +160,20 @@ Bruk underseksjoner for å strukturere lengre seksjoner.
   \end{tabular}
 \end{table}
 
-% =================================================
+% ============================================================
 \section{Avslutning}
 
 Oppsummer hovedresultatene og pek gjerne mot åpne spørsmål eller
 videre arbeid.
 
-% =================================================
+% ============================================================
 % REFERANSER
 % Kompileringsrekkefølge:
 %   lualatex main
 %   bibtex   main
 %   lualatex main
 %   lualatex main
-% =================================================
+% ============================================================
 \bibliographystyle{unsrtnat}
 \bibliography{referanser}
 

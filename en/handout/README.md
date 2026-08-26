@@ -154,8 +154,8 @@ Typical usage:
 
 ## Mathematics
 
-The engine change swaps the old `amsmath` + `amssymb` + `bm` stack for
-`unicode-math`. What that means in practice:
+These are `unicode-math` documents. If you are arriving from a pdflatex
+preamble, three habits have to change:
 
 | Instead of | Use | Why |
 |---|---|---|
@@ -163,37 +163,14 @@ The engine change swaps the old `amsmath` + `amssymb` + `bm` stack for
 | `\boldmath` | `\symbf` | NewCM Math has no bold weight, so `\boldmath` sets regular-weight maths |
 | `\usepackage{amssymb}` | nothing | `unicode-math` supplies the symbols; loading both breaks the build (`\eth already defined`) |
 
-`\symbf` selects NewCM Math's designed Unicode bold alphabets from the same
-font file, so it works for Greek as well as Latin.
+`\symbf` reaches NewCM Math's drawn Unicode bold alphabets in the same
+font file, which is why it works on Greek where `\bm` does not.
 
-More generally: this is a `unicode-math` document compiled with LuaLaTeX.
-Maths packages written for pdflatex may or may not work, and the list above
-is not exhaustive. The four packages the template loads (listed below)
-are verified, as are `listings` and `tikz`.
+The table is not exhaustive. A maths package written for pdflatex may or
+may not work here — the four the template loads for you are verified, as
+are `listings` and `tikz`.
 
-`mathtools` is deliberately **not** loaded. It works under LuaLaTeX, but
-loading it makes `unicode-math` emit two notices about commands it takes
-over, and silencing those needs machinery the style file has no business
-carrying. What it offers has native or better-maintained equivalents:
-
-| `mathtools` | Use instead |
-|---|---|
-| `\DeclarePairedDelimiter` | `physics2` with the `ab.legacy` module — `\abs`, `\abs*`, `\norm`, `\eval` |
-| `\prescript` | `tensor` — `\tensor*[^{14}_{6}]{C}{}` |
-| `\dcases` | `cases` with `\displaystyle` in each row |
-| `\coloneqq`, `\eqqcolon` | `\coloneq`, `\eqcolon`, `\Coloneq` — `unicode-math`'s own, single q |
-| `\overbracket` | `\overbrace` |
-
-All five verified under `unicode-math`. If you want `mathtools` anyway,
-load it **above** the style file — that avoids its load-order warning,
-though the two `unicode-math` notices remain:
-
-```latex
-\usepackage{mathtools}
-\usepackage{handoutstyle}
-```
-
-### Maths packages the template loads for you
+### Packages the template loads
 
 | Package | For | Example |
 |---|---|---|
@@ -233,15 +210,39 @@ decoration: the package's own font definition lists exact sizes only, while
 subscripts come out about 9 % too small with a warning. It is the same fix
 the `overarrows` author later adopted upstream.
 
+### mathtools
+
+Not loaded, deliberately. It runs under LuaLaTeX, but loading it makes
+`unicode-math` report two commands it takes over, and quieting that needs
+machinery a style file has no business carrying. Everything it offers has
+an equivalent that is native or better maintained:
+
+| `mathtools` | Use instead |
+|---|---|
+| `\DeclarePairedDelimiter` | `physics2` with the `ab.legacy` module — `\abs`, `\abs*`, `\norm`, `\eval` |
+| `\prescript` | `tensor` — `\tensor*[^{14}_{6}]{C}{}` |
+| `\dcases` | `cases` with `\displaystyle` in each row |
+| `\coloneqq`, `\eqqcolon` | `\coloneq`, `\eqcolon`, `\Coloneq` — `unicode-math`'s own, single q |
+| `\overbracket` | `\overbrace` |
+
+All five verified. If you want `mathtools` regardless, load it *above*
+the style file — `\usepackage{mathtools}` then `\usepackage{handoutstyle}`.
+That avoids its own load-order warning; the two `unicode-math` notices
+remain, and they are yours to live with.
+
 ## Typography
 
 - **Font:** NewComputerModern (Book weight), text and mathematics
 - **Engine:** LuaLaTeX (`unicode-math`, OpenType)
-- **Page size:** A4, symmetric margins (3.0 cm L/R)
+- **Page size:** A4, symmetric margins (3.0 cm all round)
+- **Measure:** 150 mm — 3.06 lowercase alphabets, wider than
+  Bringhurst's 1.8–2.4 window; the leading compensates
 - **Line spacing:** 1.04
 - **Paragraphs:** indented, no line break
 - **Microtypography:** protrusion, expansion, tracking enabled
-- **Headings:** two quiet levels — section (`\large`) and subsection (body size), bold; no oversized fonts or rules. The subsection lets the handout double as lecture notes.
+- **Headings:** two levels, bold — section (`\large`), subsection (body
+  size). No display sizes and no rules; the second level lets the same
+  style carry lecture notes
 - **Title block:** small caps, letterspaced, centered
 - **Hyperlinks and rules:** dark red, print-safe
 

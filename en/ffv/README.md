@@ -1,4 +1,4 @@
-# article-template
+# ffv-template
 
 Two-column LaTeX article template for English-language, essayistic
 physics and mathematics articles. Typeset with **LuaLaTeX** — STIX Two
@@ -95,8 +95,8 @@ vertical lines.
 
 ## Mathematics
 
-The engine change swaps the old `amsmath` + `amssymb` + `bm` stack for
-`unicode-math`. What that means in practice:
+These are `unicode-math` documents. If you are arriving from a pdflatex
+preamble, three habits have to change:
 
 | Instead of | Use | Why |
 |---|---|---|
@@ -105,18 +105,21 @@ The engine change swaps the old `amsmath` + `amssymb` + `bm` stack for
 | `\usepackage{amssymb}` | nothing | `unicode-math` supplies the symbols; loading both breaks the build (`\eth already defined`) |
 | `\vec`, `\overrightarrow` | `\usepackage[e]{esvect}`, `\vv{F}` | the collection's vector convention, if a document wants arrows |
 
-`\symbf` selects STIX Two's designed Unicode bold alphabets from the same
-font file, so it works for Greek as well as Latin. Maths inside a bold
-heading stays regular weight — a consequence of the face, not a fault.
+`\symbf` reaches STIX Two's drawn Unicode bold alphabets in the same font
+file, which is why it works on Greek where `\bm` does not. Maths inside a
+bold heading stays regular weight: the face has no bold maths, and that
+is the face, not a fault.
 
-More generally: this is a `unicode-math` document compiled with LuaLaTeX.
-Maths packages written for pdflatex may or may not work, and the list
-above is not exhaustive. `physics2`, `tensor`, `esvect` and `siunitx` are verified.
+The table is not exhaustive. A maths package written for pdflatex may or
+may not work here — `esvect`, `siunitx`, `tensor` and `physics2` are
+verified.
 
-`mathtools` is deliberately **not** loaded. It works under LuaLaTeX, but
-loading it makes `unicode-math` emit two notices about commands it takes
-over, and silencing those needs machinery the style file has no business
-carrying. What it offers has native or better-maintained equivalents:
+### mathtools
+
+Not loaded, deliberately. It runs under LuaLaTeX, but loading it makes
+`unicode-math` report two commands it takes over, and quieting that needs
+machinery a style file has no business carrying. Everything it offers has
+an equivalent that is native or better maintained:
 
 | `mathtools` | Use instead |
 |---|---|
@@ -126,15 +129,10 @@ carrying. What it offers has native or better-maintained equivalents:
 | `\coloneqq`, `\eqqcolon` | `\coloneq`, `\eqcolon`, `\Coloneq` — `unicode-math`'s own, single q |
 | `\overbracket` | `\overbrace` |
 
-All five verified under `unicode-math`. If you want `mathtools` anyway,
-load it **above** the style file — that avoids its load-order warning,
-though the two `unicode-math` notices remain:
-
-```latex
-\usepackage{mathtools}
-\usepackage{ffvstyle}
-```
-
+All five verified. If you want `mathtools` regardless, load it *above*
+the style file — `\usepackage{mathtools}` then `\usepackage{ffvstyle}`.
+That avoids its own load-order warning; the two `unicode-math` notices
+remain, and they are yours to live with.
 
 ## Typography
 

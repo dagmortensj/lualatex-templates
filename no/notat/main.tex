@@ -1,38 +1,37 @@
-% =================================================
-% HOVEDDOKUMENT (NOTATMAL)
-% =================================================
+% ============================================================
+% main.tex — selve notatet
 %
-% Langformede notater i teoretisk fysikk og matematikk.
+% Denne fila er struktur og innhold. Alle typografiske
+% valg bor i notatstil.sty.
 %
-% Det typografiske utseendet er definert i notatstil.sty
-% og bør ikke endres her.
-%
-% =================================================
+% Kompiler med LuaLaTeX, ikke pdflatex:
+%   latexmk -lualatex main
+% ============================================================
 
 
 \documentclass[a4paper,11pt]{article}
 
 
-% =================================================
+% ============================================================
 % LAST INN NOTATSTIL
-% =================================================
+% ============================================================
 \usepackage{notatstil}
 % Kommenter inn for å fjerne lenkefarger (ren typografi, ingen farger):
 % \hypersetup{hidelinks}
 
 
-% =================================================
+% ============================================================
 % SPRÅK
-% =================================================
+% ============================================================
 \usepackage[norsk]{babel}
 
 
-% =================================================
+% ============================================================
 % EGENDEFINERTE PAKKER
 %
 % Legg til prosjektspesifikke pakker her.
 % Ikke sett pakker andre steder i filen.
-% =================================================
+% ============================================================
 
 % --- Matematikk (standard) ---
 % amsthm og teorem-/definisjon-/merknad-omgivelsene
@@ -94,11 +93,11 @@
 % \usepackage{enumitem}             % listetilpasning
 
 
-% =================================================
+% ============================================================
 % EGENDEFINERTE KOMMANDOER
 %
 % Prosjektspesifikke makroer.
-% =================================================
+% ============================================================
 
 % Oppreist d og i: \symup er unicode-math-formen (\mathrm virker også).
 % \newcommand{\dd}{\symup{d}}
@@ -107,17 +106,17 @@
 % \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
 
 
-% =================================================
+% ============================================================
 % METADATA
-% =================================================
+% ============================================================
 \title{Notattittel}
 \author{Forfatternavn}
 \date{\today}
 
 
-% =================================================
+% ============================================================
 % DOKUMENT
-% =================================================
+% ============================================================
 \begin{document}
 
 \maketitle
@@ -135,7 +134,7 @@ seksjonene samler noen oppgaver til øving.
 \clearpage
 
 
-% =================================================
+% ============================================================
 \section{Bakgrunn}
 
 Disse notatene utvikler en liten bit av teoretisk maskineri
@@ -149,7 +148,7 @@ og flere kilder kombineres og komprimeres til intervaller
 automatisk~\cite{eksempel-artikkel,eksempel-bok}.
 
 
-% =================================================
+% ============================================================
 \section{Definisjoner og resultater}
 
 \begin{definisjon}
@@ -212,7 +211,7 @@ er konstant i tid. Run-in-overskrifter som denne markerer det
 laveste strukturnivået og holdes utenfor innholdsfortegnelsen.
 
 
-% =================================================
+% ============================================================
 \section{Eksempler}
 
 \begin{figure}[t]
@@ -242,7 +241,7 @@ er samlet i tabell~\ref{tab:konstanter} for referanse.
 \end{table}
 
 
-% =================================================
+% ============================================================
 \section{Numeriske metoder}
 
 % TikZ-figureksempel: bruk darkorange til energinivåer / strukturelementer,
@@ -315,7 +314,7 @@ alle~$n$, i samsvar med symmetrien til hver egentilstand om
 midtpunktet av brønnen.
 
 
-% =================================================
+% ============================================================
 \section{Oppgaver}
 
 Notater kan bære oppgaver ved siden av framstillingen.
@@ -351,7 +350,7 @@ uten å påvirke vanlige \verb|enumerate|-lister.
 \end{oppgave}
 
 
-% =================================================
+% ============================================================
 \section{Avslutning}
 
 Disse notatene er en mal; innholdet over finnes kun for å
@@ -359,9 +358,9 @@ demonstrere typografi. Bytt det ut med ditt eget materiale
 etter hvert som notatene utvikler seg.
 
 
-% =================================================
+% ============================================================
 % BIBLIOGRAFI
-% =================================================
+% ============================================================
 \bibliographystyle{unsrtnat}
 \bibliography{referanser}
 

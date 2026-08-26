@@ -1,38 +1,37 @@
-% =================================================
-% MAIN DOCUMENT (NOTES TEMPLATE)
-% =================================================
+% ============================================================
+% main.tex — the notes themselves
 %
-% Long-form theoretical physics and mathematics notes.
+% This file is structure and content. Every typographic
+% decision lives in notesstyle.sty.
 %
-% Typographic appearance is defined in notesstyle.sty
-% and should not be altered here.
-%
-% =================================================
+% Compile with LuaLaTeX, not pdflatex:
+%   latexmk -lualatex main
+% ============================================================
 
 
 \documentclass[a4paper,11pt]{article}
 
 
-% =================================================
+% ============================================================
 % LOAD NOTES STYLE
-% =================================================
+% ============================================================
 \usepackage{notesstyle}
 % Uncomment to suppress link colours (pure typography, no colour at all):
 % \hypersetup{hidelinks}
 
 
-% =================================================
+% ============================================================
 % LANGUAGE
-% =================================================
+% ============================================================
 \usepackage[english]{babel}
 
 
-% =================================================
+% ============================================================
 % CUSTOM PACKAGES
 %
 % Add project-specific packages here.
 % Do not insert packages elsewhere in the file.
-% =================================================
+% ============================================================
 
 % --- Mathematics (defaults) ---
 % amsthm and the theorem/definition/remark environments
@@ -88,11 +87,11 @@
 % \usepackage{enumitem}             % list customization
 
 
-% =================================================
+% ============================================================
 % CUSTOM COMMANDS
 %
 % Project-specific macros.
-% =================================================
+% ============================================================
 
 % Upright d and i: \symup is the unicode-math form (\mathrm also works).
 % \newcommand{\dd}{\symup{d}}
@@ -101,17 +100,17 @@
 % \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
 
 
-% =================================================
+% ============================================================
 % METADATA
-% =================================================
+% ============================================================
 \title{Notes Title}
 \author{Author Name}
 \date{\today}
 
 
-% =================================================
+% ============================================================
 % DOCUMENT
-% =================================================
+% ============================================================
 \begin{document}
 
 \maketitle
@@ -129,7 +128,7 @@ collect a few exercises for practice.
 \clearpage
 
 
-% =================================================
+% ============================================================
 \section{Setting}
 
 These notes develop a small piece of theoretical machinery to
@@ -143,7 +142,7 @@ multiple sources combine and compress to ranges
 automatically~\cite{example-article,example-book}.
 
 
-% =================================================
+% ============================================================
 \section{Definitions and Statements}
 
 \begin{definition}
@@ -206,7 +205,7 @@ in time. Run-in headings like this one mark the lowest structural
 level and are kept out of the table of contents.
 
 
-% =================================================
+% ============================================================
 \section{Examples}
 
 \begin{figure}[t]
@@ -236,7 +235,7 @@ are collected in Table~\ref{tab:constants} for reference.
 \end{table}
 
 
-% =================================================
+% ============================================================
 \section{Numerical Methods}
 
 % TikZ figure example: use darkorange for energy levels / structural
@@ -309,7 +308,7 @@ consistent with the symmetry of each eigenstate about the midpoint
 of the well.
 
 
-% =================================================
+% ============================================================
 \section{Exercises}
 
 Notes can carry problems alongside the exposition. The
@@ -346,7 +345,7 @@ ordinary \verb|enumerate| lists.
 \end{exercise}
 
 
-% =================================================
+% ============================================================
 \section{Closing}
 
 These notes are a template; the content above exists only to
@@ -354,9 +353,9 @@ demonstrate typography. Replace it with your own material as the
 notes develop.
 
 
-% =================================================
+% ============================================================
 % BIBLIOGRAPHY
-% =================================================
+% ============================================================
 \bibliographystyle{unsrtnat}
 \bibliography{references}
 

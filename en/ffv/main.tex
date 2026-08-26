@@ -1,30 +1,39 @@
+% ============================================================
+% main.tex — the article itself
+%
+% This file is structure and content. Every typographic
+% decision lives in ffvstyle.sty, which also loads babel.
+%
+% Compile with LuaLaTeX, not pdflatex:
+%   latexmk -lualatex main
+% ============================================================
 \documentclass[a4paper,10pt,twocolumn]{article}
 
-% =================================================
+% ============================================================
 % ARTICLE STYLE
-% =================================================
+% ============================================================
 \usepackage{ffvstyle}
-% Uncomment to suppress link colours (pure typography, no colour at all):
+% Uncomment for links with no colour at all:
 % \hypersetup{hidelinks}
 
-% =================================================
-% PHYSICS AND MATHEMATICS
-% =================================================
-\usepackage{amsmath}       % no amssymb: unicode-math supplies the
-                           % symbols, and loading both breaks the
-                           % build (\eth already defined)
-                           % mathtools is NOT loaded: see the README
-                           % for the unicode-math-native alternatives
-                           % no bm: incompatible with unicode-math.
-                           % Bold maths is \symbf / \symbfit / \symbfup.
+% ============================================================
+% MATHEMATICS
+%
+% No amssymb: unicode-math supplies the symbols, and
+% loading both breaks the build (\eth already defined).
+% No bm either — bold maths is \symbf / \symbfit /
+% \symbfup. mathtools is not loaded; the README lists the
+% unicode-math-native replacements.
+% ============================================================
+\usepackage{amsmath}
 
-% =================================================
+% ============================================================
 % CUSTOM PACKAGES AND COMMANDS
 %
 % Add additional packages and custom commands here.
 % Examples that are often useful are commented out
 % below — remove the % to activate them.
-% =================================================
+% ============================================================
 
 % --- Additional mathematics packages ---
 % \usepackage{slashed}        % Feynman slash for Dirac matrices
@@ -47,17 +56,17 @@
 % \DeclareMathOperator{\Tr}{Tr}
 % \DeclareMathOperator{\sgn}{sgn}
 
-% =================================================
+% ============================================================
 % METADATA — fill in here
-% =================================================
+% ============================================================
 \title{ARTICLE TITLE\\[0.4em]
 {\large Optional subtitle}}
 \author{First Last}
 \date{\today}
 
-% =================================================
+% ============================================================
 % DOCUMENT
-% =================================================
+% ============================================================
 \begin{document}
 
 \twocolumn[
@@ -71,7 +80,7 @@
   \end{lead}
 ]
 
-% =================================================
+% ============================================================
 \section{Introduction}
 
 Write the introduction here. State the problem, give the necessary
@@ -79,7 +88,7 @@ background, and end with a short overview of the article's structure
 if useful. Paragraphs are marked with indentation --- not with extra
 line breaks.
 
-% =================================================
+% ============================================================
 \section{Section Two}
 
 Mathematics is set inline as $E = mc^2$ or as numbered equations:
@@ -150,20 +159,20 @@ Use subsections to structure longer sections.
   \end{tabular}
 \end{table}
 
-% =================================================
+% ============================================================
 \section{Conclusion}
 
 Summarize the main results and feel free to point toward open
 questions or further work.
 
-% =================================================
+% ============================================================
 % REFERENCES
 % Compile order:
 %   lualatex main
 %   bibtex   main
 %   lualatex main
 %   lualatex main
-% =================================================
+% ============================================================
 \bibliographystyle{unsrtnat}
 \bibliography{references}
 

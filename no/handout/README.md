@@ -154,8 +154,8 @@ Typisk bruk:
 
 ## Matematikk
 
-Motorbyttet erstatter den gamle stabelen `amsmath` + `amssymb` + `bm` med
-`unicode-math`. Hva det betyr i praksis:
+Dette er `unicode-math`-dokumenter. Kommer du fra et pdflatex-preamble,
+er det tre vaner som må endres:
 
 | I stedet for | Bruk | Hvorfor |
 |---|---|---|
@@ -163,37 +163,14 @@ Motorbyttet erstatter den gamle stabelen `amsmath` + `amssymb` + `bm` med
 | `\boldmath` | `\symbf` | NewCM Math har ingen fet vekt, så `\boldmath` setter matte i vanlig vekt |
 | `\usepackage{amssymb}` | ingenting | `unicode-math` leverer symbolene; lastes begge, brekker bygget (`\eth already defined`) |
 
-`\symbf` henter NewCM Math sine tegnede fete Unicode-alfabeter fra samme
-fontfil, og virker derfor på gresk så vel som latinsk.
+`\symbf` når NewCM Math sine tegnede fete Unicode-alfabeter i samme
+fontfil, og det er derfor den virker på gresk der `\bm` ikke gjør det.
 
-Mer generelt: dette er et `unicode-math`-dokument kompilert med LuaLaTeX.
-Mattepakker skrevet for pdflatex kan fungere eller ikke, og lista over er
-ikke uttømmende. De fire pakkene malen laster (listet under) er verifisert,
-likeså `listings` og `tikz`.
+Tabellen er ikke uttømmende. En mattepakke skrevet for pdflatex kan
+fungere eller ikke — de fire malen laster for deg er verifisert, likeså
+`listings` og `tikz`.
 
-`mathtools` lastes bevisst **ikke**. Den virker under LuaLaTeX, men å laste
-den får `unicode-math` til å melde fra om to kommandoer den overtar, og å
-dempe det krever maskineri stilfila ikke har noe med å bære. Det den
-tilbyr har native eller bedre vedlikeholdte ekvivalenter:
-
-| `mathtools` | Bruk i stedet |
-|---|---|
-| `\DeclarePairedDelimiter` | `physics2` med modulen `ab.legacy` — `\abs`, `\abs*`, `\norm`, `\eval` |
-| `\prescript` | `tensor` — `\tensor*[^{14}_{6}]{C}{}` |
-| `\dcases` | `cases` med `\displaystyle` i hver rad |
-| `\coloneqq`, `\eqqcolon` | `\coloneq`, `\eqcolon`, `\Coloneq` — `unicode-math` sine egne, enkelt q |
-| `\overbracket` | `\overbrace` |
-
-Alle fem verifisert under `unicode-math`. Vil du ha `mathtools` likevel,
-last den **over** stilfila — det unngår rekkefølge-advarselen, men de to
-`unicode-math`-meldingene består:
-
-```latex
-\usepackage{mathtools}
-\usepackage{handoutstyle}
-```
-
-### Mattepakker malen laster for deg
+### Pakker malen laster
 
 | Pakke | Til | Eksempel |
 |---|---|---|
@@ -232,14 +209,38 @@ ikke pynt: pakkas egen fontdefinisjon lister bare eksakte størrelser, mens
 subskript rundt 9 % for små — med advarsel. Det er samme fiks som
 forfatteren av `overarrows` senere tok inn upstream.
 
+### mathtools
+
+Lastes bevisst ikke. Den kjører under LuaLaTeX, men å laste den får
+`unicode-math` til å melde fra om to kommandoer den overtar, og å dempe
+det krever maskineri en stilfil ikke har noe med å bære. Alt den tilbyr
+har en ekvivalent som er native eller bedre vedlikeholdt:
+
+| `mathtools` | Bruk i stedet |
+|---|---|
+| `\DeclarePairedDelimiter` | `physics2` med modulen `ab.legacy` — `\abs`, `\abs*`, `\norm`, `\eval` |
+| `\prescript` | `tensor` — `\tensor*[^{14}_{6}]{C}{}` |
+| `\dcases` | `cases` med `\displaystyle` i hver rad |
+| `\coloneqq`, `\eqqcolon` | `\coloneq`, `\eqcolon`, `\Coloneq` — `unicode-math` sine egne, enkelt q |
+| `\overbracket` | `\overbrace` |
+
+Alle fem verifisert. Vil du ha `mathtools` likevel, last den *over*
+stilfila — `\usepackage{mathtools}` og så `\usepackage{handoutstyle}`. Det
+unngår pakkas egen rekkefølge-advarsel; de to `unicode-math`-meldingene
+består, og dem får du leve med.
+
 ## Typografi
 
 - **Skrift:** NewComputerModern (Book-vekt), tekst og matematikk
 - **Motor:** LuaLaTeX (`unicode-math`, OpenType)
-- **Sideoppsett:** A4, symmetriske marger (3,0 cm V/H)
+- **Sideoppsett:** A4, symmetriske marger (3,0 cm hele veien rundt)
+- **Satsbredde:** 150 mm — 3,06 lilleboksalfabeter, bredere enn
+  Bringhursts vindu på 1,8–2,4; kjegla kompenserer
 - **Linjeavstand:** 1,04
 - **Avsnitt:** innrykk, ikke linjeskift
 - **Mikrotypografi:** protrusion, expansion, tracking aktivert
-- **Overskrifter:** to stille nivåer — seksjon (`\large`) og underseksjon (kroppsstørrelse), fet; ingen overdimensjonerte fonter eller streker. Underseksjonen gjør at handout-en også kan brukes som forelesningsnotater.
+- **Overskrifter:** to nivåer, fete — seksjon (`\large`), underseksjon
+  (kroppsstørrelse). Ingen displaystørrelser og ingen streker; nivå to
+  gjør at samme stil kan bære forelesningsnotater
 - **Tittelblokk:** kapiteler, sperret, sentrert
 - **Hyperlenker og linjer:** mørkerøde, trygt for trykk
