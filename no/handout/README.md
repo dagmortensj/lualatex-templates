@@ -129,8 +129,9 @@ mellom eksempler, eller ved temaskifter innen en seksjon.
 
 ### TikZ-figurer
 
-`handoutstyle.sty` laster ikke TikZ — legg til `\usepackage{tikz}` i
-pakkeblokken i `main.tex` når du trenger native figurer.
+TikZ lastes fra pakkeblokken i `main.tex`, ikke fra `handoutstyle.sty`
+— fjern `\usepackage{tikz}`-linjen der om et dokument ikke trenger
+native figurer.
 
 Stilfilen definerer tre navngitte farger med faste roller:
 
@@ -203,11 +204,12 @@ modulene (`ab.legacy`, `nabla.legacy`, `op.legacy`, `diagmat`, `xmat`, …) ved 
 
 Pakka `derivative` er et fyldigere ferdiglaget alternativ om du vil ha ett.
 
-`esvect` har med seg en fem linjers fontdeklarasjon i `main.tex`. Den er
-ikke pynt: pakkas egen fontdefinisjon lister bare eksakte størrelser, mens
-`unicode-math` ber om brøkne mattestørrelser, og uten den blir pilene i
-subskript rundt 9 % for små — med advarsel. Det er samme fiks som
-forfatteren av `overarrows` senere tok inn upstream.
+`esvect` trenger en fontfiks under `unicode-math`: pakkas egen
+fontdefinisjon lister bare eksakte størrelser, mens `unicode-math` ber om
+brøkne mattestørrelser, og uten den blir pilene i subskript rundt 9 % for
+små — med advarsel. Det er samme fiks som forfatteren av `overarrows`
+senere tok inn upstream. Fiksen bor i stilfila, vaktet med
+`\IfPackageLoadedTF`, så `main.tex` bare laster pakka.
 
 ### mathtools
 

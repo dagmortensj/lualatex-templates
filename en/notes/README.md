@@ -148,8 +148,9 @@ called anywhere in the normal document flow.
 
 ### TikZ figures
 
-`notesstyle.sty` does not load TikZ — add `\usepackage{tikz}` to the
-custom packages block in `main.tex` when you need native figures.
+TikZ is loaded from the custom packages block in `main.tex`, not from
+`notesstyle.sty` — remove the `\usepackage{tikz}` line there if a
+document does not need native figures.
 
 The style file defines three named colors. Their roles are fixed:
 
@@ -228,11 +229,12 @@ modules (`ab.legacy`, `nabla.legacy`, `op.legacy`, `diagmat`, `xmat`, …) as ne
 
 The `derivative` package is a fuller ready-made alternative if you prefer one.
 
-`esvect` carries a five-line font-shape declaration in `main.tex`. It is not
-decoration: the package's own font definition lists exact sizes only, while
-`unicode-math` asks for fractional maths sizes, and without it the arrows in
-subscripts come out about 9 % too small with a warning. It is the same fix
-the `overarrows` author later adopted upstream.
+`esvect` needs a font-shape fix under `unicode-math`: the package's own
+font definition lists exact sizes only, while `unicode-math` asks for
+fractional maths sizes, and without it the arrows in subscripts come out
+about 9 % too small with a warning — the same fix the `overarrows` author
+later adopted upstream. The fix lives in the style file, guarded by
+`\IfPackageLoadedTF`, so `main.tex` just loads the package.
 
 ### mathtools
 

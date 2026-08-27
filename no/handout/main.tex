@@ -53,22 +53,9 @@
 % som er native i unicode-math
 
 % --- Vektorer: \vv{F}, flat pil som spenner over hele symbolet ---
+% Størrelsesfiksen esvect trenger under unicode-math bor i stilfila,
+% vaktet slik at den bare slår til når pakka faktisk er lastet.
 \usepackage[e]{esvect}
-% esvect sin fontdefinisjon lister bare eksakte størrelser
-% (5, 6, ..., 10 pt), mens unicode-math ber om brøkne mattestørrelser
-% -- NewCM sin scriptscript er 0,50 x 10,95 = 5,475 pt -- og LaTeX
-% bytter bare stille innenfor 0,4 pt. Sammenhengende intervaller
-% dekker alle størrelser. Dette er samme fiks som forfatteren av
-% overarrows tok inn upstream.
-\DeclareFontFamily{U}{esvect}{}
-\DeclareFontShape{U}{esvect}{m}{n}{%
-  <-5.5>    vect5
-  <5.5-6.5> vect6
-  <6.5-7.5> vect7
-  <7.5-8.5> vect8
-  <8.5-9.5> vect9
-  <9.5->    vect10
-}{}
 
 % --- Enheter: \qty{9.81}{\metre\per\second\squared} ---
 \usepackage{siunitx}
@@ -260,6 +247,7 @@ størrelsen $a_s = v^2/r$, rettet inn mot sentrum av sirkelen.
 % OPPGAVE
 % ============================================================
 \begin{oppgave}[Sirkulær bane]
+\label{opg:bane}
 En satellitt går i en sirkulær bane med radius $r$ rundt en
 planet med masse $M$.
 
@@ -278,7 +266,7 @@ planet med masse $M$.
 
 \verb|python|-omgivelsen setter kode med Gruvbox Light
 syntaksutheving. Det korte skriptet nedenfor verifiserer
-banehastigheten og omløpstiden fra oppgave~3 numerisk for
+banehastigheten og omløpstiden fra oppgave~\ref{opg:bane} numerisk for
 tre representative radier.
 
 \begin{python}

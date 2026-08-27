@@ -94,10 +94,11 @@ A table can summarize key values:
 % compile each figure in its own file with \documentclass{standalone},
 % then include the resulting PDF with \includegraphics.
 % This keeps chapter files clean and avoids slow recompilation of the
-% whole book when a figure changes.  The palette colors (darkred,
-% darkorange, darkolive) defined in bookstyle.sty are available in
-% standalone files via \usepackage{bookstyle} or \usepackage{xcolor}
-% with the same \definecolor definitions.
+% whole book when a figure changes.  bookstyle.sty defines no figure
+% palette; if you want the collection's colors from the notes and
+% handout styles, define them in the standalone preamble with xcolor:
+%   \definecolor{darkorange}{RGB}{184, 92,  0}
+%   \definecolor{darkolive} {RGB}{ 74,107, 18}
 
 Tables in this template use the \texttt{booktabs} convention:
 horizontal rules only, used sparingly --- top, middle, and

@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notatstil}[2026/08/26 v1.6 Notatstil — CUP-inspirert boktypografi i artikkelformat]
+\ProvidesPackage{notatstil}[2026/08/27 v1.7 Notatstil — CUP-inspirert boktypografi i artikkelformat]
 
 % ============================================================
 % notatstil.sty — langformede notater
@@ -530,6 +530,36 @@
   {\lstset{language=Python, style=gruvboxlight,
            morekeywords={True,False,None,self}}}
   {}
+
+
+% ============================================================
+% VEKTORPILER (esvect)
+%
+% main.tex laster esvect når et dokument vil ha \vv-piler;
+% stilen bærer bare størrelsesfiksen pakka trenger under
+% unicode-math. esvect sin egen fontdefinisjon lister bare
+% eksakte størrelser (5, 6, ..., 10 pt), mens unicode-math ber
+% om brøkne mattestørrelser -- NewCM sin scriptscript er
+% 0,50 x 10,95 = 5,475 pt -- og LaTeX bytter bare stille
+% innenfor 0,4 pt; uten fiksen blir pilene i subskript rundt
+% 9 % for små, med advarsel. Sammenhengende intervaller dekker
+% alle størrelser -- samme fiks som forfatteren av overarrows
+% tok inn upstream. Vaktet, så den gjør ingenting i et dokument
+% som aldri laster esvect.
+% ============================================================
+\AtBeginDocument{%
+  \IfPackageLoadedTF{esvect}{%
+    \DeclareFontFamily{U}{esvect}{}%
+    \DeclareFontShape{U}{esvect}{m}{n}{%
+      <-5.5>    vect5
+      <5.5-6.5> vect6
+      <6.5-7.5> vect7
+      <7.5-8.5> vect8
+      <8.5-9.5> vect9
+      <9.5->    vect10
+    }{}%
+  }{}%
+}
 
 
 % ============================================================

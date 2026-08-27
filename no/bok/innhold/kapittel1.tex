@@ -94,10 +94,11 @@ En tabell kan oppsummere nøkkelverdier:
 % kompiler hver figur i sin egen fil med \documentclass{standalone},
 % og inkluder den resulterende PDF-en med \includegraphics.
 % Dette holder kapittelfiler rene og unngår treg rekompilering av
-% hele boken når en figur endres. Palettfargene (darkred, darkorange,
-% darkolive) definert i bokstil.sty er tilgjengelige i standalone-filer
-% via \usepackage{bokstil} eller \usepackage{xcolor} med de samme
-% \definecolor-definisjonene.
+% hele boken når en figur endres. bokstil.sty definerer ingen
+% figurpalett; vil du bruke samlingens farger fra notat- og
+% handout-stilene, definer dem i standalone-preamblen med xcolor:
+%   \definecolor{darkorange}{RGB}{184, 92,  0}
+%   \definecolor{darkolive} {RGB}{ 74,107, 18}
 
 Tabeller i denne malen bruker \texttt{booktabs}-konvensjonen:
 kun horisontale streker, brukt sparsomt --- topp, midt og

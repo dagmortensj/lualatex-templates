@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notesstyle}[2026/08/26 v1.6 Notes style — CUP-inspired book typography in article form]
+\ProvidesPackage{notesstyle}[2026/08/27 v1.7 Notes style — CUP-inspired book typography in article form]
 
 % ============================================================
 % notesstyle.sty — long-form notes
@@ -536,6 +536,36 @@
   {\lstset{language=Python, style=gruvboxlight,
            morekeywords={True,False,None,self}}}
   {}
+
+
+% ============================================================
+% VECTOR ARROWS (esvect)
+%
+% main.tex loads esvect when a document wants \vv arrows; the
+% style carries only the size fix the package needs under
+% unicode-math. esvect's own font definition lists exact sizes
+% (5, 6, ..., 10 pt), while unicode-math asks for fractional
+% maths sizes -- NewCM's scriptscript is 0.50 x 10.95 =
+% 5.475 pt -- and LaTeX substitutes silently only within
+% 0.4 pt; without the fix the arrows in subscripts come out
+% about 9 % too small, with a warning. Continuous ranges cover
+% every size -- the same fix the overarrows author adopted
+% upstream. Guarded, so it does nothing in a document that
+% never loads esvect.
+% ============================================================
+\AtBeginDocument{%
+  \IfPackageLoadedTF{esvect}{%
+    \DeclareFontFamily{U}{esvect}{}%
+    \DeclareFontShape{U}{esvect}{m}{n}{%
+      <-5.5>    vect5
+      <5.5-6.5> vect6
+      <6.5-7.5> vect7
+      <7.5-8.5> vect8
+      <8.5-9.5> vect9
+      <9.5->    vect10
+    }{}%
+  }{}%
+}
 
 
 % ============================================================

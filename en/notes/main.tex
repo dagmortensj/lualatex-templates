@@ -42,21 +42,9 @@
 % unicode-math-native alternatives
 
 % --- Vectors: \vv{F}, a flat arrow that spans the whole symbol ---
+% The size fix esvect needs under unicode-math lives in the style
+% file, guarded so it activates only when the package is loaded.
 \usepackage[e]{esvect}
-% esvect's font definition lists exact sizes only (5, 6, ..., 10 pt),
-% while unicode-math asks for fractional maths sizes -- NewCM's
-% scriptscript is 0.50 x 10.95 = 5.475 pt -- and LaTeX substitutes
-% silently only within 0.4 pt. Continuous ranges cover every size.
-% This is the same fix the overarrows author adopted upstream.
-\DeclareFontFamily{U}{esvect}{}
-\DeclareFontShape{U}{esvect}{m}{n}{%
-  <-5.5>    vect5
-  <5.5-6.5> vect6
-  <6.5-7.5> vect7
-  <7.5-8.5> vect8
-  <8.5-9.5> vect9
-  <9.5->    vect10
-}{}
 
 % --- Units: \qty{9.81}{\metre\per\second\squared} ---
 \usepackage{siunitx}
