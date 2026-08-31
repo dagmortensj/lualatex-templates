@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bookstyle}[2026/08/26 v1.9 — frozen CUP-style book layout]
+\ProvidesPackage{bookstyle}[2026/08/31 v1.11 — frozen CUP-style book layout]
 
 % ============================================================
 % bookstyle.sty — a CUP-style monograph
@@ -146,6 +146,36 @@
 
 
 % ============================================================
+% EQUATION NUMBERS
+%
+% amsmath sets the tag "(2.1)" in \normalfont — Garamond at
+% the full 12pt — while the maths beside it is scaled to
+% 0.90, an effective 10.8pt. The tag then reads ~11% too
+% large. \small in the 12pt class is 10.95pt — practically
+% the same scale as the maths — so the tag is set in
+% \small.
+%
+% \eqref shares the tag form and would shrink with it. In
+% running text the number sits among 12pt prose and should
+% match it, so \eqref is restored to full size.
+%
+% amsmath is loaded in main.tex, after this file, so the
+% definitions are swapped in only at \AtBeginDocument — and
+% only when amsmath is actually loaded.
+% ============================================================
+\newcommand{\bk@smalltagform}[1]{%
+  \maketag@@@{\small(\ignorespaces#1\unskip\@@italiccorr)}}
+\newcommand{\bk@fulleqref}[1]{\textup{(\ref{#1})}}
+
+\AtBeginDocument{%
+  \@ifpackageloaded{amsmath}{%
+    \let\tagform@\bk@smalltagform
+    \let\eqref\bk@fulleqref
+  }{}%
+}
+
+
+% ============================================================
 % CAPTIONS
 %
 %   font=small       one step below body text
@@ -271,6 +301,13 @@
 \setlength{\cftsecnumwidth}{3.0em}
 \setlength{\cftsubsecnumwidth}{3.5em}
 
+% Unnumbered sections otherwise start at tocloft's 1.5em —
+% left of the chapter titles at 2.5em, so the children
+% outdent past their parent. Line the sections up under the
+% chapter title, and subsections one step further.
+\setlength{\cftsecindent}{2.5em}
+\setlength{\cftsubsecindent}{3.5em}
+
 \setlength{\cftbeforechapskip}{6pt}
 \setlength{\cftbeforesecskip}{2.5pt}
 \setlength{\cftbeforesubsecskip}{1.5pt}
@@ -347,6 +384,18 @@
   {}{}
 
 \makeatother
+
+
+% ============================================================
+% BLANK VERSO PAGES
+%
+% \cleardoublepage inserts a blank page to land on a recto,
+% but the blank inherits the current page style and carries
+% a running head and folio. The convention is that inserted
+% blanks are completely empty. emptypage patches
+% \cleardoublepage to do exactly that.
+% ============================================================
+\RequirePackage{emptypage}
 
 
 % ============================================================

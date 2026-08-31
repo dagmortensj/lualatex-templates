@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bokstil}[2026/08/26 v1.9 — frosset CUP-stil bokoppsett]
+\ProvidesPackage{bokstil}[2026/08/31 v1.11 — frosset CUP-stil bokoppsett]
 
 % ============================================================
 % bokstil.sty — en monografi i CUP-stil
@@ -148,6 +148,36 @@
 
 
 % ============================================================
+% LIGNINGSNUMMER
+%
+% amsmath setter taggen «(2.1)» i \normalfont — Garamond i
+% full 12 pt — mens matten den står ved siden av er
+% skalert til 0,90, altså 10,8 pt effektivt. Taggen leser
+% da ~11 % for stor. \small i 12 pt-klassen er 10,95 pt —
+% praktisk talt samme skala som matten — så taggen settes
+% i \small.
+%
+% \eqref deler tagformen og ville krympet med. I løpende
+% tekst står nummeret blant 12 pt prosa og skal matche
+% den, så \eqref settes tilbake til full størrelse.
+%
+% amsmath lastes i main.tex, etter denne fila, derfor byttes
+% definisjonene først i \AtBeginDocument — og bare når
+% amsmath faktisk er lastet.
+% ============================================================
+\newcommand{\bk@smalltagform}[1]{%
+  \maketag@@@{\small(\ignorespaces#1\unskip\@@italiccorr)}}
+\newcommand{\bk@fulleqref}[1]{\textup{(\ref{#1})}}
+
+\AtBeginDocument{%
+  \@ifpackageloaded{amsmath}{%
+    \let\tagform@\bk@smalltagform
+    \let\eqref\bk@fulleqref
+  }{}%
+}
+
+
+% ============================================================
 % FIGURTEKSTER
 %
 %   font=small       ett steg under kroppsteksten
@@ -273,6 +303,13 @@
 \setlength{\cftsecnumwidth}{3.0em}
 \setlength{\cftsubsecnumwidth}{3.5em}
 
+% Unummererte seksjoner starter ellers ved tocloft sine
+% 1,5 em — til venstre for kapitteltitlene ved 2,5 em, så
+% barna rykker ut forbi forelderen. Still seksjonene under
+% kapitteltittelen, og underseksjoner ett steg til.
+\setlength{\cftsecindent}{2.5em}
+\setlength{\cftsubsecindent}{3.5em}
+
 \setlength{\cftbeforechapskip}{6pt}
 \setlength{\cftbeforesecskip}{2.5pt}
 \setlength{\cftbeforesubsecskip}{1.5pt}
@@ -349,6 +386,18 @@
   {}{}
 
 \makeatother
+
+
+% ============================================================
+% BLANKE VERSOSIDER
+%
+% \cleardoublepage skyter inn en tomside for å lande på en
+% recto, men tomsiden arver gjeldende sidestil og får
+% topptekst og folio. Konvensjonen er at innskutte
+% blanksider er helt tomme. emptypage patcher
+% \cleardoublepage til nettopp det.
+% ============================================================
+\RequirePackage{emptypage}
 
 
 % ============================================================
