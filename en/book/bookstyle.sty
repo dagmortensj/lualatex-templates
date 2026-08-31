@@ -1,5 +1,26 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bookstyle}[2026/08/31 v1.11 — frozen CUP-style book layout]
+\ProvidesPackage{bookstyle}[2026/08/31 v1.12 — frozen CUP-style book layout]
+
+% ============================================================
+% PACKAGE OPTIONS
+%
+%   \usepackage{bookstyle}            normal
+%   \usepackage[proof]{bookstyle}     page proofs: the B5
+%                                     page untouched, centred
+%                                     on A4 with crop marks
+%
+% Proof mode requires b5paper in \documentclass. The
+% typesetting is untouched, so both line and page breaks are
+% identical to print — unlike the a4paper draft, which
+% shares line breaks but not page breaks. With a4paper the
+% option is ignored with a warning. 'korrektur' is accepted
+% as a synonym.
+% ============================================================
+\newif\ifbk@korrektur
+\DeclareOption{korrektur}{\bk@korrekturtrue}
+\DeclareOption{proof}{\bk@korrekturtrue}
+\ProcessOptions\relax
+
 
 % ============================================================
 % bookstyle.sty — a CUP-style monograph
@@ -89,6 +110,19 @@
   \geometry{inner=4.3cm, outer=4.7cm, top=2.6cm, bottom=3.9cm}
 \else
   \geometry{inner=2.4cm, outer=3.2cm, top=2.6cm, bottom=3.9cm}
+\fi
+
+
+% Page proofs: the B5 sheet centred on A4 with crop marks
+% (cam) and crop's info line at the top — add noinfo to the
+% options below for a clean sheet. Loaded here, after the
+% geometry is set.
+\ifbk@korrektur
+  \ifdim\paperwidth>18cm
+    \PackageWarning{bookstyle}{The 'proof' option requires b5paper; option ignored}%
+  \else
+    \RequirePackage[cam,a4,center]{crop}
+  \fi
 \fi
 
 

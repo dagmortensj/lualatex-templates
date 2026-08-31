@@ -1,5 +1,25 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bokstil}[2026/08/31 v1.11 — frosset CUP-stil bokoppsett]
+\ProvidesPackage{bokstil}[2026/08/31 v1.12 — frosset CUP-stil bokoppsett]
+
+% ============================================================
+% PAKKEOPSJONER
+%
+%   \usepackage{bokstil}              vanlig
+%   \usepackage[korrektur]{bokstil}   sidekorrektur: B5-siden
+%                                     uendret, sentrert på A4
+%                                     med skjæremerker
+%
+% Korrekturmodusen krever b5paper i \documentclass. Satsen
+% røres ikke, så både linje- og sidebrudd er identiske med
+% trykk — i motsetning til a4paper-utkastet, som deler
+% linjebrudd men ikke sidebrudd. Med a4paper ignoreres
+% opsjonen med en advarsel. 'proof' godtas som synonym.
+% ============================================================
+\newif\ifbk@korrektur
+\DeclareOption{korrektur}{\bk@korrekturtrue}
+\DeclareOption{proof}{\bk@korrekturtrue}
+\ProcessOptions\relax
+
 
 % ============================================================
 % bokstil.sty — en monografi i CUP-stil
@@ -91,6 +111,19 @@
   \geometry{inner=4.3cm, outer=4.7cm, top=2.6cm, bottom=3.9cm}
 \else
   \geometry{inner=2.4cm, outer=3.2cm, top=2.6cm, bottom=3.9cm}
+\fi
+
+
+% Sidekorrektur: B5-arket sentrert på A4 med skjæremerker
+% (cam) og crops informasjonslinje øverst — legg til noinfo
+% i opsjonene under om du vil ha arket uten den. Lastes her,
+% etter at geometrien er satt.
+\ifbk@korrektur
+  \ifdim\paperwidth>18cm
+    \PackageWarning{bokstil}{Opsjonen 'korrektur' krever b5paper; opsjonen ignoreres}%
+  \else
+    \RequirePackage[cam,a4,center]{crop}
+  \fi
 \fi
 
 
