@@ -6,7 +6,7 @@ and Norwegian. Copy a folder, edit `main.tex`, compile.
 
 Typeset with **LuaLaTeX** and `unicode-math`, OpenType fonts throughout.
 An earlier pdflatex edition of the same four lives in
-[latex-templates](https://github.com/dagmortensj/latex-templates).
+[pdflatex-templates](https://github.com/dagmortensj/pdflatex-templates).
 
 ## Templates
 

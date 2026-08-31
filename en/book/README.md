@@ -219,6 +219,12 @@ both give a 120 mm text block, so an A4 draft breaks lines exactly as
 the printed B5 will, with 4 cm left over for notes. Page breaks still
 differ — A4 is taller.
 
+A third mode gives page proofs: keep `b5paper` and load the style as
+`\usepackage[proof]{bookstyle}` — the B5 page is typeset untouched and
+centred on an A4 sheet with crop marks, so line *and* page breaks match
+print exactly. Add `noinfo` to the `crop` options in the style file to
+drop the info line at the top of each sheet.
+
 ## BibTeX sources
 
 - **Google Scholar** → Cite → BibTeX

@@ -217,6 +217,12 @@ begge gir en sats på 120 mm, så et A4-utkast brekker linjer nøyaktig som
 den trykte B5-en, med 4 cm igjen til notater. Sidebrudd blir likevel
 ulike — A4 er høyere.
 
+En tredje modus gir sidekorrektur: behold `b5paper` og last stilen som
+`\usepackage[korrektur]{bokstil}` — B5-siden settes uendret og sentreres
+på et A4-ark med skjæremerker, så både linje- *og* sidebrudd matcher
+trykk nøyaktig. Legg til `noinfo` i `crop`-opsjonene i stilfila for å
+fjerne informasjonslinjen øverst på arket.
+
 ## BibTeX-kilder
 
 - **Google Scholar** → Cite → BibTeX
