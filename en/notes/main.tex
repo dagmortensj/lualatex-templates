@@ -2,7 +2,7 @@
 % main.tex — the notes themselves
 %
 % This file is structure and content. Every typographic
-% decision lives in notesstyle.sty.
+% decision lives in notesstyle.sty, which also loads babel.
 %
 % Compile with LuaLaTeX, not pdflatex:
 %   latexmk -lualatex main
@@ -18,12 +18,6 @@
 \usepackage{notesstyle}
 % Uncomment to suppress link colours (pure typography, no colour at all):
 % \hypersetup{hidelinks}
-
-
-% ============================================================
-% LANGUAGE
-% ============================================================
-\usepackage[english]{babel}
 
 
 % ============================================================
@@ -86,6 +80,16 @@
 % \newcommand{\ii}{\symup{i}}
 % \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
 % \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+
+% ============================================================
+% BIBLIOGRAPHY
+%
+% The bibliography is set with \printbibliography at the
+% end of the document; the style (biblatex, numeric, in
+% citation order) lives in notesstyle.sty.
+% ============================================================
+\addbibresource{references.bib}
 
 
 % ============================================================
@@ -354,8 +358,7 @@ notes develop.
 % ============================================================
 % BIBLIOGRAPHY
 % ============================================================
-\bibliographystyle{unsrtnat}
-\bibliography{references}
+\printbibliography
 
 
 \end{document}

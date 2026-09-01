@@ -29,7 +29,7 @@ Eller for hånd:
 
 ```
 lualatex main
-bibtex   main
+biber    main
 lualatex main
 lualatex main
 ```
@@ -301,7 +301,7 @@ består, og dem får du leve med.
 - **Seksjoner:** nummererte, fete overskrifter
 - **Underunderseksjoner:** stille run-in-overskrift, holdt utenfor innholdsfortegnelsen
 - **Siteringer:** numeriske i hakeparenteser, sortert og komprimert
-- **Bibliografi:** `unsrtnat` (i siteringsrekkefølge)
+- **Bibliografi:** biblatex `numeric-comp` med biber (i siteringsrekkefølge)
 - **Hyperlenker:** mørkerød, trygt for trykk
 - **Innholdsfortegnelse:** JHEP-stil, rammet av vannrette linjer
 

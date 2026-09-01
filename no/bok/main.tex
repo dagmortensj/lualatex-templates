@@ -2,7 +2,7 @@
 % main.tex — selve boka
 %
 % Denne fila er struktur og innhold. Alle typografiske
-% valg bor i bokstil.sty.
+% valg bor i bokstil.sty, som også laster babel.
 %
 % Kompiler med LuaLaTeX, ikke pdflatex:
 %   latexmk -lualatex main
@@ -25,12 +25,6 @@
 % Sidekorrektur — B5-siden uendret, sentrert på A4 med
 % skjæremerker (krever b5paper over). Bytt ut linjen over med:
 % \usepackage[korrektur]{bokstil}
-
-
-% ============================================================
-% SPRÅK
-% ============================================================
-\usepackage[norsk]{babel}
 
 
 % ============================================================
@@ -57,6 +51,16 @@
 % Oppreist d og i: \symup er unicode-math-formen.
 % \newcommand{\dd}{\symup{d}}
 % \newcommand{\ii}{\symup{i}}
+
+
+% ============================================================
+% BIBLIOGRAFI
+%
+% Settes med \printbibliography i bakmaterialet; stilen
+% (biblatex, superskript, i siteringsrekkefølge) bor i
+% bokstil.sty.
+% ============================================================
+\addbibresource{referanser.bib}
 
 
 % ============================================================
@@ -176,8 +180,7 @@ før de møter det tekniske stoffet.
 \backmatter
 
 % ------------------ Bibliografi -------------------
-\bibliographystyle{unsrt}
-\bibliography{referanser}
+\printbibliography
 
 % ------------------ Indeks ------------------------
 % \printindex

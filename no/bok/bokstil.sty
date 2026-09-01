@@ -34,10 +34,20 @@
 % Motor: LuaLaTeX. Fontene er OpenType og lastes gjennom
 % unicode-math, og det kan ikke pdflatex.
 %
-% Rekkefølgen nedenfor: fonter, mikrotypografi, geometri,
-% avstander, seksjonering, sidemøblering, siteringer, og
-% hyperref sist.
+% Rekkefølgen nedenfor: språk, fonter, mikrotypografi,
+% geometri, avstander, seksjonering, sidemøblering,
+% hyperref, og siteringer sist.
 % ============================================================
+
+
+% ============================================================
+% SPRÅK
+%
+% babel lastes her og ikke i main.tex, slik at det å laste
+% stilen er nok til å få orddeling og tegnsetting riktig.
+% Bytt språk på linja under.
+% ============================================================
+\RequirePackage[norsk]{babel}
 
 
 % ============================================================
@@ -541,30 +551,11 @@
 
 
 % ============================================================
-% SITERINGER
-%
-%   \cite{nokkel}         superskript ¹
-%   \cite{a,b,c}          sortert og komprimert, ¹⁻³
-%   \bibliography{...}    i bakmaterialet i main.tex
-%
-% Opsjonen 'nomove' holder en sitering nøyaktig der du
-% skrev den i stedet for å flytte den forbi tegnsetting,
-% så sett den rett etter ordet den hører til.
-% ============================================================
-\RequirePackage[superscript,nomove]{cite}
-
-% Etiketter i bibliografilisten: "1." istedenfor "[1]",
-% for å matche superskript-stilen i teksten.
-\makeatletter
-\renewcommand{\@biblabel}[1]{#1.}
-\makeatother
-
-
-% ============================================================
 % HYPERLENKER
 %
-% Lastes sist, fordi hyperref patcher kommandoer andre
-% pakker definerer. Lenkene er svarte og ikke fargede, så
+% Lastes nesten sist, fordi hyperref patcher kommandoer
+% andre pakker definerer; bare biblatex står etter.
+% Lenkene er svarte og ikke fargede, så
 % siden trykkes nøyaktig som den ville gjort uten dem, mens
 % de fortsatt er aktive i en PDF-leser.
 % ============================================================
@@ -587,6 +578,38 @@
 \renewcommand{\cftsecpagefont}{\normalfont\color{black}}
 \renewcommand{\cftsubsecpagefont}{\normalfont\color{black}}
 \makeatother
+
+
+% ============================================================
+% SITERINGER
+%
+%   \cite{nokkel}         superskript ¹
+%   \cite{a,b,c}          sortert og komprimert, ¹⁻³
+%   \addbibresource{referanser.bib}   i preamblet i main.tex
+%   \printbibliography                i bakmaterialet
+%
+% biblatex med biber, ikke bibtex — latexmk kjører biber av
+% seg selv. sorting=none lister referansene i siterings-
+% rekkefølge, slik unsrt gjorde. biblatex flytter aldri en
+% sitering forbi tegnsetting (gamle cite sin 'nomove' er
+% standardoppførselen her), så sett \cite rett etter ordet
+% den hører til.
+%
+% biblatex er unntaket fra hyperref-sist-regelen: den er
+% skrevet for å lastes ETTER hyperref, og står derfor sist.
+% ============================================================
+% csquotes gir biblatex språkriktige sitattegn i
+% bibliografien; biblatex ber om den når babel er lastet.
+\RequirePackage{csquotes}
+
+\RequirePackage[backend=biber,style=numeric-comp,sorting=none]{biblatex}
+
+% \cite er superskript-siteringen: biblatex' \supercite.
+\let\cite\supercite
+
+% Etiketter i bibliografilisten: "1." istedenfor "[1]",
+% for å matche superskript-stilen i teksten.
+\DeclareFieldFormat{labelnumberwidth}{#1.}
 
 
 % ============================================================

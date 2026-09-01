@@ -86,6 +86,15 @@ The two versions are functionally equivalent. What differs:
 
 Layout, packages and typography are otherwise identical.
 
+## Parity between the editions
+
+The two editions are meant to differ only in language strings,
+filenames and comments. `tools/parity-diff.sh` strips comments,
+maps the Norwegian identifiers to their English counterparts, and
+diffs each pair of style files and `main.tex` — run it from the
+repository root after editing either edition. The script's header
+lists the few legitimate residual differences.
+
 ## License
 
 [MIT](LICENSE) — use, modify, and redistribute freely. Attribution is

@@ -28,7 +28,7 @@ Or by hand:
 
 ```
 lualatex main
-bibtex   main
+biber    main
 lualatex main
 lualatex main
 ```
@@ -301,7 +301,7 @@ remain, and they are yours to live with.
 - **Sections:** numbered, bold headings
 - **Subsubsections:** quiet run-in heading, kept out of the table of contents
 - **Citations:** numerical in square brackets, sorted and compressed
-- **Bibliography:** `unsrtnat` (in citation order)
+- **Bibliography:** biblatex `numeric-comp` with biber (in citation order)
 - **Hyperlinks:** dark red, print-safe
 - **Table of contents:** JHEP-style, framed by horizontal rules
 
@@ -319,25 +319,6 @@ remain, and they are yours to live with.
 The `[theorem]` argument means the new environment shares
 the theorem counter — keeps numbering coherent across the
 document.
-
-## Localizing labels
-
-`notesstyle.sty` sets the structured-environment labels in
-English by default. To adapt this English template to another
-language, override any of them *before* loading the style:
-
-```latex
-\providecommand{\theoremname}{Teorem}
-\providecommand{\definitionname}{Definisjon}
-\providecommand{\remarkname}{Merknad}
-\providecommand{\exercisename}{Oppgave}
-\usepackage{notesstyle}
-```
-
-(If you just want Norwegian, use the bundled `no/notat`
-template instead — it ships fully localized, with the theorem
-and exercise environments defined under Norwegian names rather
-than via these override hooks.)
 
 ## BibTeX sources
 

@@ -30,7 +30,7 @@ Or by hand:
 
 ```
 lualatex main
-bibtex   main
+biber    main
 lualatex main
 lualatex main
 ```

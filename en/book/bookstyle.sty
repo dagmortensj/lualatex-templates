@@ -35,9 +35,20 @@
 % Engine: LuaLaTeX. The fonts are OpenType and load through
 % unicode-math, which pdflatex cannot do.
 %
-% Order below: fonts, microtypography, geometry, spacing,
-% sectioning, page furniture, citations, hyperref last.
+% Order below: language, fonts, microtypography, geometry,
+% spacing, sectioning, page furniture, hyperref, citations
+% last.
 % ============================================================
+
+
+% ============================================================
+% LANGUAGE
+%
+% babel is loaded here and not in main.tex, so that loading
+% the style is enough to get hyphenation and punctuation
+% right. Switch language on the line below.
+% ============================================================
+\RequirePackage[english]{babel}
 
 
 % ============================================================
@@ -540,30 +551,11 @@
 
 
 % ============================================================
-% CITATIONS
-%
-%   \cite{key}            superscript ¹
-%   \cite{a,b,c}          sorted and compressed, ¹⁻³
-%   \bibliography{...}    in the back matter of main.tex
-%
-% The 'nomove' option keeps a citation exactly where you
-% wrote it instead of shifting it past punctuation, so put
-% it directly after the word it belongs to.
-% ============================================================
-\RequirePackage[superscript,nomove]{cite}
-
-% Bibliography list labels: "1." instead of "[1]",
-% to match the superscript style used in the text.
-\makeatletter
-\renewcommand{\@biblabel}[1]{#1.}
-\makeatother
-
-
-% ============================================================
 % HYPERLINKS
 %
-% Loaded last, because hyperref patches commands that other
-% packages define. Links are black rather than coloured, so
+% Loaded almost last, because hyperref patches commands
+% that other packages define; only biblatex comes after.
+% Links are black rather than coloured, so
 % the page prints exactly as it would without them while
 % staying live in a PDF reader.
 % ============================================================
@@ -586,6 +578,38 @@
 \renewcommand{\cftsecpagefont}{\normalfont\color{black}}
 \renewcommand{\cftsubsecpagefont}{\normalfont\color{black}}
 \makeatother
+
+
+% ============================================================
+% CITATIONS
+%
+%   \cite{key}            superscript ¹
+%   \cite{a,b,c}          sorted and compressed, ¹⁻³
+%   \addbibresource{references.bib}   in the preamble of main.tex
+%   \printbibliography                in the back matter
+%
+% biblatex with biber, not bibtex — latexmk runs biber by
+% itself. sorting=none lists the references in citation
+% order, as unsrt did. biblatex never moves a citation past
+% punctuation (old cite's 'nomove' is the default behaviour
+% here), so put \cite directly after the word it belongs to.
+%
+% biblatex is the exception to the hyperref-last rule: it is
+% written to be loaded AFTER hyperref, and so sits last.
+% ============================================================
+% csquotes gives biblatex language-aware quotation marks
+% in the bibliography; biblatex asks for it when babel is
+% loaded.
+\RequirePackage{csquotes}
+
+\RequirePackage[backend=biber,style=numeric-comp,sorting=none]{biblatex}
+
+% \cite is the superscript citation: biblatex's \supercite.
+\let\cite\supercite
+
+% Bibliography list labels: "1." instead of "[1]",
+% to match the superscript style used in the text.
+\DeclareFieldFormat{labelnumberwidth}{#1.}
 
 
 % ============================================================

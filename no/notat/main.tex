@@ -2,7 +2,7 @@
 % main.tex — selve notatet
 %
 % Denne fila er struktur og innhold. Alle typografiske
-% valg bor i notatstil.sty.
+% valg bor i notatstil.sty, som også laster babel.
 %
 % Kompiler med LuaLaTeX, ikke pdflatex:
 %   latexmk -lualatex main
@@ -18,12 +18,6 @@
 \usepackage{notatstil}
 % Kommenter inn for å fjerne lenkefarger (ren typografi, ingen farger):
 % \hypersetup{hidelinks}
-
-
-% ============================================================
-% SPRÅK
-% ============================================================
-\usepackage[norsk]{babel}
 
 
 % ============================================================
@@ -91,6 +85,16 @@
 % \newcommand{\ii}{\symup{i}}
 % \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
 % \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+
+% ============================================================
+% BIBLIOGRAFI
+%
+% Bibliografien settes med \printbibliography sist i
+% dokumentet; stilen (biblatex, numerisk, i siterings-
+% rekkefølge) bor i notatstil.sty.
+% ============================================================
+\addbibresource{referanser.bib}
 
 
 % ============================================================
@@ -359,8 +363,7 @@ etter hvert som notatene utvikler seg.
 % ============================================================
 % BIBLIOGRAFI
 % ============================================================
-\bibliographystyle{unsrtnat}
-\bibliography{referanser}
+\printbibliography
 
 
 \end{document}

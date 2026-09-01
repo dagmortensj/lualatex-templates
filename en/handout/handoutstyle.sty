@@ -29,8 +29,8 @@
 % For physics and mathematics handouts: a few pages, printed
 % and handed out. Same family as the notes and book styles,
 % but lighter — quiet headings, no table of contents, no
-% bibliography. Add natbib and a .bib file if a handout ever
-% needs one.
+% bibliography. Add biblatex and a .bib file if a handout
+% ever needs one (see the notes style).
 %
 % Everything about how the handout looks is set here;
 % main.tex holds the content and any extra packages.
@@ -38,11 +38,21 @@
 % Engine: LuaLaTeX. The font is OpenType and loads through
 % unicode-math, which pdflatex cannot do.
 %
-% Order below: package options, fonts, geometry, spacing,
+% Order below: package options, language, fonts, geometry, spacing,
 % sectioning with swallow rule, page furniture, colours,
 % structured environments, listings, emphasis boxes,
 % hyperref last.
 % ============================================================
+
+
+% ============================================================
+% LANGUAGE
+%
+% babel is loaded here and not in main.tex, so that loading
+% the style is enough to get hyphenation and punctuation
+% right. Switch language on the line below.
+% ============================================================
+\RequirePackage[english]{babel}
 
 
 % ============================================================
@@ -303,18 +313,10 @@
 % \newtheorem{lemma}[theorem]{Lemma} in main.tex to keep
 % them in the same sequence.
 %
-% The labels are \providecommand, so they can be replaced
-% before this style is loaded:
-%   \providecommand{\theoremname}{Teorem}
-%
 % amsthm is loaded once here; the exercise environment
 % further down uses it too.
 % ============================================================
 \RequirePackage{amsthm}
-
-\providecommand{\theoremname}{Theorem}
-\providecommand{\definitionname}{Definition}
-\providecommand{\remarkname}{Remark}
 
 % --- Space around them ---
 % amsthm's default is \topsep, tight enough that a theorem
@@ -337,16 +339,16 @@
 
 \theoremstyle{plain}
 \ifhandoutunnumbered
-  \newtheorem{theorem}{\theoremname}
+  \newtheorem{theorem}{Theorem}
 \else
-  \newtheorem{theorem}{\theoremname}[section]
+  \newtheorem{theorem}{Theorem}[section]
 \fi
 
 \theoremstyle{definition}
-\newtheorem{definition}[theorem]{\definitionname}
+\newtheorem{definition}[theorem]{Definition}
 
 \theoremstyle{remark}
-\newtheorem{remark}[theorem]{\remarkname}
+\newtheorem{remark}[theorem]{Remark}
 
 
 % ============================================================
@@ -395,9 +397,6 @@
 % the head reads "Exercise 1.1 - Title". The body sits at
 % full width, without paragraph indent, set off by space.
 %
-% Rename the label before loading this style:
-%   \providecommand{\exercisename}{Problem}
-%
 % Shared with the notes style, so a set of problems can move
 % between the two unchanged.
 % ============================================================
@@ -411,13 +410,11 @@
   {\newline}         % space between head and body
   {\thmname{#1}\thmnumber{ #2}\thmnote{ - \bfseries#3}}
 
-\providecommand{\exercisename}{Exercise}
-
 \theoremstyle{handoutex}
 \ifhandoutunnumbered
-  \newtheorem{exerciseinner}{\exercisename}
+  \newtheorem{exerciseinner}{Exercise}
 \else
-  \newtheorem{exerciseinner}{\exercisename}[section]
+  \newtheorem{exerciseinner}{Exercise}[section]
   \renewcommand{\theexerciseinner}{\thesection.\arabic{exerciseinner}}
 \fi
 

@@ -16,10 +16,20 @@
 % Engine: LuaLaTeX. The font is OpenType and loads through
 % unicode-math, which pdflatex cannot do.
 %
-% Order below: fonts, colours, geometry, spacing,
+% Order below: language, fonts, colours, geometry, spacing,
 % sectioning with swallow rule, page furniture, structured
-% environments, citations, emphasis boxes, hyperref last.
+% environments, emphasis boxes, hyperref, citations last.
 % ============================================================
+
+
+% ============================================================
+% LANGUAGE
+%
+% babel is loaded here and not in main.tex, so that loading
+% the style is enough to get hyphenation and punctuation
+% right. Switch language on the line below.
+% ============================================================
+\RequirePackage[english]{babel}
 
 
 % ============================================================
@@ -356,18 +366,10 @@
 % \newtheorem{lemma}[theorem]{Lemma} in main.tex to keep
 % them in the same sequence.
 %
-% The labels are \providecommand, so they can be replaced
-% before this style is loaded:
-%   \providecommand{\theoremname}{Teorem}
-%
 % amsthm is loaded once here; the exercise environment
 % further down uses it too.
 % ============================================================
 \RequirePackage{amsthm}
-
-\providecommand{\theoremname}{Theorem}
-\providecommand{\definitionname}{Definition}
-\providecommand{\remarkname}{Remark}
 
 % --- Space around them ---
 % amsthm's default is \topsep, tight enough that a theorem
@@ -389,13 +391,13 @@
 \makeatother
 
 \theoremstyle{plain}
-\newtheorem{theorem}{\theoremname}[section]
+\newtheorem{theorem}{Theorem}[section]
 
 \theoremstyle{definition}
-\newtheorem{definition}[theorem]{\definitionname}
+\newtheorem{definition}[theorem]{Definition}
 
 \theoremstyle{remark}
-\newtheorem{remark}[theorem]{\remarkname}
+\newtheorem{remark}[theorem]{Remark}
 
 
 % ============================================================
@@ -441,9 +443,6 @@
 % so Exercise 2.1 can sit next to Theorem 2.4. With a title
 % the head reads "Exercise 2.1 - Title".
 %
-% Rename the label before loading this style:
-%   \providecommand{\exercisename}{Problem}
-%
 % Shared with the handout style, so a set of problems can
 % move between the two unchanged. amsthm comes from the
 % theorem section above; enumitem drives the subproblems.
@@ -461,10 +460,8 @@
   {\newline}         % space between head and body
   {\thmname{#1}\thmnumber{ #2}\thmnote{ - \bfseries#3}}
 
-\providecommand{\exercisename}{Exercise}
-
 \theoremstyle{notesex}
-\newtheorem{exerciseinner}{\exercisename}[section]
+\newtheorem{exerciseinner}{Exercise}[section]
 \renewcommand{\theexerciseinner}{\thesection.\arabic{exerciseinner}}
 
 % Back to amsthm's default, so a \newtheorem added later in
@@ -619,19 +616,6 @@
 
 
 % ============================================================
-% CITATIONS
-%
-%   \cite{key}            [1]
-%   \cite{a,b,c}          sorted and compressed, [1-3]
-%   \bibliographystyle{unsrtnat}   in main.tex
-%   \bibliography{...}             in main.tex
-%
-% natbib has to come before hyperref.
-% ============================================================
-\RequirePackage[numbers,sort&compress]{natbib}
-
-
-% ============================================================
 % EMPHASIS BOXES
 %
 %   \begin{important}
@@ -707,8 +691,9 @@
 % ============================================================
 % HYPERLINKS
 %
-% Loaded last, because hyperref patches commands that other
-% packages define. Dark red rather than the default blue: it
+% Loaded almost last, because hyperref patches commands
+% that other packages define; only biblatex comes after.
+% Dark red rather than the default blue: it
 % stays legible when the notes are printed in grey. Set
 % \hypersetup{hidelinks} in main.tex for no colour at all.
 % ============================================================
@@ -720,6 +705,29 @@
   urlcolor=darkred,
   linktoc=page
 }
+
+
+% ============================================================
+% CITATIONS
+%
+%   \cite{key}            [1]
+%   \cite{a,b,c}          sorted and compressed, [1-3]
+%   \addbibresource{references.bib}   in the preamble of main.tex
+%   \printbibliography                at the end of main.tex
+%
+% biblatex with biber, not natbib with bibtex — latexmk runs
+% biber by itself. sorting=none lists the references in
+% citation order, as unsrtnat did.
+%
+% biblatex is the exception to the hyperref-last rule: it is
+% written to be loaded AFTER hyperref, and so sits last.
+% ============================================================
+% csquotes gives biblatex language-aware quotation marks
+% in the bibliography; biblatex asks for it when babel is
+% loaded.
+\RequirePackage{csquotes}
+
+\RequirePackage[backend=biber,style=numeric-comp,sorting=none]{biblatex}
 
 
 % ============================================================

@@ -17,10 +17,21 @@
 % Motor: LuaLaTeX. Fonten er OpenType og lastes gjennom
 % unicode-math, og det kan ikke pdflatex.
 %
-% Rekkefølgen nedenfor: fonter, farger, geometri, avstander,
-% seksjonering med slukeregel, sidemøblering, strukturerte
-% omgivelser, siteringer, viktig-bokser, hyperref sist.
+% Rekkefølgen nedenfor: språk, fonter, farger, geometri,
+% avstander, seksjonering med slukeregel, sidemøblering,
+% strukturerte omgivelser, viktig-bokser, hyperref og
+% siteringer sist.
 % ============================================================
+
+
+% ============================================================
+% SPRÅK
+%
+% babel lastes her og ikke i main.tex, slik at det å laste
+% stilen er nok til å få orddeling og tegnsetting riktig.
+% Bytt språk på linja under.
+% ============================================================
+\RequirePackage[norsk]{babel}
 
 
 % ============================================================
@@ -612,19 +623,6 @@
 
 
 % ============================================================
-% SITERINGER
-%
-%   \cite{nokkel}         [1]
-%   \cite{a,b,c}          sortert og komprimert, [1-3]
-%   \bibliographystyle{unsrtnat}   i main.tex
-%   \bibliography{...}             i main.tex
-%
-% natbib må lastes før hyperref.
-% ============================================================
-\RequirePackage[numbers,sort&compress]{natbib}
-
-
-% ============================================================
 % VIKTIG-BOKSER
 %
 %   \begin{viktig}
@@ -699,8 +697,9 @@
 % ============================================================
 % HYPERLENKER
 %
-% Lastes sist, fordi hyperref patcher kommandoer andre
-% pakker definerer. Mørkerød i stedet for standardblå: den
+% Lastes nesten sist, fordi hyperref patcher kommandoer
+% andre pakker definerer; bare biblatex står etter.
+% Mørkerød i stedet for standardblå: den
 % holder seg lesbar når notatene trykkes i gråtoner. Sett
 % \hypersetup{hidelinks} i main.tex for ingen farge i det
 % hele tatt.
@@ -713,6 +712,28 @@
   urlcolor=darkred,
   linktoc=page
 }
+
+
+% ============================================================
+% SITERINGER
+%
+%   \cite{nokkel}         [1]
+%   \cite{a,b,c}          sortert og komprimert, [1-3]
+%   \addbibresource{referanser.bib}   i preamblet i main.tex
+%   \printbibliography                sist i main.tex
+%
+% biblatex med biber, ikke natbib med bibtex — latexmk
+% kjører biber av seg selv. sorting=none lister referansene
+% i siteringsrekkefølge, slik unsrtnat gjorde.
+%
+% biblatex er unntaket fra hyperref-sist-regelen: den er
+% skrevet for å lastes ETTER hyperref, og står derfor sist.
+% ============================================================
+% csquotes gir biblatex språkriktige sitattegn i
+% bibliografien; biblatex ber om den når babel er lastet.
+\RequirePackage{csquotes}
+
+\RequirePackage[backend=biber,style=numeric-comp,sorting=none]{biblatex}
 
 
 % ============================================================

@@ -28,8 +28,8 @@
 % Til handouts i fysikk og matematikk: noen få sider, trykt
 % og delt ut. Samme familie som notat- og bokstilen, men
 % lettere — stille overskrifter, ingen innholdsfortegnelse,
-% ingen bibliografi. Legg til natbib og en .bib-fil om en
-% handout skulle trenge det.
+% ingen bibliografi. Legg til biblatex og en .bib-fil om en
+% handout skulle trenge det (se notatstilen).
 %
 % Alt om hvordan handout-en ser ut settes her; main.tex
 % inneholder innholdet og eventuelle ekstra pakker.
@@ -37,11 +37,21 @@
 % Motor: LuaLaTeX. Fonten er OpenType og lastes gjennom
 % unicode-math, og det kan ikke pdflatex.
 %
-% Rekkefølgen nedenfor: pakkevalg, fonter, geometri,
+% Rekkefølgen nedenfor: pakkevalg, språk, fonter, geometri,
 % avstander, seksjonering med slukeregel, sidemøblering,
 % farger, strukturerte omgivelser, kodeeksempler,
 % viktig-bokser, hyperref sist.
 % ============================================================
+
+
+% ============================================================
+% SPRÅK
+%
+% babel lastes her og ikke i main.tex, slik at det å laste
+% stilen er nok til å få orddeling og tegnsetting riktig.
+% Bytt språk på linja under.
+% ============================================================
+\RequirePackage[norsk]{babel}
 
 
 % ============================================================

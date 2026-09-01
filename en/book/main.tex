@@ -2,7 +2,7 @@
 % main.tex — the book itself
 %
 % This file is structure and content. Every typographic
-% decision lives in bookstyle.sty.
+% decision lives in bookstyle.sty, which also loads babel.
 %
 % Compile with LuaLaTeX, not pdflatex:
 %   latexmk -lualatex main
@@ -25,12 +25,6 @@
 % Page proofs — the B5 page untouched, centred on A4 with
 % crop marks (requires b5paper above). Replace the line above with:
 % \usepackage[proof]{bookstyle}
-
-
-% ============================================================
-% LANGUAGE
-% ============================================================
-\usepackage[english]{babel}
 
 
 % ============================================================
@@ -57,6 +51,16 @@
 % Upright d and i: \symup is the unicode-math form.
 % \newcommand{\dd}{\symup{d}}
 % \newcommand{\ii}{\symup{i}}
+
+
+% ============================================================
+% BIBLIOGRAPHY
+%
+% Set with \printbibliography in the back matter; the style
+% (biblatex, superscript, in citation order) lives in
+% bookstyle.sty.
+% ============================================================
+\addbibresource{references.bib}
 
 
 % ============================================================
@@ -176,8 +180,7 @@ encounter the technical material.
 \backmatter
 
 % ------------------ Bibliography -----------------
-\bibliographystyle{unsrt}
-\bibliography{references}
+\printbibliography
 
 % ------------------ Index ------------------------
 % \printindex
