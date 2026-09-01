@@ -75,6 +75,31 @@ works if you ever want an unframed list.
 All three share a single counter scoped to the section,
 e.g. Theorem 2.1, Definition 2.2, Remark 2.3.
 
+### Boxes: important and mainresult
+
+```latex
+\begin{important}
+\begin{definition}
+  ...
+\end{definition}
+\end{important}
+
+\begin{mainresult}[Law of gravitation]   % title can be omitted
+\begin{theorem}
+  ...
+\end{theorem}
+\end{mainresult}
+```
+
+`important` sets thin dark red rules above and below the content —
+for important definitions. `mainresult` sets a hairline frame
+around the document's central result; with the optional argument
+the title sits in letterspaced small caps breaking the top frame
+rule, without it the frame stands clean. Both are wrappers around
+the ordinary environments: numbering continues in the same
+sequence as elsewhere, and the boxes break across pages. Use them
+sparingly — box everything and the box is no longer a signal.
+
 ### Exercises
 
 ```latex
@@ -89,9 +114,16 @@ Prompt for the exercise.
 ```
 
 Exercises are numbered per section (e.g. Exercise 4.1, 4.2),
-independently of the theorem counter, and use lowercase
-letter labels for subproblems (a, b, c). The `subproblems`
-environment leaves ordinary `enumerate` lists untouched.
+independently of the theorem counter, and use bold letter
+labels for subproblems (a, b, c), with the same indent as
+ordinary lists. The `subproblems` environment leaves ordinary
+`enumerate` lists untouched.
+
+Exercises are set at full width, without indentation,
+separated from the prose by space: 4.5ex before and 6.75ex
+after. Less room before ties the exercise to its lead-in;
+more room after marks it as finished. Two consecutive
+exercises share the larger distance — space never stacks.
 
 Use `\begin{subproblems}[resume]` to continue the same letter
 sequence after explanatory prose between subproblems.

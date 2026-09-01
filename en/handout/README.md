@@ -52,9 +52,16 @@ Prompt for the exercise.
 ```
 
 Exercises are numbered per section (e.g. Exercise 2.1, 2.2)
-and use lowercase letter labels for subproblems (a, b, c).
-The `subproblems` environment leaves ordinary `enumerate`
-lists untouched for normal use.
+and use bold letter labels for subproblems (a, b, c), with
+the same indent as ordinary lists. The `subproblems`
+environment leaves ordinary `enumerate` lists untouched for
+normal use.
+
+Exercises are set at full width, without indentation,
+separated from the prose by space: 4.5ex before and 6.75ex
+after. Less room before ties the exercise to its lead-in;
+more room after marks it as finished. Two consecutive
+exercises share the larger distance — space never stacks.
 
 Use `\begin{subproblems}[resume]` to continue the same letter
 sequence after explanatory prose between subproblems.
@@ -90,6 +97,31 @@ as before.
 
 All three share a single counter scoped to the section,
 e.g. Theorem 1.1, Definition 1.2, Remark 1.3.
+
+### Boxes: important and mainresult
+
+```latex
+\begin{important}
+\begin{definition}
+  ...
+\end{definition}
+\end{important}
+
+\begin{mainresult}[Law of gravitation]   % title can be omitted
+\begin{theorem}
+  ...
+\end{theorem}
+\end{mainresult}
+```
+
+`important` sets thin dark red rules above and below the content —
+for important definitions. `mainresult` sets a hairline frame
+around the document's central result; with the optional argument
+the title sits in letterspaced small caps breaking the top frame
+rule, without it the frame stands clean. Both are wrappers around
+the ordinary environments: numbering continues in the same
+sequence as elsewhere, and the boxes break across pages. Use them
+sparingly — box everything and the box is no longer a signal.
 
 ### Python code
 

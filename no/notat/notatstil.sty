@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notatstil}[2026/08/27 v1.7 Notatstil — CUP-inspirert boktypografi i artikkelformat]
+\ProvidesPackage{notatstil}[2026/09/01 v1.9 Notatstil — CUP-inspirert boktypografi i artikkelformat]
 
 % ============================================================
 % notatstil.sty — langformede notater
@@ -195,6 +195,41 @@
 % Nummerert ned til underunderseksjon, ført opp ned til
 % underseksjon.
 \setcounter{tocdepth}{2}
+
+
+% ============================================================
+% OVERSKRIFTER SLUKER BLOKKLUFT
+%
+% titlesec legger luften over en overskrift med \vspace, ikke
+% \addvspace, så den stables oppå avstanden en oppgave eller
+% et teorem etterlater seg — og overgangen ser ut som et hull.
+% Denne kroken kjøres før hver overskrift: den samler opp
+% etterlatt vertikal lim (glue) og setter bare inn det som
+% eventuelt overstiger overskriftens egen luft. Resultatet er
+% maksimum, ikke sum — samme semantikk som \addvspace.
+% Overskuddet settes inn som \kern, ikke glue: titlesec
+% absorberer foranliggende glue i sin egen luft, og en kern
+% kan ikke absorberes — men forkastes pent ved sideskift.
+%
+% Kjent rest: et teorem som avslutter en seksjon etterlater
+% limen sin bak en penalty i LaTeX' vedlikeholdsliste, og den
+% kan ikke fjernes derfra. Overgangen teorem->overskrift blir
+% derfor postskip (2,8 ex) for stor — mildt, og eldre enn
+% denne stilen. Oppgaver rammes ikke: de legger limen sist.
+% ============================================================
+\makeatletter
+\newcommand{\overskriftsluk}[1]{%
+  \par
+  \@tempskipb\z@skip
+  \@whiledim\lastskip>\z@\do{%
+    \advance\@tempskipb\lastskip
+    \removelastskip}%
+  \ifdim\@tempskipb>#1\relax
+    \kern\dimexpr\@tempskipb-#1\relax
+  \fi}
+\makeatother
+\AddToHook{cmd/section/before}{\overskriftsluk{4.5ex}}
+\AddToHook{cmd/subsection/before}{\overskriftsluk{4.0ex}}
 
 
 % ============================================================
@@ -434,10 +469,20 @@
 % den så opp igjen til et tett mellomrom. -2ex er
 % font-relativ, så den følger linjehøyden på tvers av
 % størrelser.
+%
+% Luft: 4,5 ex før og 6,75 ex etter — ett basisvalg og én
+% ratio (1,5), plassert i familiens ex-skala mellom
+% separatoren (3,5) og seksjonsluften. Mindre rom før binder
+% oppgaven til innledningen sin i prosaen; større rom etter
+% markerer at enheten er avsluttet. \addvspace tar maksimum
+% av tilstøtende avstander, så to oppgaver på rad får 6,75 ex
+% av seg selv. \parindent nulles i hele kroppen, som i den
+% gamle quote-formen, så deloppgavene leses som innrykket.
 \newenvironment{oppgave}[1][]
 {%
-  \par
-  \begin{quote}
+  \par\addvspace{4.5ex plus 1.5ex minus .8ex}
+  \setlength{\parindent}{0pt}%
+  \boksnullteoremluft
   \def\tmp{#1}\ifx\tmp\empty
     \begin{oppgaveinner}\leavevmode\par\vspace{-2ex}
   \else
@@ -446,8 +491,7 @@
 }
 {%
   \end{oppgaveinner}
-  \end{quote}
-  \vspace{3.5ex plus 1.5ex minus .8ex}
+  \par\addvspace{6.75ex plus 2.2ex minus 1.2ex}
 }
 
 % --- Deloppgaver: a), b), c) ---
@@ -459,8 +503,8 @@
 % \begin{deloppgaver}[resume].
 \newlist{deloppgaver}{enumerate}{1}
 \setlist[deloppgaver]{%
-  label=\alph*),
-  leftmargin=2.2em,
+  label=\textbf{\alph*)},
+  leftmargin=\leftmargini,
   labelsep=0.6em,
   itemsep=0.8ex,
   parsep=0.8ex,
@@ -573,6 +617,78 @@
 % natbib må lastes før hyperref.
 % ============================================================
 \RequirePackage[numbers,sort&compress]{natbib}
+
+
+% ============================================================
+% VIKTIG-BOKSER
+%
+%   \begin{viktig}
+%     \begin{definisjon} ... \end{definisjon}
+%   \end{viktig}
+%
+%   \begin{hovedresultat}[Gravitasjonsloven]   % tittel valgfri
+%     \begin{teorem} ... \end{teorem}
+%   \end{hovedresultat}
+%
+% To omslag for det som fortjener å løftes fra prosaen.
+% viktig setter tynne mørkerøde linjer over og under — samme
+% vekt som separatorlinjen — og er tenkt rundt viktige
+% definisjoner. hovedresultat setter en hårfin ramme rundt
+% dokumentets sentrale resultat; med valgfritt argument står
+% tittelen i sperrede kapiteler brutt inn i den øvre
+% rammelinjen, slik eldre oppslagsverk satte titler, og uten
+% står rammen ren.
+%
+% Begge er omslag, ikke egne teorem-typer: teller og
+% nummerering hører til omgivelsen innenfor, så en bokset
+% definisjon står i samme rekke som en ubokset — og
+% unummerert modus følger med av seg selv. Bruk dem
+% sparsomt: bokses alt, er boksen ikke lenger et signal.
+%
+% Boksene er brytbare over sideskift. Teoremomgivelsenes
+% egen luft over og under nulles inne i boksen — den er
+% dimensjonert mot prosa, og oppå boksens polstring ville
+% den blitt dobbel. \thm@space@setup kjøres av amsthm ved
+% hver omgivelsesstart, så en lokal omdefinisjon inne i
+% boksgruppen er nok.
+% ============================================================
+\RequirePackage[skins,breakable]{tcolorbox}
+
+\makeatletter
+\newcommand{\boksnullteoremluft}{%
+  \def\thm@space@setup{%
+    \setlength\thm@preskip{\z@}%
+    \setlength\thm@postskip{\z@}}}
+\makeatother
+
+\tcbset{boksgrunn/.style={
+  enhanced, breakable, sharp corners,
+  boxrule=0pt, frame hidden, colback=white,
+  left=0pt, right=0pt, top=1.6ex, bottom=1.6ex,
+  before skip=3.2ex plus 1ex minus .4ex,
+  after skip=3.2ex plus 1ex minus .4ex,
+  parbox=false,
+  before upper=\boksnullteoremluft
+}}
+
+\newtcolorbox{viktig}{boksgrunn,
+  borderline north={0.5pt}{0pt}{darkred},
+  borderline south={0.5pt}{0pt}{darkred}
+}
+
+\NewTColorBox{hovedresultat}{o}{boksgrunn,
+  borderline={0.4pt}{0pt}{darkred},
+  left=1.2em, right=1.2em, top=1.8ex, bottom=1.8ex,
+  IfValueT={#1}{
+    top=2.2ex,
+    attach boxed title to top left=
+      {xshift=1.0em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={colback=white, frame hidden,
+      boxrule=0pt, sharp corners,
+      left=0.45em, right=0.45em, top=0pt, bottom=0pt},
+    title={\footnotesize\scshape\lsstyle\color{darkred}#1}
+  }
+}
 
 
 % ============================================================

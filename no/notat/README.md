@@ -76,6 +76,31 @@ fungerer fortsatt om du heller vil ha en uinnrammet liste.
 Alle tre deler én teller knyttet til seksjonen,
 f.eks. Teorem 2.1, Definisjon 2.2, Merknad 2.3.
 
+### Bokser: viktig og hovedresultat
+
+```latex
+\begin{viktig}
+\begin{definisjon}
+  ...
+\end{definisjon}
+\end{viktig}
+
+\begin{hovedresultat}[Gravitasjonsloven]   % tittelen kan sløyfes
+\begin{teorem}
+  ...
+\end{teorem}
+\end{hovedresultat}
+```
+
+`viktig` setter tynne mørkerøde linjer over og under innholdet —
+til viktige definisjoner. `hovedresultat` setter en hårfin ramme
+rundt dokumentets sentrale resultat; med valgfritt argument står
+tittelen i sperrede kapiteler brutt inn i den øvre rammelinjen,
+uten står rammen ren. Begge er omslag rundt de vanlige
+omgivelsene: nummereringen fortsetter i samme rekke som ellers,
+og boksene er brytbare over sideskift. Bruk dem sparsomt —
+bokses alt, er boksen ikke lenger et signal.
+
 ### Oppgaver
 
 ```latex
@@ -90,9 +115,16 @@ Oppgavetekst.
 ```
 
 Oppgaver nummereres per seksjon (f.eks. Oppgave 4.1, 4.2),
-uavhengig av teoremtelleren, og bruker små bokstavetiketter
-for deloppgaver (a, b, c). `deloppgaver`-omgivelsen lar vanlige
-`enumerate`-lister være urørt.
+uavhengig av teoremtelleren, og bruker fete bokstavetiketter
+for deloppgaver (a, b, c), med samme innrykk som vanlige
+lister. `deloppgaver`-omgivelsen lar vanlige `enumerate`-lister
+være urørt.
+
+Oppgavene settes i full bredde, uten innrykk, skilt fra
+prosaen av luft: 4,5 ex før og 6,75 ex etter. Mindre rom før
+binder oppgaven til innledningen sin; større rom etter
+markerer at den er ferdig. To oppgaver på rad deler den
+største avstanden — luften stables aldri.
 
 Bruk `\begin{deloppgaver}[resume]` for å fortsette samme
 bokstavsekvens etter forklarende tekst mellom deloppgaver.

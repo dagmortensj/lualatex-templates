@@ -133,11 +133,15 @@ automatically~\cite{example-article,example-book}.
 % ============================================================
 \section{Definitions and Statements}
 
+% the important box lifts a central definition out of the
+% prose; numbering continues in the same sequence as outside.
+\begin{important}
 \begin{definition}
   Let $\mathcal{H}$ be a complex separable Hilbert space. A
   \emph{state} is a unit vector $\psi \in \mathcal{H}$, considered
   up to a phase factor $e^{i\theta}$.
 \end{definition}
+\end{important}
 
 \begin{definition}
   An \emph{observable} is a self-adjoint linear operator $\hat{A}$
@@ -151,9 +155,13 @@ The expectation value of an observable in a given state is defined by
   \label{eq:expectation}
 \end{equation}
 
+% mainresult frames the document's central result; the title
+% argument can be omitted for a clean frame.
+\begin{mainresult}[Real expectation values]
 \begin{theorem}
   Expectation values of self-adjoint operators are real.
 \end{theorem}
+\end{mainresult}
 
 \begin{proof}
   By definition,

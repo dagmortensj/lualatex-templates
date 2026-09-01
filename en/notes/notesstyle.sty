@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notesstyle}[2026/08/27 v1.7 Notes style — CUP-inspired book typography in article form]
+\ProvidesPackage{notesstyle}[2026/09/01 v1.9 Notes style — CUP-inspired book typography in article form]
 
 % ============================================================
 % notesstyle.sty — long-form notes
@@ -193,6 +193,42 @@
 
 % Numbered down to subsubsection, listed down to subsection.
 \setcounter{tocdepth}{2}
+
+
+% ============================================================
+% HEADINGS SWALLOW BLOCK SPACE
+%
+% titlesec inserts the space above a heading with \vspace, not
+% \addvspace, so it stacks on top of whatever an exercise or
+% theorem leaves behind — and the transition looks like a hole.
+% This hook runs before every heading: it collects trailing
+% vertical glue and reinserts only what exceeds the heading's
+% own space. The result is a maximum, not a sum — the same
+% semantics as \addvspace. The excess goes in as \kern, not
+% glue: titlesec absorbs preceding glue into its own space,
+% and a kern cannot be absorbed — yet is discarded cleanly at
+% a page break.
+%
+% Known residue: a theorem that ends a section leaves its glue
+% behind a penalty in LaTeX's maintenance list, from where it
+% cannot be removed. The theorem->heading transition therefore
+% comes out one postskip (2.8ex) too large — mild, and older
+% than this style. Exercises are unaffected: their glue is
+% contributed last.
+% ============================================================
+\makeatletter
+\newcommand{\headingswallow}[1]{%
+  \par
+  \@tempskipb\z@skip
+  \@whiledim\lastskip>\z@\do{%
+    \advance\@tempskipb\lastskip
+    \removelastskip}%
+  \ifdim\@tempskipb>#1\relax
+    \kern\dimexpr\@tempskipb-#1\relax
+  \fi}
+\makeatother
+\AddToHook{cmd/section/before}{\headingswallow{4.5ex}}
+\AddToHook{cmd/subsection/before}{\headingswallow{4.0ex}}
 
 
 % ============================================================
@@ -440,10 +476,20 @@
 % line under the bold label; \leavevmode\par\vspace{-2ex}
 % then pulls it back up to a tight gap. -2ex is
 % font-relative, so it tracks the line height across sizes.
+%
+% Space: 4.5ex before and 6.75ex after — one base value and
+% one ratio (1.5), placed on the family's ex scale between
+% the separator (3.5) and the heading space. Less room before
+% ties the exercise to its lead-in prose; more room after
+% marks the unit as finished. \addvspace takes the maximum of
+% adjacent spaces, so two consecutive exercises get 6.75ex by
+% themselves. \parindent is zeroed throughout the body, as in
+% the old quote form, so subproblems read as indented.
 \newenvironment{exercise}[1][]
 {%
-  \par
-  \begin{quote}
+  \par\addvspace{4.5ex plus 1.5ex minus .8ex}
+  \setlength{\parindent}{0pt}%
+  \boxzerothmspace
   \def\tmp{#1}\ifx\tmp\empty
     \begin{exerciseinner}\leavevmode\par\vspace{-2ex}
   \else
@@ -452,8 +498,7 @@
 }
 {%
   \end{exerciseinner}
-  \end{quote}
-  \vspace{3.5ex plus 1.5ex minus .8ex}
+  \par\addvspace{6.75ex plus 2.2ex minus 1.2ex}
 }
 
 % --- Subproblems: a), b), c) ---
@@ -465,8 +510,8 @@
 % \begin{subproblems}[resume].
 \newlist{subproblems}{enumerate}{1}
 \setlist[subproblems]{%
-  label=\alph*),
-  leftmargin=2.2em,
+  label=\textbf{\alph*)},
+  leftmargin=\leftmargini,
   labelsep=0.6em,
   itemsep=0.8ex,
   parsep=0.8ex,
@@ -579,6 +624,79 @@
 % natbib has to come before hyperref.
 % ============================================================
 \RequirePackage[numbers,sort&compress]{natbib}
+
+
+% ============================================================
+% EMPHASIS BOXES
+%
+%   \begin{important}
+%     \begin{definition} ... \end{definition}
+%   \end{important}
+%
+%   \begin{mainresult}[Law of gravitation]   % title optional
+%     \begin{theorem} ... \end{theorem}
+%   \end{mainresult}
+%
+% Two wrappers for what deserves lifting out of the prose.
+% important sets thin dark red rules above and below — the
+% same weight as the separator rule — and is meant around
+% important definitions. mainresult sets a hairline frame
+% around the document's central result; with the optional
+% argument the title sits in letterspaced small caps
+% breaking the top frame rule, the way old reference works
+% set titles, and without it the frame stands clean.
+%
+% Both are wrappers, not theorem types of their own: the
+% counter and numbering belong to the environment inside,
+% so a boxed definition sits in the same sequence as an
+% unboxed one — and unnumbered mode follows along by
+% itself. Use them sparingly: box everything and the box is
+% no longer a signal.
+%
+% The boxes break across pages. The theorem environments'
+% own space above and below is zeroed inside the box — it
+% is sized against prose, and on top of the box padding it
+% would double up. \thm@space@setup is run by amsthm at
+% every environment start, so a local redefinition inside
+% the box group suffices.
+% ============================================================
+\RequirePackage[skins,breakable]{tcolorbox}
+
+\makeatletter
+\newcommand{\boxzerothmspace}{%
+  \def\thm@space@setup{%
+    \setlength\thm@preskip{\z@}%
+    \setlength\thm@postskip{\z@}}}
+\makeatother
+
+\tcbset{boxbase/.style={
+  enhanced, breakable, sharp corners,
+  boxrule=0pt, frame hidden, colback=white,
+  left=0pt, right=0pt, top=1.6ex, bottom=1.6ex,
+  before skip=3.2ex plus 1ex minus .4ex,
+  after skip=3.2ex plus 1ex minus .4ex,
+  parbox=false,
+  before upper=\boxzerothmspace
+}}
+
+\newtcolorbox{important}{boxbase,
+  borderline north={0.5pt}{0pt}{darkred},
+  borderline south={0.5pt}{0pt}{darkred}
+}
+
+\NewTColorBox{mainresult}{o}{boxbase,
+  borderline={0.4pt}{0pt}{darkred},
+  left=1.2em, right=1.2em, top=1.8ex, bottom=1.8ex,
+  IfValueT={#1}{
+    top=2.2ex,
+    attach boxed title to top left=
+      {xshift=1.0em, yshift=-\tcboxedtitleheight/2},
+    boxed title style={colback=white, frame hidden,
+      boxrule=0pt, sharp corners,
+      left=0.45em, right=0.45em, top=0pt, bottom=0pt},
+    title={\footnotesize\scshape\lsstyle\color{darkred}#1}
+  }
+}
 
 
 % ============================================================
