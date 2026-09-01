@@ -38,8 +38,9 @@
 % Engine: LuaLaTeX. The font is OpenType and loads through
 % unicode-math, which pdflatex cannot do.
 %
-% Order below: fonts, geometry, spacing, sectioning, page
-% furniture, colours, structured environments, listings,
+% Order below: package options, fonts, geometry, spacing,
+% sectioning with swallow rule, page furniture, colours,
+% structured environments, listings, emphasis boxes,
 % hyperref last.
 % ============================================================
 
@@ -463,6 +464,11 @@
 % Write explanatory prose between parts as normal text
 % outside the environment and pick the letters up again with
 % \begin{subproblems}[resume].
+%
+% The labels are bold, echoing the bold exercise head, and
+% the indent is \leftmargini — the same left edge as ordinary
+% enumerate and itemize lists, so every list in a document
+% shares one grid.
 % ============================================================
 \RequirePackage{enumitem}
 

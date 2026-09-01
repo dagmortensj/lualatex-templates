@@ -16,8 +16,8 @@ English in `en/`, Norwegian in `no/`.
 |---|---|---|
 | **book** / **bok** | B5 or A4 | A monograph in CUP style: parts, chapters, drop caps, superscript citations |
 | **ffv** | A4, two columns | An essayistic physics or mathematics article, numbered citations |
-| **notes** / **notat** | A4 | Long-form notes: theorem and exercise environments, framed contents, Python listings |
-| **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, Python listings |
+| **notes** / **notat** | A4 | Long-form notes: theorem and exercise environments, emphasis boxes, framed contents, Python listings |
+| **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, emphasis boxes, Python listings; optional unnumbered mode |
 
 `notes` and `handout` share their exercise environments, so a problem set
 moves between them unchanged; `book` and `notes` share their equation

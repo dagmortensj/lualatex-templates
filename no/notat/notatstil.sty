@@ -18,8 +18,8 @@
 % unicode-math, og det kan ikke pdflatex.
 %
 % Rekkefølgen nedenfor: fonter, farger, geometri, avstander,
-% seksjonering, sidemøblering, strukturerte omgivelser,
-% siteringer, hyperref sist.
+% seksjonering med slukeregel, sidemøblering, strukturerte
+% omgivelser, siteringer, viktig-bokser, hyperref sist.
 % ============================================================
 
 
@@ -501,6 +501,11 @@
 % Skriv forklarende tekst mellom delene som vanlig tekst
 % utenfor omgivelsen, og ta bokstavene opp igjen med
 % \begin{deloppgaver}[resume].
+%
+% Etikettene er fete, som ekko av det fete oppgavehodet, og
+% innrykket er \leftmargini — samme venstrekant som vanlige
+% enumerate- og itemize-lister, så alle lister i et dokument
+% deler ett grid.
 \newlist{deloppgaver}{enumerate}{1}
 \setlist[deloppgaver]{%
   label=\textbf{\alph*)},

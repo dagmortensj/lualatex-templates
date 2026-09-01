@@ -17,8 +17,8 @@
 % unicode-math, which pdflatex cannot do.
 %
 % Order below: fonts, colours, geometry, spacing,
-% sectioning, page furniture, structured environments,
-% citations, hyperref last.
+% sectioning with swallow rule, page furniture, structured
+% environments, citations, emphasis boxes, hyperref last.
 % ============================================================
 
 
@@ -508,6 +508,11 @@
 % Write explanatory prose between parts as normal text
 % outside the environment and pick the letters up again with
 % \begin{subproblems}[resume].
+%
+% The labels are bold, echoing the bold exercise head, and
+% the indent is \leftmargini — the same left edge as ordinary
+% enumerate and itemize lists, so every list in a document
+% shares one grid.
 \newlist{subproblems}{enumerate}{1}
 \setlist[subproblems]{%
   label=\textbf{\alph*)},

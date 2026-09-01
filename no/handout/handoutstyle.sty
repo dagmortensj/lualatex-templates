@@ -37,9 +37,10 @@
 % Motor: LuaLaTeX. Fonten er OpenType og lastes gjennom
 % unicode-math, og det kan ikke pdflatex.
 %
-% Rekkefølgen nedenfor: fonter, geometri, avstander,
-% seksjonering, sidemøblering, farger, strukturerte
-% omgivelser, kodeeksempler, hyperref sist.
+% Rekkefølgen nedenfor: pakkevalg, fonter, geometri,
+% avstander, seksjonering med slukeregel, sidemøblering,
+% farger, strukturerte omgivelser, kodeeksempler,
+% viktig-bokser, hyperref sist.
 % ============================================================
 
 
@@ -451,6 +452,11 @@
 % Skriv forklarende tekst mellom delene som vanlig tekst
 % utenfor omgivelsen, og ta bokstavene opp igjen med
 % \begin{deloppgaver}[resume].
+%
+% Etikettene er fete, som ekko av det fete oppgavehodet, og
+% innrykket er \leftmargini — samme venstrekant som vanlige
+% enumerate- og itemize-lister, så alle lister i et dokument
+% deler ett grid.
 % ============================================================
 \RequirePackage{enumitem}
 
