@@ -59,6 +59,19 @@ lists untouched for normal use.
 Use `\begin{subproblems}[resume]` to continue the same letter
 sequence after explanatory prose between subproblems.
 
+### Unnumbered mode
+
+```latex
+\usepackage[unnumbered]{handoutstyle}
+```
+
+For a handout about a single topic: the section headings lose
+their numbers, and exercises and theorems count flat through
+the whole document — Exercise 1, 2, 3 and Theorem 1, 2, 3
+instead of 1.1, 1.2. Everything else (fonts, spacing, heading
+style) is unchanged. Without the option the template behaves
+as before.
+
 ### Theorem-like environments
 
 ```latex

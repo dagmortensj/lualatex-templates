@@ -59,6 +59,18 @@ urørt til vanlig bruk.
 Bruk `\begin{deloppgaver}[resume]` for å fortsette samme
 bokstavsekvens etter forklarende tekst mellom deloppgaver.
 
+### Unummerert modus
+
+```latex
+\usepackage[unummerert]{handoutstyle}
+```
+
+For en handout som handler om én ting: seksjonsoverskriftene
+mister nummeret sitt, og oppgaver og teoremer telles flatt
+gjennom hele dokumentet — Oppgave 1, 2, 3 og Teorem 1, 2, 3 i
+stedet for 1.1, 1.2. Alt annet (fonter, luft, overskriftsstil)
+er uendret. Uten valget oppfører malen seg som før.
+
 ### Teoremomgivelser
 
 ```latex
