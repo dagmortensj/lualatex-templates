@@ -506,13 +506,14 @@
 % outside the environment and pick the letters up again with
 % \begin{subproblems}[resume].
 %
-% The labels are bold, echoing the bold exercise head, and
-% the indent is \leftmargini — the same left edge as ordinary
+% The labels are unbolded, as in the textbook tradition —
+% the bold exercise head carries the navigation alone. The
+% indent is \leftmargini — the same left edge as ordinary
 % enumerate and itemize lists, so every list in a document
 % shares one grid.
 \newlist{subproblems}{enumerate}{1}
 \setlist[subproblems]{%
-  label=\textbf{\alph*)},
+  label=\alph*),
   leftmargin=\leftmargini,
   labelsep=0.6em,
   itemsep=0.8ex,

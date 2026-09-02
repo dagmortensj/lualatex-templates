@@ -52,7 +52,7 @@ Prompt for the exercise.
 ```
 
 Exercises are numbered per section (e.g. Exercise 2.1, 2.2)
-and use bold letter labels for subproblems (a, b, c), with
+and use plain letter labels for subproblems (a, b, c), with
 the same indent as ordinary lists. The `subproblems`
 environment leaves ordinary `enumerate` lists untouched for
 normal use.

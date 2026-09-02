@@ -499,8 +499,9 @@
 % utenfor omgivelsen, og ta bokstavene opp igjen med
 % \begin{deloppgaver}[resume].
 %
-% Etikettene er fete, som ekko av det fete oppgavehodet, og
-% innrykket er \leftmargini — samme venstrekant som vanlige
+% Etikettene er magre, som i læreboktradisjonen — det fete
+% oppgavehodet bærer navigasjonen alene. Innrykket er
+% \leftmargini — samme venstrekant som vanlige
 % enumerate- og itemize-lister, så alle lister i et dokument
 % deler ett grid.
 % ============================================================
@@ -510,7 +511,7 @@
 \newlist{deloppgaver}{enumerate}{1}
 
 \setlist[deloppgaver]{%
-  label=\textbf{\alph*)},
+  label=\alph*),
   leftmargin=\leftmargini,
   labelsep=0.6em,
   itemsep=0.8ex,

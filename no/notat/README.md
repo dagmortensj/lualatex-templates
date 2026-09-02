@@ -115,7 +115,7 @@ Oppgavetekst.
 ```
 
 Oppgaver nummereres per seksjon (f.eks. Oppgave 4.1, 4.2),
-uavhengig av teoremtelleren, og bruker fete bokstavetiketter
+uavhengig av teoremtelleren, og bruker magre bokstavetiketter
 for deloppgaver (a, b, c), med samme innrykk som vanlige
 lister. `deloppgaver`-omgivelsen lar vanlige `enumerate`-lister
 være urørt.

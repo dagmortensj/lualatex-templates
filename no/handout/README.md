@@ -52,7 +52,7 @@ Oppgavetekst.
 ```
 
 Oppgaver nummereres per seksjon (f.eks. Oppgave 2.1, 2.2)
-og bruker fete bokstavetiketter for deloppgaver (a, b, c),
+og bruker magre bokstavetiketter for deloppgaver (a, b, c),
 med samme innrykk som vanlige lister. `deloppgaver`-omgivelsen
 lar vanlige `enumerate`-lister være urørt til vanlig bruk.
 
