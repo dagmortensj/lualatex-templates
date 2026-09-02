@@ -35,6 +35,8 @@
 # biber, if a document swaps natbib for biblatex
 *.bcf
 *.run.xml
+# latexmk sets a .bbl/.bcf it cannot use aside under this name
+*-SAVE-ERROR
 
 # TikZ externalization, if \tikzexternalize is turned on
 *.figlist
