@@ -15,8 +15,9 @@
 # Expected residual differences (legitimate, language-driven):
 #   - no styles set \proofname to «Bevis»; English keeps the
 #     amsthm default
-#   - the Norwegian notes/handout main.tex configure siunitx
-#     for decimal comma, «til» and «og»
+#   - the Norwegian styles' siunitx hook sets decimal comma,
+#     half-high dot, «til» and «og»; the English hook keeps
+#     siunitx's defaults for those
 #   - \providecommand guards may differ where babel supplies
 #     one language but not the other
 # Anything else is drift.

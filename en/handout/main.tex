@@ -60,7 +60,9 @@
 
 % --- Units: \qty{9.81}{\metre\per\second\squared} ---
 \usepackage{siunitx}
-\sisetup{per-mode=symbol, separate-uncertainty=true}
+% Configuration (per-mode, uncertainty) lives in the style file.
+% Override here if needed:
+% \sisetup{per-mode=power}
 
 % --- Tensor indices: \tensor{R}{^\rho_\sigma_\mu_\nu} ---
 \usepackage{tensor}

@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notatstil}[2026/09/01 v1.9 Notatstil — CUP-inspirert boktypografi i artikkelformat]
+\ProvidesPackage{notatstil}[2026/09/02 v1.10 Notatstil — CUP-inspirert boktypografi i artikkelformat]
 
 % ============================================================
 % notatstil.sty — langformede notater
@@ -32,6 +32,46 @@
 % Bytt språk på linja under.
 % ============================================================
 \RequirePackage[norsk]{babel}
+
+
+% ============================================================
+% TALL OG ENHETER (siunitx)
+%
+% main.tex laster siunitx når et dokument trenger \qty og
+% \num; stilen bærer språkvalgene, så et dokument som laster
+% pakka får norsk sats uten å sette opp noe selv. Kroken
+% kjører i det øyeblikket siunitx lastes -- før resten av
+% preamble -- så en \sisetup i main.tex overstyrer fortsatt
+% det som står her. Gjør ingenting i et dokument som aldri
+% laster siunitx.
+%
+% Valgene følger Språkrådet og NS-ISO 80000-1:
+%   desimalkomma          6,63 -- ikke 6.63
+%   halvhøy prikk         6,63 · 10^-34 -- ikke kryss; ISO
+%                         forbeholder krysset for
+%                         desimalpunktum-tradisjonen
+%   «til» og «og»         \qtyrange: 10 km til 20 km,
+%                         \qtylist: 1 V, 2 V og 3 V
+%   skråstrek i enheter   m/s^2 -- ikke m s^-2; lærebok,
+%                         ikke tidsskrift
+%   samlet usikkerhet     (9,81 ± 0,03) m/s^2
+%
+% Resten er siunitx sine standarder og skal stå: tynt
+% mellomrom rundt gangetegnet og mellom tall og enhet (som
+% hos Griffiths), tusenskille med tynt mellomrom fra fem
+% sifre (10 000, men 1000), og mellomrom foran %.
+% ============================================================
+\AddToHook{package/siunitx/after}{%
+  \sisetup{
+    output-decimal-marker = {,},
+    exponent-product      = \cdot,
+    range-phrase          = { til },
+    list-final-separator  = { og },
+    list-pair-separator   = { og },
+    per-mode              = symbol,
+    separate-uncertainty  = true,
+  }%
+}
 
 
 % ============================================================

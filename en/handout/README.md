@@ -241,10 +241,12 @@ are `listings` and `tikz`.
 All four are verified under `unicode-math` with LuaLaTeX, and together they
 add about 50 ms to a build — measurement noise.
 
-`siunitx` keeps its English defaults in `main.tex` — decimal point, "to" in
-`\qtyrange`, "and" in `\qtylist`. The `\sisetup` block sets only
-`per-mode=symbol` (`m/s^2` rather than `m s^-2`) and `separate-uncertainty`.
-The Norwegian templates set a decimal comma there instead.
+`siunitx` is configured by the style file the moment the package is loaded.
+It keeps the English defaults — decimal point, multiplication cross in
+scientific notation, "to" in `\qtyrange`, "and" in `\qtylist` — and sets
+only `per-mode=symbol` (`m/s^2` rather than `m s^-2`) and
+`separate-uncertainty`. A `\sisetup` in `main.tex` overrides it. The
+Norwegian templates set a decimal comma and a half-high dot instead.
 
 The old `physics` package is not used here — it is unmaintained and written
 for the pdflatex era. It does still work alongside `siunitx` if you add

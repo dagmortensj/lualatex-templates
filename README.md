@@ -80,9 +80,9 @@ The two versions are functionally equivalent. What differs:
   `referanser.bib`, `bokstil.sty`. `no/handout` is the exception, since
   the folder name is not translated and neither is its style file.
 - **Comments and placeholder text** — in the matching language
-- **Numbers** — the Norwegian `notes` and `handout` set `siunitx` to a
-  decimal comma, «til» in `\qtyrange` and «og» in `\qtylist`; the English
-  ones keep siunitx's defaults
+- **Numbers** — the Norwegian style files set `siunitx` to a decimal
+  comma, a half-high dot in scientific notation, «til» in `\qtyrange` and
+  «og» in `\qtylist`; the English ones keep siunitx's defaults
 
 Layout, packages and typography are otherwise identical.
 

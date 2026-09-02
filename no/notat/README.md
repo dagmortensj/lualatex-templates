@@ -240,9 +240,10 @@ fungere eller ikke — de fire malen laster for deg er verifisert, likeså
 Alle fire er verifisert under `unicode-math` med LuaLaTeX, og til sammen
 koster de rundt 50 ms i byggetid — altså målestøy.
 
-`siunitx` er satt opp norsk i `main.tex`: desimalkomma, «til» i
-`\qtyrange`, «og» i `\qtylist`, og `m/s^2` framfor `m s^-2`. Endre
-`\sisetup`-blokka om du vil ha noe annet.
+`siunitx` settes opp norsk av stilfila i det øyeblikket pakka lastes:
+desimalkomma, halvhøy prikk i standardform (`6,63 · 10^-34`, ikke kryss),
+«til» i `\qtyrange`, «og» i `\qtylist`, og `m/s^2` framfor `m s^-2`. En
+`\sisetup` i `main.tex` overstyrer om du vil ha noe annet.
 
 Den gamle `physics`-pakka brukes ikke her — den er uten vedlikehold og
 skrevet for pdflatex-tida. Den virker riktignok sammen med `siunitx` om du

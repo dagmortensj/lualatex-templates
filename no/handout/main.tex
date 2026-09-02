@@ -59,12 +59,9 @@
 
 % --- Enheter: \qty{9.81}{\metre\per\second\squared} ---
 \usepackage{siunitx}
-\sisetup{output-decimal-marker={,},   % norsk desimalkomma
-         range-phrase={ til },        % \qtyrange: "10 km til 20 km"
-         list-final-separator={ og }, % \qtylist: "1 V, 2 V og 3 V"
-         list-pair-separator={ og },
-         per-mode=symbol,             % m/s^2, ikke m s^-2
-         separate-uncertainty=true}   % (25,3 +- 0,4) grader C
+% Norsk oppsett (desimalkomma, prikk i standardform, «til», «og»)
+% ligger i stilfila. Overstyr her ved behov:
+% \sisetup{exponent-product=\times}
 
 % --- Tensorindekser: \tensor{R}{^\rho_\sigma_\mu_\nu} ---
 \usepackage{tensor}

@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{handoutstyle}[2026/09/02 v1.8 Handout style — calm classic typography for problem sheets]
+\ProvidesPackage{handoutstyle}[2026/09/02 v1.9 Handout style — calm classic typography for problem sheets]
 
 % ============================================================
 % PACKAGE OPTIONS
@@ -65,6 +65,42 @@
 % right. Switch language on the line below.
 % ============================================================
 \RequirePackage[english]{babel}
+
+
+% ============================================================
+% NUMBERS & UNITS (siunitx)
+%
+% main.tex loads siunitx when a document needs \qty and
+% \num; the style carries the language choices, so a
+% document that loads the package gets English typesetting
+% without configuring anything itself. The hook runs the
+% moment siunitx is loaded -- before the rest of the
+% preamble -- so a \sisetup in main.tex still overrides
+% what is set here. Does nothing in a document that never
+% loads siunitx.
+%
+% The choices follow NIST SP 811 and ISO 80000-1:
+%   decimal point         6.63 (siunitx default)
+%   multiplication cross  6.63 × 10^-34 -- not a half-high
+%                         dot; ISO reserves the dot for the
+%                         decimal-comma tradition (default)
+%   "to" and "and"        \qtyrange: 10 km to 20 km,
+%                         \qtylist: 1 V, 2 V and 3 V (default)
+%   slash in units        m/s^2 -- not m s^-2; textbook,
+%                         not journal
+%   combined uncertainty  (9.81 ± 0.03) m/s^2
+%
+% The rest are siunitx defaults and should stay: thin space
+% around the multiplication sign and between number and
+% unit (as in Griffiths), digit grouping by thin space from
+% five digits (10 000, but 1000), and a space before %.
+% ============================================================
+\AddToHook{package/siunitx/after}{%
+  \sisetup{
+    per-mode              = symbol,
+    separate-uncertainty  = true,
+  }%
+}
 
 
 % ============================================================
