@@ -1,24 +1,36 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{handoutstyle}[2026/09/01 v1.7 Handout-stil — rolig klassisk typografi for oppgavesett]
+\ProvidesPackage{handoutstyle}[2026/09/02 v1.8 Handout-stil — rolig klassisk typografi for oppgavesett]
 
 % ============================================================
 % PAKKEVALG
 %
 %   \usepackage[unummerert]{handoutstyle}
+%   \usepackage[blokkavsnitt]{handoutstyle}
+%   \usepackage[unummerert,blokkavsnitt]{handoutstyle}
 %
-% For handouts som handler om én ting og ikke trenger noe
-% hierarki: seksjonsoverskrifter uten nummer, og flat
-% nummerering gjennom hele dokumentet — Oppgave 1, 2, 3 og
-% Teorem 1, 2, 3 i stedet for 1.1, 1.2. Teoremer,
+% unummerert — for handouts som handler om én ting og ikke
+% trenger noe hierarki: seksjonsoverskrifter uten nummer, og
+% flat nummerering gjennom hele dokumentet — Oppgave 1, 2, 3
+% og Teorem 1, 2, 3 i stedet for 1.1, 1.2. Teoremer,
 % definisjoner og merknader følger med, siden «Teorem 2.1»
-% ikke gir mening når seksjonene står unummerert.
+% ikke gir mening når seksjonene står unummerert. Bryteren
+% leses tre steder lenger ned: secnumdepth under
+% seksjonsoverskriftene, og tellerdefinisjonene for teorem
+% og oppgave.
 %
-% Uten valget er alt som før. Bryteren leses tre steder
-% lenger ned: secnumdepth under seksjonsoverskriftene, og
-% tellerdefinisjonene for teorem og oppgave.
+% blokkavsnitt — avsnitt skilt med luft i stedet for innrykk:
+% en halv grunnlinje mellom dem, og ingen \parindent. Passer
+% en handout som er mest oppgaver og korte instrukser, der
+% innrykket ikke har noen løpende prosa å arbeide i. Bryteren
+% leses under AVSNITT OG KJEGLE, og kompenseres to steder som
+% ellers ville arvet luften: tittelblokka og oppgavehodet.
+%
+% Uten valg er alt som før.
 % ============================================================
 \newif\ifhandoutunummerert
+\newif\ifhandoutblokkavsnitt
 \DeclareOption{unummerert}{\handoutunummererttrue}
+\DeclareOption{blokkavsnitt}{\handoutblokkavsnitttrue}
 \DeclareOption*{\PackageWarning{handoutstyle}{Ukjent valg '\CurrentOption'}}
 \ProcessOptions\relax
 
@@ -111,12 +123,28 @@
 % \setstretch{1.04} tar grunnlinjen fra 13,6 pt til
 % 14,14 pt — litt mindre åpent enn notatstilen, noe som
 % passer et kortere dokument.
+%
+% Med [blokkavsnitt]: innrykket nulles, og en halv grunnlinje
+% skiller avsnittene i stedet — nok til å lese som et skille,
+% lite nok til at to avsnitt fortsatt hører sammen. Verdien
+% settes ved \begin{document}, etter at \normalsize og
+% setspace har gjort grunnlinjen ferdig, og lagres som fast
+% lengde. Lister rammes ikke: LaTeX bytter \parskip mot
+% \parsep inne i dem, og deloppgaver har sin egen. Ikke bruk
+% parskip-pakka i tillegg — den gjør det samme, men patcher
+% listene på egen hånd.
 % ============================================================
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{0pt}
 
 \RequirePackage{setspace}
 \setstretch{1.04}
+
+\ifhandoutblokkavsnitt
+  \setlength{\parindent}{0pt}
+  \AtBeginDocument{%
+    \setlength{\parskip}{.5\baselineskip plus 2pt minus 1pt}}
+\fi
 
 
 % ============================================================
@@ -261,11 +289,16 @@
 % kurset sitt, og det hører hjemme i \date. \lsstyle er
 % microtypes tracking, og det er derfor microtype lastes med
 % tracking=true over.
+%
+% \parskip nulles inne i blokka: med [blokkavsnitt] ville den
+% ellers lagt seg oppå avstanden mellom tittel og dato, som
+% er satt for hånd under.
 % ============================================================
 \makeatletter
 \renewcommand{\maketitle}{%
   \thispagestyle{plain}
   \begin{center}
+    \setlength{\parskip}{0pt}%
     \vspace*{1em}
     {\Large\normalfont\scshape\lsstyle \@title\par}
     \vspace{1.6em}
@@ -427,7 +460,10 @@
 % den fete etiketten; \leavevmode\par\vspace{-2ex} trekker
 % den så opp igjen til et tett mellomrom. -2ex er
 % font-relativ, så den følger linjehøyden på tvers av
-% størrelser.
+% størrelser. Kroppen starter et nytt avsnitt, og TeX legger
+% \parskip foran det; \vspace{-\parskip} tar den bort igjen,
+% så mellomrommet er det samme med [blokkavsnitt] som uten
+% (uten valget er \parskip null, og linja gjør ingenting).
 %
 % Luft: 4,5 ex før og 6,75 ex etter — ett basisvalg og én
 % ratio (1,5), plassert i familiens ex-skala mellom
@@ -443,9 +479,9 @@
   \setlength{\parindent}{0pt}%
   \boksnullteoremluft
   \def\tmp{#1}\ifx\tmp\empty
-    \begin{oppgaveinner}\leavevmode\par\vspace{-2ex}
+    \begin{oppgaveinner}\leavevmode\par\vspace{-2ex}\vspace{-\parskip}
   \else
-    \begin{oppgaveinner}[#1]\leavevmode\par\vspace{-2ex}
+    \begin{oppgaveinner}[#1]\leavevmode\par\vspace{-2ex}\vspace{-\parskip}
   \fi
 }
 {%

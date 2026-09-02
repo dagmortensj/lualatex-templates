@@ -79,6 +79,19 @@ instead of 1.1, 1.2. Everything else (fonts, spacing, heading
 style) is unchanged. Without the option the template behaves
 as before.
 
+### Block paragraphs
+
+```latex
+\usepackage[blockparagraphs]{handoutstyle}
+```
+
+Paragraphs separated by space instead of indentation: half a
+baseline between them, and no indent. Suits a handout that is
+mostly exercises and short instructions. The title block and
+the exercise head keep the same distances as otherwise. The
+options combine: `[unnumbered,blockparagraphs]`. Do not load
+the `parskip` package as well — the option does the job.
+
 ### Theorem-like environments
 
 ```latex
@@ -285,7 +298,8 @@ remain, and they are yours to live with.
 - **Measure:** 150 mm — 3.06 lowercase alphabets, wider than
   Bringhurst's 1.8–2.4 window; the leading compensates
 - **Line spacing:** 1.04
-- **Paragraphs:** indented, no line break
+- **Paragraphs:** indented, no line break — or space (half a
+  baseline) instead of indentation with `[blockparagraphs]`
 - **Microtypography:** protrusion, expansion, tracking enabled
 - **Headings:** two levels, bold — section (`\large`), subsection (body
   size). No display sizes and no rules; the second level lets the same

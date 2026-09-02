@@ -30,6 +30,8 @@ cd "$(dirname "$0")/.." || exit 1
 map() {
   sed -e 's/handoutunummerert/handoutunnumbered/g' \
       -e 's/unummerert/unnumbered/g' \
+      -e 's/handoutblokkavsnitt/handoutblockparagraphs/g' \
+      -e 's/blokkavsnitt/blockparagraphs/g' \
       -e 's/boksnullteoremluft/boxzerothmspace/g' \
       -e 's/overskriftsluk/headingswallow/g' \
       -e 's/deloppgaver/subproblems/g' \

@@ -19,19 +19,20 @@
 % exercises and theorems count flat through the document:
 % Exercise 1, 2, 3 instead of 1.1, 1.2. Suits a handout
 % about a single topic.
+%
+% With [blockparagraphs] paragraphs are separated by space
+% (half a baseline) instead of indentation. The options
+% combine.
 % ============================================================
 \usepackage{handoutstyle}
 % \usepackage[unnumbered]{handoutstyle}
+% \usepackage[blockparagraphs]{handoutstyle}
+% \usepackage[unnumbered,blockparagraphs]{handoutstyle}
 
 
 % ============================================================
 % OPTIONAL HANDOUT TWEAKS  (uncomment to enable)
 % ============================================================
-
-% --- No paragraph indentation ---
-% Use parskip, not a bare \parindent=0pt: the style also zeroes
-% \parskip, so parindent alone leaves paragraphs with no separation.
-% \usepackage{parskip}
 
 % --- No page numbers (needs BOTH lines) ---
 % \maketitle forces "plain" on page 1, so also uncomment the

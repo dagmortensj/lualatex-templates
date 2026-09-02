@@ -1,25 +1,37 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{handoutstyle}[2026/09/01 v1.7 Handout style — calm classic typography for problem sheets]
+\ProvidesPackage{handoutstyle}[2026/09/02 v1.8 Handout style — calm classic typography for problem sheets]
 
 % ============================================================
 % PACKAGE OPTIONS
 %
 %   \usepackage[unnumbered]{handoutstyle}
+%   \usepackage[blockparagraphs]{handoutstyle}
+%   \usepackage[unnumbered,blockparagraphs]{handoutstyle}
 %
-% For handouts about a single topic that need no hierarchy:
-% section headings without numbers, and flat numbering
-% through the whole document — Exercise 1, 2, 3 and
-% Theorem 1, 2, 3 instead of 1.1, 1.2. Theorems, definitions
-% and remarks follow along, since "Theorem 2.1" makes no
-% sense when the sections stand unnumbered.
+% unnumbered — for handouts about a single topic that need
+% no hierarchy: section headings without numbers, and flat
+% numbering through the whole document — Exercise 1, 2, 3
+% and Theorem 1, 2, 3 instead of 1.1, 1.2. Theorems,
+% definitions and remarks follow along, since "Theorem 2.1"
+% makes no sense when the sections stand unnumbered. The
+% switch is read in three places further down: secnumdepth
+% under the section headings, and the counter definitions
+% for theorem and exercise.
 %
-% Without the option everything is as before. The switch is
-% read in three places further down: secnumdepth under the
-% section headings, and the counter definitions for theorem
-% and exercise.
+% blockparagraphs — paragraphs separated by space instead of
+% indentation: half a baseline between them, and no
+% \parindent. Suits a handout that is mostly exercises and
+% short instructions, where the indent has no running prose
+% to work in. The switch is read under PARAGRAPHS & LEADING,
+% and compensated in two places that would otherwise inherit
+% the space: the title block and the exercise head.
+%
+% Without options everything is as before.
 % ============================================================
 \newif\ifhandoutunnumbered
+\newif\ifhandoutblockparagraphs
 \DeclareOption{unnumbered}{\handoutunnumberedtrue}
+\DeclareOption{blockparagraphs}{\handoutblockparagraphstrue}
 \DeclareOption*{\PackageWarning{handoutstyle}{Unknown option '\CurrentOption'}}
 \ProcessOptions\relax
 
@@ -113,12 +125,28 @@
 % book. \setstretch{1.04} takes the baseline from 13.6pt to
 % 14.14pt — a little less open than the notes style, which
 % suits a shorter document.
+%
+% With [blockparagraphs]: the indent is zeroed, and half a
+% baseline separates the paragraphs instead — enough to read
+% as a break, little enough that two paragraphs still belong
+% together. The value is set at \begin{document}, after
+% \normalsize and setspace have finished the baseline, and
+% stored as a fixed length. Lists are unaffected: LaTeX swaps
+% \parskip for \parsep inside them, and subproblems have
+% their own. Do not load the parskip package as well — it
+% does the same thing, but patches the lists on its own.
 % ============================================================
 \setlength{\parindent}{15pt}
 \setlength{\parskip}{0pt}
 
 \RequirePackage{setspace}
 \setstretch{1.04}
+
+\ifhandoutblockparagraphs
+  \setlength{\parindent}{0pt}
+  \AtBeginDocument{%
+    \setlength{\parskip}{.5\baselineskip plus 2pt minus 1pt}}
+\fi
 
 
 % ============================================================
@@ -265,11 +293,16 @@
 % course, which belongs in \date. \lsstyle is microtype's
 % tracking, which is why microtype is loaded with
 % tracking=true above.
+%
+% \parskip is zeroed inside the block: with [blockparagraphs]
+% it would otherwise stack on the title-to-date distance,
+% which is set by hand below.
 % ============================================================
 \makeatletter
 \renewcommand{\maketitle}{%
   \thispagestyle{plain}
   \begin{center}
+    \setlength{\parskip}{0pt}%
     \vspace*{1em}
     {\Large\normalfont\scshape\lsstyle \@title\par}
     \vspace{1.6em}
@@ -427,6 +460,11 @@
 % line under the bold label; \leavevmode\par\vspace{-2ex}
 % then pulls it back up to a tight gap. -2ex is
 % font-relative, so it tracks the line height across sizes.
+% The body starts a new paragraph, and TeX puts \parskip in
+% front of it; \vspace{-\parskip} takes it away again, so
+% the gap is the same with [blockparagraphs] as without
+% (without the option \parskip is zero, and the line does
+% nothing).
 %
 % Space: 4.5ex before and 6.75ex after — one base value and
 % one ratio (1.5), placed on the family's ex scale between
@@ -442,9 +480,9 @@
   \setlength{\parindent}{0pt}%
   \boxzerothmspace
   \def\tmp{#1}\ifx\tmp\empty
-    \begin{exerciseinner}\leavevmode\par\vspace{-2ex}
+    \begin{exerciseinner}\leavevmode\par\vspace{-2ex}\vspace{-\parskip}
   \else
-    \begin{exerciseinner}[#1]\leavevmode\par\vspace{-2ex}
+    \begin{exerciseinner}[#1]\leavevmode\par\vspace{-2ex}\vspace{-\parskip}
   \fi
 }
 {%
