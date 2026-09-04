@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{ffvstil}[2026/09/02 v1.3 Artikkelstil — tokolonne]
+\ProvidesPackage{ffvstil}[2026/09/04 v1.4 Artikkelstil — tokolonne]
 
 % ============================================================
 % ffvstil.sty — en tokolonnes artikkel
@@ -165,6 +165,22 @@
   \setlength{\abovedisplayshortskip}{4pt plus 2pt minus 1pt}%
   \setlength{\belowdisplayshortskip}{10pt plus 3pt minus 2pt}%
 }
+
+% ============================================================
+% AVSTAND MELLOM RADENE I ALIGN
+%
+% \jot er den ekstra luften amsmath legger mellom radene i
+% align, gather og aligned. Standard er 3 pt, som klemmer
+% radene sammen, særlig når de inneholder display-brøker.
+% 8 pt gir radene omtrent samme pust som avstanden til
+% prosaen rundt, uten at kjeden faller fra hverandre i
+% separate ligninger; 10 pt gjør det. Trenger én blokk
+% mindre, bruk \\[-2pt] lokalt.
+%
+% Trenger ikke \AtBeginDocument: \jot er en vanlig lengde som
+% \normalsize ikke rører.
+% ============================================================
+\setlength{\jot}{8pt}
 
 
 % ============================================================

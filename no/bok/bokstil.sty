@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bokstil}[2026/09/02 v1.13 — frosset CUP-stil bokoppsett]
+\ProvidesPackage{bokstil}[2026/09/04 v1.14 — frosset CUP-stil bokoppsett]
 
 % ============================================================
 % PAKKEOPSJONER
@@ -228,6 +228,22 @@
   \setlength{\abovedisplayshortskip}{7pt plus 3pt minus 3pt}%
   \setlength{\belowdisplayshortskip}{12pt plus 3pt minus 3pt}%
 }
+
+% ============================================================
+% AVSTAND MELLOM RADENE I ALIGN
+%
+% \jot er den ekstra luften amsmath legger mellom radene i
+% align, gather og aligned. Standard er 3 pt, som klemmer
+% radene sammen, særlig når de inneholder display-brøker.
+% 8 pt gir radene omtrent samme pust som avstanden til
+% prosaen rundt, uten at kjeden faller fra hverandre i
+% separate ligninger; 10 pt gjør det. Trenger én blokk
+% mindre, bruk \\[-2pt] lokalt.
+%
+% Trenger ikke \AtBeginDocument: \jot er en vanlig lengde som
+% \normalsize ikke rører.
+% ============================================================
+\setlength{\jot}{8pt}
 
 
 % ============================================================

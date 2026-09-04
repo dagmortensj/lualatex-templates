@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{ffvstyle}[2026/09/02 v1.3 Article style — two-column]
+\ProvidesPackage{ffvstyle}[2026/09/04 v1.4 Article style — two-column]
 
 % ============================================================
 % ffvstyle.sty — a two-column article
@@ -160,6 +160,22 @@
   \setlength{\abovedisplayshortskip}{4pt plus 2pt minus 1pt}%
   \setlength{\belowdisplayshortskip}{10pt plus 3pt minus 2pt}%
 }
+
+% ============================================================
+% ROW SPACING IN ALIGN
+%
+% \jot is the extra space amsmath adds between the rows of
+% align, gather and aligned. The default is 3 pt, which
+% crowds the rows, especially when they hold display-style
+% fractions. 8 pt gives the rows about the same breathing
+% room as the space to the surrounding prose, without the
+% chain falling apart into separate equations; 10 pt does.
+% Where one block needs less, use \\[-2pt] locally.
+%
+% No \AtBeginDocument needed: \jot is an ordinary length that
+% \normalsize leaves alone.
+% ============================================================
+\setlength{\jot}{8pt}
 
 
 % ============================================================

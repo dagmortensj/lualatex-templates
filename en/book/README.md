@@ -155,6 +155,8 @@ remain, and they are yours to live with.
   1.8–2.4 window
 - **Margins:** inner 2.4 cm, outer 3.2 cm, top 2.6 cm, bottom 3.9 cm
 - **Line spacing:** 1.02 (baseline 14.79 pt = 5.20 mm)
+- **Align rows:** `\jot` = 8 pt (default 3 pt) — more air between the
+  rows of `align`, shared by all the templates
 - **Paragraphs:** indented 1.25 em, no inter-paragraph skip
 - **Microtypography:** protrusion, expansion, tracking enabled
 - **Sections:** unnumbered, but appear in TOC

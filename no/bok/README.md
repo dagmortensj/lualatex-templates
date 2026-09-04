@@ -155,6 +155,8 @@ består, og dem får du leve med.
   vindu på 1,8–2,4
 - **Marger:** innside 2,4 cm, utside 3,2 cm, topp 2,6 cm, bunn 3,9 cm
 - **Linjeavstand:** 1,02 (baseline 14,79 pt = 5,20 mm)
+- **Align-rader:** `\jot` = 8 pt (standard er 3 pt) — mer luft mellom
+  radene i `align`, felles for alle malene
 - **Avsnitt:** innrykk 1,25 em, ikke linjeskift
 - **Mikrotypografi:** protrusion, expansion, tracking aktivert
 - **Seksjoner:** unummererte, men i innholdsfortegnelse

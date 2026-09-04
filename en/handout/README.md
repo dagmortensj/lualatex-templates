@@ -300,6 +300,8 @@ remain, and they are yours to live with.
 - **Measure:** 150 mm — 3.06 lowercase alphabets, wider than
   Bringhurst's 1.8–2.4 window; the leading compensates
 - **Line spacing:** 1.04
+- **Align rows:** `\jot` = 8 pt (default 3 pt) — more air between the
+  rows of `align`, shared by all the templates
 - **Paragraphs:** indented, no line break — or space (half a
   baseline) instead of indentation with `[blockparagraphs]`
 - **Microtypography:** protrusion, expansion, tracking enabled

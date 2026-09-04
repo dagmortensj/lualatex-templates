@@ -297,6 +297,8 @@ består, og dem får du leve med.
 - **Satsbredde:** 150 mm — 3,06 lilleboksalfabeter, bredere enn
   Bringhursts vindu på 1,8–2,4; kjegla kompenserer
 - **Linjeavstand:** 1,07
+- **Align-rader:** `\jot` = 8 pt (standard er 3 pt) — mer luft mellom
+  radene i `align`, felles for alle malene
 - **Avsnitt:** innrykk, ikke linjeskift
 - **Mikrotypografi:** protrusion, expansion, tracking aktivert
 - **Seksjoner:** nummererte, fete overskrifter
