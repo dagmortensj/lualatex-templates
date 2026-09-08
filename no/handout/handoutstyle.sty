@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{handoutstyle}[2026/09/04 v1.10 Handout-stil — rolig klassisk typografi for oppgavesett]
+\ProvidesPackage{handoutstyle}[2026/09/08 v1.11 Handout-stil — rolig klassisk typografi for oppgavesett]
 
 % ============================================================
 % PAKKEVALG
@@ -529,15 +529,28 @@
 % av tilstøtende avstander, så to oppgaver på rad får 6,75 ex
 % av seg selv. \parindent nulles i hele kroppen, som i den
 % gamle quote-formen, så deloppgavene leses som innrykket.
+%
+% \nobreak rett etter \par forbyr sideskift mellom hode og
+% kropp — alt derfra til første kroppslinje er lim og kan
+% ikke brytes ved, så hodet blir aldri stående alene nederst
+% på en side. \needspace sikrer i tillegg plass til hodet og
+% et par linjer, så en oppgave ikke starter med to linjer i
+% bunnen. Den må stå ETTER \addvspace: den legger inn egne
+% (null-)glue-er, og sto den før, ville \addvspace ikke sett
+% luften fra forrige oppgave og lagt 4,5 ex oppå 6,75 i
+% stedet for å ta maksimum.
+\RequirePackage{needspace}
+
 \newenvironment{oppgave}[1][]
 {%
-  \par\addvspace{4.5ex plus 1.5ex minus .8ex}
+  \par\addvspace{4.5ex plus 1.5ex minus .8ex}%
+  \needspace{4\baselineskip}%
   \setlength{\parindent}{0pt}%
   \boksnullteoremluft
   \def\tmp{#1}\ifx\tmp\empty
-    \begin{oppgaveinner}\leavevmode\par\vspace{-2ex}\vspace{-\parskip}
+    \begin{oppgaveinner}\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}
   \else
-    \begin{oppgaveinner}[#1]\leavevmode\par\vspace{-2ex}\vspace{-\parskip}
+    \begin{oppgaveinner}[#1]\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}
   \fi
 }
 {%

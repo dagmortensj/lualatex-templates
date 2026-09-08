@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notesstyle}[2026/09/04 v1.11 Notes style — CUP-inspired book typography in article form]
+\ProvidesPackage{notesstyle}[2026/09/08 v1.12 Notes style — CUP-inspired book typography in article form]
 
 % ============================================================
 % notesstyle.sty — long-form notes
@@ -534,15 +534,29 @@
 % adjacent spaces, so two consecutive exercises get 6.75ex by
 % themselves. \parindent is zeroed throughout the body, as in
 % the old quote form, so subproblems read as indented.
+%
+% \nobreak right after \par forbids a page break between head
+% and body — everything from there to the first body line is
+% glue and cannot be broken at, so the head is never left
+% alone at the foot of a page. \needspace also secures room
+% for the head and a couple of lines, so an exercise does not
+% start with two lines at the bottom. It must come AFTER
+% \addvspace: it inserts (zero) glue of its own, and placed
+% before, \addvspace would not see the space left by the
+% previous exercise and would add 4.5ex on top of 6.75
+% instead of taking the maximum.
+\RequirePackage{needspace}
+
 \newenvironment{exercise}[1][]
 {%
-  \par\addvspace{4.5ex plus 1.5ex minus .8ex}
+  \par\addvspace{4.5ex plus 1.5ex minus .8ex}%
+  \needspace{4\baselineskip}%
   \setlength{\parindent}{0pt}%
   \boxzerothmspace
   \def\tmp{#1}\ifx\tmp\empty
-    \begin{exerciseinner}\leavevmode\par\vspace{-2ex}
+    \begin{exerciseinner}\leavevmode\par\nobreak\vspace{-2ex}
   \else
-    \begin{exerciseinner}[#1]\leavevmode\par\vspace{-2ex}
+    \begin{exerciseinner}[#1]\leavevmode\par\nobreak\vspace{-2ex}
   \fi
 }
 {%
