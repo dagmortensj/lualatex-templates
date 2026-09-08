@@ -150,8 +150,9 @@ Farten i horisontal retning er
 ```
 
 Alternativene får A, B, C, D i sans uten parentes, så de skiller
-seg fra deloppgavenes a), b). Lista kan stå rett i oppgaven eller
-inne i en deloppgave. Luften mellom alternativene er større enn
+seg fra deloppgavenes a), b) — men med samme innrykk, så A står
+under a). Lista kan stå rett i oppgaven eller inne i en deloppgave;
+der rykker den ett hakk til, som en nestet liste. Luften mellom alternativene er større enn
 mellom deloppgavene — alternativene er ofte brøker og andre
 formler som ellers klumper seg. Sideskift er forbudt mellom
 spørsmålet og A og mellom alternativene, men tillatt etter det

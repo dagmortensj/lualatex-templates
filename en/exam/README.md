@@ -156,8 +156,10 @@ The horizontal component of the velocity is
 ```
 
 The alternatives get A, B, C, D in sans without a parenthesis, so
-they stand apart from the subproblems' a), b). The list works
-directly in the exercise or inside a subproblem. The space between
+they stand apart from the subproblems' a), b) — but with the same
+indent, so A sits under a). The list works directly in the exercise
+or inside a subproblem; there it steps in once more, like a nested
+list. The space between
 alternatives is larger than between subproblems — alternatives
 are often fractions and other formulas that otherwise bunch up.
 No page break is allowed between the question and A, nor between

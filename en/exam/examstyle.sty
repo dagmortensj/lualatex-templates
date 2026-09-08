@@ -620,8 +620,9 @@
 %   \end{multiplechoice}
 %
 % Letters in sans, no parenthesis, so they stand apart from
-% the subproblems' a), b). Works directly in the exercise or
-% inside a subproblem. The space between alternatives is
+% the subproblems' a), b), but with the same indent. Works
+% directly in the exercise or inside a subproblem — there they
+% step in once more, like a nested list. The space between alternatives is
 % larger than between subproblems, because alternatives are
 % often fractions and other formulas that otherwise bunch up.
 % No page break between the question and A, nor between the
@@ -631,7 +632,7 @@
 
 \setlist[multiplechoice]{%
   label=\sffamily\Alph*,
-  leftmargin=*,
+  leftmargin=\leftmargini,
   labelsep=1em,
   itemsep=1.4ex,
   parsep=0pt,
