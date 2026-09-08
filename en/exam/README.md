@@ -143,6 +143,27 @@ the title; leave it out if the test does not state points.
 `\begin{subproblems}[resume]` continues the letter sequence after
 intervening text.
 
+## Multiple choice
+
+```latex
+The horizontal component of the velocity is
+\begin{multiplechoice}
+  \item zero
+  \item constant, but non-zero
+  \item increasing
+  \item decreasing
+\end{multiplechoice}
+```
+
+The alternatives get A, B, C, D in sans without a parenthesis, so
+they stand apart from the subproblems' a), b). The list works
+directly in the exercise or inside a subproblem. The space between
+alternatives is larger than between subproblems — alternatives
+are often fractions and other formulas that otherwise bunch up.
+No page break is allowed between the question and A, nor between
+the alternatives, but one is allowed after the last, so A–D always
+stay with their question.
+
 ## Python code
 
 ```latex

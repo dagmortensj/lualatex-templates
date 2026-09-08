@@ -40,6 +40,7 @@ map() {
       -e 's/boksnullteoremluft/boxzerothmspace/g' \
       -e 's/overskriftsluk/headingswallow/g' \
       -e 's/deloppgaver/subproblems/g' \
+      -e 's/flervalg/multiplechoice/g' \
       -e 's/oppgaveinner/exerciseinner/g' \
       -e 's/oppgave/exercise/g' \
       -e 's/provestatussjekk/examstatuscheck/g' \

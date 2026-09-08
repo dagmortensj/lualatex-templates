@@ -612,6 +612,37 @@
 
 
 % ============================================================
+% MULTIPLE CHOICE — A, B, C, D
+%
+%   \begin{multiplechoice}
+%     \item zero
+%     \item constant, but non-zero
+%   \end{multiplechoice}
+%
+% Letters in sans, no parenthesis, so they stand apart from
+% the subproblems' a), b). Works directly in the exercise or
+% inside a subproblem. The space between alternatives is
+% larger than between subproblems, because alternatives are
+% often fractions and other formulas that otherwise bunch up.
+% No page break between the question and A, nor between the
+% alternatives — but one is allowed after the last.
+% ============================================================
+\newlist{multiplechoice}{enumerate}{1}
+
+\setlist[multiplechoice]{%
+  label=\sffamily\Alph*,
+  leftmargin=*,
+  labelsep=1em,
+  itemsep=1.4ex,
+  parsep=0pt,
+  topsep=0.8ex,
+  beginpenalty=10000,
+  midpenalty=10000,
+  endpenalty=-100
+}
+
+
+% ============================================================
 % CODE LISTINGS
 %
 %   \begin{python}

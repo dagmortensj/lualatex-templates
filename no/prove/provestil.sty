@@ -610,6 +610,37 @@
 
 
 % ============================================================
+% FLERVALG — A, B, C, D
+%
+%   \begin{flervalg}
+%     \item lik null
+%     \item konstant, men forskjellig fra null
+%   \end{flervalg}
+%
+% Bokstavene i sans, uten parentes, så de skiller seg fra
+% deloppgavenes a), b). Kan stå rett i oppgaven eller inne i
+% en deloppgave. Luften mellom alternativene er større enn
+% mellom deloppgavene, fordi alternativene ofte er brøker
+% og andre formler som ellers klumper seg. Sideskift er
+% forbudt mellom spørsmålet og A, og mellom alternativene —
+% men tillatt etter det siste.
+% ============================================================
+\newlist{flervalg}{enumerate}{1}
+
+\setlist[flervalg]{%
+  label=\sffamily\Alph*,
+  leftmargin=*,
+  labelsep=1em,
+  itemsep=1.4ex,
+  parsep=0pt,
+  topsep=0.8ex,
+  beginpenalty=10000,
+  midpenalty=10000,
+  endpenalty=-100
+}
+
+
+% ============================================================
 % KODEEKSEMPLER
 %
 %   \begin{python}

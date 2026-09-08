@@ -19,7 +19,7 @@ English in `en/`, Norwegian in `no/`.
 | **ffv** | A4, two columns | An essayistic physics or mathematics article, numbered citations |
 | **notes** / **notat** | A4 | Long-form notes: theorem and exercise environments, emphasis boxes, framed contents, Python listings |
 | **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, emphasis boxes, Python listings; optional unnumbered mode |
-| **exam** / **prove** | A4, 12 pt | Classroom tests: title block with name, date, time and aids; Part 1 / Part 2 or Level 1–3; "Page 2 of 5" on every page; optional cover page and booklet padding for duplex printing |
+| **exam** / **prove** | A4, 12 pt | Classroom tests: title block with name, date, time and aids; Part 1 / Part 2 or Level 1–3; multiple-choice lists; "Page 2 of 5" on every page; optional cover page and booklet padding for duplex printing |
 
 `notes`, `handout` and `exam` share their exercise environments, so a
 problem set moves between them unchanged; `book` and `notes` share their

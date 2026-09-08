@@ -137,6 +137,26 @@ hører hjemme bakerst i tittelen; utelat den om prøven ikke oppgir
 poeng. `\begin{deloppgaver}[resume]` fortsetter bokstavrekka etter
 mellomtekst.
 
+## Flervalg
+
+```latex
+Farten i horisontal retning er
+\begin{flervalg}
+  \item lik null
+  \item konstant, men forskjellig fra null
+  \item økende
+  \item minkende
+\end{flervalg}
+```
+
+Alternativene får A, B, C, D i sans uten parentes, så de skiller
+seg fra deloppgavenes a), b). Lista kan stå rett i oppgaven eller
+inne i en deloppgave. Luften mellom alternativene er større enn
+mellom deloppgavene — alternativene er ofte brøker og andre
+formler som ellers klumper seg. Sideskift er forbudt mellom
+spørsmålet og A og mellom alternativene, men tillatt etter det
+siste, så A–D holder alltid sammen med spørsmålet sitt.
+
 ## Python-kode
 
 ```latex
