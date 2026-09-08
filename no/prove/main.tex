@@ -1,0 +1,232 @@
+% ============================================================
+% main.tex — selve prøven
+%
+% Denne fila er struktur og innhold. Alle typografiske
+% valg bor i provestil.sty, som også laster babel.
+%
+% Kompiler med LuaLaTeX, ikke pdflatex:
+%   latexmk -lualatex main
+% (to kjøringer: «Side 2 av 5» trenger sidetallet fra
+% forrige runde — latexmk ordner det selv.)
+% ============================================================
+
+
+\documentclass[12pt]{article}
+
+
+% ============================================================
+% LAST INN PRØVESTIL
+%
+% [forside]: tittelblokk og instrukser på en egen side uten
+% sidetall; Del 1 begynner på side 1. Til heldagsprøver og
+% prøver med to deler. Uten valget står tittelblokka øverst
+% på side 1 med oppgavene rett under — til mindre prøver.
+%
+% [hefte]: som [forside], men lagt til rette for tosidig
+% utskrift og falsing — tom bakside på forsiden, hver del på
+% en høyreside, og sidetall delelig med 4.
+%
+% [statussjekk]: tittel, undertittel og dato — ingen felt.
+% Del oppgavene i \nivå[...]{1}, {2}, {3} i stedet for \del.
+%
+% [innrykk]: avsnittsinnrykk i stedet for luft mellom
+% avsnittene. Valgene kan kombineres.
+% ============================================================
+\usepackage[forside]{provestil}
+% \usepackage[hefte]{provestil}
+% \usepackage{provestil}
+% \usepackage[statussjekk]{provestil}
+% \usepackage[innrykk]{provestil}
+
+
+% ============================================================
+% EGENDEFINERTE PAKKER
+%
+% Legg til prosjektspesifikke pakker her.
+% Ikke sett pakker andre steder i filen.
+% ============================================================
+
+% --- Matematikk (standard) ---
+\usepackage{amsmath}                % ikke amssymb: unicode-math
+                                    % leverer symbolene
+
+% --- Vektorer: \vv{F}, flat pil over symbolet. Indekser utenfor: \vv{F}_1 ---
+\usepackage[e]{esvect}
+
+% --- Enheter: \qty{9.81}{\metre\per\second\squared} ---
+\usepackage{siunitx}
+% Norsk oppsett (desimalkomma, prikk i standardform, «til», «og»)
+% ligger i stilfila. Overstyr her ved behov:
+% \sisetup{exponent-product=\times}
+
+% --- Figurer ---
+\usepackage{graphicx}
+\graphicspath{{figurer/}}
+
+% --- Annet ---
+\usepackage{tikz}
+
+
+% ============================================================
+% EGENDEFINERTE KOMMANDOER
+% ============================================================
+
+% Oppreist d: \symup er unicode-math-formen.
+% \newcommand{\dd}{\symup{d}}
+% \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
+
+
+% ============================================================
+% METADATA
+%
+% Tomme felt vises som tomme (ikke utelatt). \navnetikett
+% bytter «Navn» mot f.eks. «Kandidatnummer».
+% ============================================================
+\title{Prøve i Fysikk 1}
+\undertittel{Kapittel 3 og 4: Krefter og bevegelse}
+\date{Torsdag 15. oktober 2026}
+\tid{90 minutter}
+\hjelpemidler{Del 1: ingen. Del 2: alle, unntatt kommunikasjon}
+% \navnetikett{Kandidatnummer}
+
+
+% ============================================================
+% DOKUMENT
+% ============================================================
+\begin{document}
+
+\maketitle
+
+% Med [forside] står alt herfra til første \del på forsiden.
+Svar på alle oppgavene. Vis utregning og begrunn svarene;
+et riktig svar uten begrunnelse gir ikke full uttelling.
+Bruk gjerne figurer.
+
+Del 1 leveres inn før du begynner på Del 2. Prøven har
+5 oppgaver og gir til sammen 20 poeng.
+
+
+% ============================================================
+% DEL 1
+%
+% Med [forside] lukker første \del forsiden og begynner på
+% side 1. Sløyf \del-linjene helt på en mindre prøve uten
+% deler (og uten [forside]) — oppgavene telles likt uansett.
+% ============================================================
+\del[Uten hjelpemidler]{1}
+
+
+\begin{oppgave}[Krefter på skråplan \poeng{4}]
+En kloss med masse $m$ ligger i ro på et skråplan som danner
+vinkelen $\theta$ med horisontalen.
+
+\begin{deloppgaver}
+  \item Tegn figur og sett på alle kreftene som virker på klossen.
+  \item Vis at normalkraften er $N = mg\cos\theta$.
+  \item Hvor stor må friksjonskraften minst være for at klossen
+        skal ligge i ro?
+\end{deloppgaver}
+\end{oppgave}
+
+
+\begin{oppgave}[Bevegelseslikningene \poeng{4}]
+En ball kastes rett opp med farten $v_0 = \qty{12}{\metre\per\second}$.
+Se bort fra luftmotstand, og bruk $g = \qty{9.8}{\metre\per\second\squared}$.
+
+\begin{deloppgaver}
+  \item Hvor høyt kommer ballen?
+  \item Hvor lang tid tar det før ballen er tilbake i utgangspunktet?
+\end{deloppgaver}
+\end{oppgave}
+
+
+\begin{oppgave}[Vektorer \poeng{2}]
+To krefter $\vv{F}_1$ og $\vv{F}_2$ virker på samme punkt.
+$\vv{F}_1$ har størrelse \qty{3.0}{\newton} og peker mot øst;
+$\vv{F}_2$ har størrelse \qty{4.0}{\newton} og peker mot nord.
+Finn størrelsen og retningen til den resulterende kraften.
+\end{oppgave}
+
+
+% ============================================================
+% DEL 2
+%
+% \clearpage om Del 1 skal leveres inn før Del 2 begynner.
+% Skal oppgavene starte på 1 igjen her:
+% \setcounter{oppgaveinner}{0} etter \del.
+% ============================================================
+\clearpage
+\del[Med hjelpemidler]{2}
+
+
+\begin{oppgave}[Bilen som bremser \poeng{6}]
+En bil kjører med farten \qty{80}{\kilo\metre\per\hour} når
+sjåføren oppdager et hinder \qty{50}{\metre} lenger framme.
+Reaksjonstiden er \qty{0.8}{\second}, og bremsene gir en
+konstant retardasjon på \qty{6.5}{\metre\per\second\squared}.
+
+\begin{deloppgaver}
+  \item Hvor langt kjører bilen i løpet av reaksjonstiden?
+  \item Rekker bilen å stoppe før hinderet? Vis utregningen.
+\end{deloppgaver}
+
+Figuren under viser et fart--tid-diagram for bevegelsen.
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[>=stealth, x=1.1cm, y=0.9cm]
+    \draw[->,thick] (0,0) -- (5.2,0) node[right,font=\small] {$t$ (s)};
+    \draw[->,thick] (0,0) -- (0,3.4) node[above,font=\small] {$v$ (m/s)};
+    \draw[gray,thin,dashed] (0.8,0) -- (0.8,2.5);
+    \node[below,font=\small,gray] at (0.8,0) {$0{,}8$};
+    \node[below,font=\small,gray] at (4.2,0) {$t_{\text{stopp}}$};
+    \node[left,font=\small] at (0,2.5) {$22{,}2$};
+    \fill[darkorange!15] (0,0) -- (0,2.5) -- (0.8,2.5) -- (4.2,0) -- cycle;
+    \draw[darkolive,thick] (0,2.5) -- (0.8,2.5) -- (4.2,0);
+  \end{tikzpicture}
+  \caption{Fart som funksjon av tid. Arealet under grafen er
+           strekningen.}
+  \label{fig:vt}
+\end{figure}
+
+\begin{deloppgaver}[resume]
+  \item Bruk figur~\ref{fig:vt} til å forklare hvordan
+        stopplengden kan leses ut av diagrammet.
+\end{deloppgaver}
+\end{oppgave}
+
+
+\begin{oppgave}[Numerisk løsning \poeng{4}]
+Programmet under simulerer fallet til en kule med luftmotstand
+ved hjelp av Eulers metode.
+
+\begin{python}
+import numpy as np
+
+m, g, k = 0.10, 9.81, 0.02     # masse (kg), g, luftmotstand
+v, t, dt = 0.0, 0.0, 0.01
+
+while t < 5.0:
+    a = g - (k / m) * v**2      # akselerasjon (m/s^2)
+    v = v + a * dt
+    t = t + dt
+
+print(f"Fart etter {t:.1f} s: {v:.2f} m/s")
+\end{python}
+
+\begin{deloppgaver}
+  \item Forklar hva linje 7 gjør, og hvilken fysisk lov den bygger på.
+  \item Hva vil programmet skrive ut hvis $k$ settes til null?
+        Begrunn svaret uten å kjøre programmet.
+  \item Endre programmet slik at det også regner ut hvor langt
+        kula har falt.
+\end{deloppgaver}
+\end{oppgave}
+
+\separator
+
+\begin{center}
+\sffamily Lykke til!
+\end{center}
+
+\end{document}

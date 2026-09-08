@@ -1,0 +1,235 @@
+% ============================================================
+% main.tex — the test itself
+%
+% This file is structure and content. All typographic
+% choices live in examstyle.sty, which also loads babel.
+%
+% Compile with LuaLaTeX, not pdflatex:
+%   latexmk -lualatex main
+% (two runs: "Page 2 of 5" needs the page count from the
+% previous pass — latexmk handles it by itself.)
+% ============================================================
+
+
+\documentclass[12pt]{article}
+
+
+% ============================================================
+% LOAD THE EXAM STYLE
+%
+% [coverpage]: title block and instructions on a page of
+% their own without a page number; Part 1 begins on page 1.
+% For full-day tests and tests with two parts. Without the
+% option the title block sits at the top of page 1 with the
+% exercises straight below — for smaller tests.
+%
+% [booklet]: like [coverpage], but laid out for duplex
+% printing and folding — blank back on the cover, every part
+% on a right-hand page, and a page count divisible by 4.
+%
+% [statuscheck]: title, subtitle and date — no fields. Split
+% the exercises with \level[...]{1}, {2}, {3} instead of
+% \exampart.
+%
+% [indent]: paragraph indentation instead of space between
+% paragraphs. The options can be combined.
+% ============================================================
+\usepackage[coverpage]{examstyle}
+% \usepackage[booklet]{examstyle}
+% \usepackage{examstyle}
+% \usepackage[statuscheck]{examstyle}
+% \usepackage[indent]{examstyle}
+
+
+% ============================================================
+% CUSTOM PACKAGES
+%
+% Add project-specific packages here.
+% Do not put packages anywhere else in the file.
+% ============================================================
+
+% --- Mathematics (standard) ---
+\usepackage{amsmath}                % not amssymb: unicode-math
+                                    % supplies the symbols
+
+% --- Vectors: \vv{F}, flat arrow over the symbol. Indices outside: \vv{F}_1 ---
+\usepackage[e]{esvect}
+
+% --- Units: \qty{9.81}{\metre\per\second\squared} ---
+\usepackage{siunitx}
+% The two house choices (m/s^2, combined uncertainty) live in
+% the style file. Override here if needed:
+% \sisetup{per-mode=power}
+
+% --- Figures ---
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+% --- Other ---
+\usepackage{tikz}
+
+
+% ============================================================
+% CUSTOM COMMANDS
+% ============================================================
+
+% Upright d: \symup is the unicode-math form.
+% \newcommand{\dd}{\symup{d}}
+% \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
+
+
+% ============================================================
+% METADATA
+%
+% Empty fields are shown as empty (not omitted). \namelabel
+% swaps "Name" for e.g. "Candidate number".
+% ============================================================
+\title{Physics 1 Test}
+\subtitle{Chapters 3 and 4: Forces and motion}
+\date{Thursday 15 October 2026}
+\duration{90 minutes}
+\aids{Part 1: none. Part 2: all, except communication}
+% \namelabel{Candidate number}
+
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+\begin{document}
+
+\maketitle
+
+% With [coverpage] everything from here to the first \exampart stays on the cover.
+Answer all the exercises. Show your working and justify your
+answers; a correct answer without justification does not earn
+full credit. Use figures where helpful.
+
+Part 1 is handed in before you begin Part 2. The test has
+5 exercises and is worth 20 points in total.
+
+
+% ============================================================
+% PART 1
+%
+% With [coverpage] the first \exampart closes the cover and
+% begins on page 1. Drop the \exampart lines entirely on a
+% smaller test without parts (and without [coverpage]) — the
+% exercises count the same either way.
+% ============================================================
+\exampart[Without aids]{1}
+
+
+\begin{exercise}[Forces on an incline \points{4}]
+A block of mass $m$ rests on an incline making an angle
+$\theta$ with the horizontal.
+
+\begin{subproblems}
+  \item Draw a figure and mark all the forces acting on the block.
+  \item Show that the normal force is $N = mg\cos\theta$.
+  \item How large must the friction force be, at minimum, for
+        the block to stay at rest?
+\end{subproblems}
+\end{exercise}
+
+
+\begin{exercise}[Equations of motion \points{4}]
+A ball is thrown straight up with speed $v_0 = \qty{12}{\metre\per\second}$.
+Neglect air resistance, and use $g = \qty{9.8}{\metre\per\second\squared}$.
+
+\begin{subproblems}
+  \item How high does the ball go?
+  \item How long does it take before the ball is back at its starting point?
+\end{subproblems}
+\end{exercise}
+
+
+\begin{exercise}[Vectors \points{2}]
+Two forces $\vv{F}_1$ and $\vv{F}_2$ act at the same point.
+$\vv{F}_1$ has magnitude \qty{3.0}{\newton} and points east;
+$\vv{F}_2$ has magnitude \qty{4.0}{\newton} and points north.
+Find the magnitude and direction of the resultant force.
+\end{exercise}
+
+
+% ============================================================
+% PART 2
+%
+% \clearpage if Part 1 is to be handed in before Part 2
+% begins. To restart the exercises at 1 here:
+% \setcounter{exerciseinner}{0} after \exampart.
+% ============================================================
+\clearpage
+\exampart[With aids]{2}
+
+
+\begin{exercise}[The braking car \points{6}]
+A car is travelling at \qty{80}{\kilo\metre\per\hour} when the
+driver notices an obstacle \qty{50}{\metre} ahead. The reaction
+time is \qty{0.8}{\second}, and the brakes give a constant
+deceleration of \qty{6.5}{\metre\per\second\squared}.
+
+\begin{subproblems}
+  \item How far does the car travel during the reaction time?
+  \item Does the car manage to stop before the obstacle? Show your working.
+\end{subproblems}
+
+The figure below shows a velocity--time graph of the motion.
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[>=stealth, x=1.1cm, y=0.9cm]
+    \draw[->,thick] (0,0) -- (5.2,0) node[right,font=\small] {$t$ (s)};
+    \draw[->,thick] (0,0) -- (0,3.4) node[above,font=\small] {$v$ (m/s)};
+    \draw[gray,thin,dashed] (0.8,0) -- (0.8,2.5);
+    \node[below,font=\small,gray] at (0.8,0) {$0.8$};
+    \node[below,font=\small,gray] at (4.2,0) {$t_{\text{stop}}$};
+    \node[left,font=\small] at (0,2.5) {$22.2$};
+    \fill[darkorange!15] (0,0) -- (0,2.5) -- (0.8,2.5) -- (4.2,0) -- cycle;
+    \draw[darkolive,thick] (0,2.5) -- (0.8,2.5) -- (4.2,0);
+  \end{tikzpicture}
+  \caption{Velocity as a function of time. The area under the
+           graph is the distance.}
+  \label{fig:vt}
+\end{figure}
+
+\begin{subproblems}[resume]
+  \item Use figure~\ref{fig:vt} to explain how the stopping
+        distance can be read off the graph.
+\end{subproblems}
+\end{exercise}
+
+
+\begin{exercise}[Numerical solution \points{4}]
+The program below simulates the fall of a ball with air
+resistance using Euler's method.
+
+\begin{python}
+import numpy as np
+
+m, g, k = 0.10, 9.81, 0.02     # mass (kg), g, air resistance
+v, t, dt = 0.0, 0.0, 0.01
+
+while t < 5.0:
+    a = g - (k / m) * v**2      # acceleration (m/s^2)
+    v = v + a * dt
+    t = t + dt
+
+print(f"Speed after {t:.1f} s: {v:.2f} m/s")
+\end{python}
+
+\begin{subproblems}
+  \item Explain what line 7 does, and which physical law it is based on.
+  \item What will the program print if $k$ is set to zero?
+        Justify your answer without running the program.
+  \item Change the program so that it also computes how far
+        the ball has fallen.
+\end{subproblems}
+\end{exercise}
+
+\separator
+
+\begin{center}
+\sffamily Good luck!
+\end{center}
+
+\end{document}

@@ -1,11 +1,12 @@
 # lualatex-templates
 
-Four LaTeX templates for academic and teaching work — a monograph, a
-two-column article, lecture notes, and problem sheets — each in English
-and Norwegian. Copy a folder, edit `main.tex`, compile.
+Five LaTeX templates for academic and teaching work — a monograph, a
+two-column article, lecture notes, problem sheets, and classroom
+tests — each in English and Norwegian. Copy a folder, edit `main.tex`,
+compile.
 
 Typeset with **LuaLaTeX** and `unicode-math`, OpenType fonts throughout.
-An earlier pdflatex edition of the same four lives in
+An earlier pdflatex edition of the first four lives in
 [pdflatex-templates](https://github.com/dagmortensj/pdflatex-templates).
 
 ## Templates
@@ -18,16 +19,21 @@ English in `en/`, Norwegian in `no/`.
 | **ffv** | A4, two columns | An essayistic physics or mathematics article, numbered citations |
 | **notes** / **notat** | A4 | Long-form notes: theorem and exercise environments, emphasis boxes, framed contents, Python listings |
 | **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, emphasis boxes, Python listings; optional unnumbered mode |
+| **exam** / **prove** | A4, 12 pt | Classroom tests: title block with name, date, time and aids; Part 1 / Part 2 or Level 1–3; "Page 2 of 5" on every page; optional cover page and booklet padding for duplex printing |
 
-`notes` and `handout` share their exercise environments, so a problem set
-moves between them unchanged; `book` and `notes` share their equation
-spacing, so the two read as a family.
+`notes`, `handout` and `exam` share their exercise environments, so a
+problem set moves between them unchanged; `book` and `notes` share their
+equation spacing, so the two read as a family. `exam` is `handout`
+stripped of theorems and boxes and given what a test needs instead; it
+is the only one that loads neither `hyperref` nor a bibliography
+package, since a test is printed.
 
 ## Fonts and engine
 
 **Compile with `lualatex`, not `pdflatex`.** The fonts are OpenType and
 load through `unicode-math`. The wrong engine gives you a wall of errors
-rather than a helpful message.
+rather than a helpful message. Use `latexmk -lualatex`: `notes` and
+`book` need biber, and `exam` needs a second pass for "Page 2 of 5".
 
 | Template | Text | Mathematics |
 |---|---|---|
@@ -35,6 +41,7 @@ rather than a helpful message.
 | **ffv** | STIX Two Text, 10 pt | STIX Two Math |
 | **notes** | NewComputerModern Book, 11 pt | NewCM Math Book |
 | **handout** | NewComputerModern Book, 11 pt | NewCM Math Book |
+| **exam** | NewComputerModern Book, 12 pt; NewCM Sans for headings | NewCM Math Book |
 
 Three rules follow from `unicode-math` and hold for all four:
 
@@ -54,9 +61,10 @@ pdflatex may or may not work here. Each template's README carries its own
 table of what was checked.
 
 `notes` and `handout` also load `esvect`, `siunitx`, `tensor` and
-`physics2` ready to use, for vectors, units, tensor indices and bra-ket.
+`physics2` ready to use, for vectors, units, tensor indices and bra-ket;
+`exam` loads `esvect` and `siunitx`.
 
-All eight build with no warnings.
+All ten build with no warnings.
 
 ## Quick start
 
@@ -71,14 +79,26 @@ with example entries; `book`, `notes` and `handout` add a `figures/`
 folder with a stock figure. The bundled `main.pdf` shows what each one
 produces before you compile anything.
 
+`exam` has four package options — none, `[coverpage]`, `[booklet]` and
+`[statuscheck]` — for a short test, a full-day test with a cover, the
+same laid out for duplex printing and folding, and a levelled status
+check. Its `README.md` shows each.
+
 ## Languages
 
 The two versions are functionally equivalent. What differs:
 
 - **Babel** — `[english]` vs `[norsk]`
 - **Filenames** — Norwegian folders use Norwegian names: `bok`,
-  `referanser.bib`, `bokstil.sty`. `no/handout` is the exception, since
-  the folder name is not translated and neither is its style file.
+  `referanser.bib`, `bokstil.sty`, `prove/provestil.sty`. `no/handout`
+  is the exception, since the folder name is not translated and neither
+  is its style file.
+- **Command names** — the Norwegian `exam` (`prøve`) uses Norwegian
+  commands: `\del`, `\nivå`, `\undertittel`, `\tid`, `\hjelpemidler`,
+  `\poeng`, and options `forside`, `hefte`, `statussjekk`, `innrykk`;
+  the English one `\exampart`, `\level`, `\subtitle`, `\duration`,
+  `\aids`, `\points`, and `coverpage`, `booklet`, `statuscheck`,
+  `indent`. `parity-diff.sh` maps one onto the other.
 - **Comments and placeholder text** — in the matching language
 - **Numbers** — the Norwegian style files set `siunitx` to a decimal
   comma, a half-high dot in scientific notation, «til» in `\qtyrange` and

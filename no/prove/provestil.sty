@@ -1,0 +1,691 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{provestil}[2026/09/08 v1.0 Prøvestil — prøver og heldagsprøver for videregående]
+
+% ============================================================
+% provestil.sty — prøver til skolen
+%
+% Til prøver i fysikk og matematikk på videregående: skrevet
+% ut, delt ut, besvart på papir. Samme familie som handout-
+% stilen, og hentet derfra, men strippet for det en prøve
+% ikke trenger (teoremer, bokser) og lagt til det den
+% trenger: en tittelblokk med felt for navn, dato, tid og
+% hjelpemidler, Del 1 / Del 2 slik eksamen er delt, og
+% «Side 2 av 5» på hver side.
+%
+% Alt om hvordan prøven ser ut settes her; main.tex
+% inneholder innholdet og eventuelle ekstra pakker.
+%
+% Motor: LuaLaTeX. Fonten er OpenType og lastes gjennom
+% unicode-math, og det kan ikke pdflatex.
+%
+% Rekkefølgen nedenfor: pakkevalg, språk, tall, fonter,
+% geometri, avstander, deler (Del 1 / Del 2), sidemøblering,
+% tittelblokk, farger, oppgaver, kodeeksempler.
+%
+% Ingen hyperref, med vilje: en prøve er trykt og besvart på
+% papir, og en farget «figur 1» er bare støy på kopien.
+% Trenger et dokument likevel lenker, last hyperref sist i
+% main.tex.
+% ============================================================
+
+
+% ============================================================
+% PAKKEVALG
+%
+%   \usepackage[forside]{provestil}
+%   \usepackage[hefte]{provestil}
+%   \usepackage[statussjekk]{provestil}
+%   \usepackage[innrykk]{provestil}
+%   \usepackage[hefte,innrykk]{provestil}
+%
+% forside — tittelblokka får en egen side, uten sidetall, og
+% første \del begynner på en ny side som teller som side 1.
+% Slik er heldagsprøver og eksamen: en forside med navn,
+% tid og hjelpemidler, og instruksene, og så Del 1 fra side
+% 1. Uten valget står tittelblokka øverst på side 1 og
+% oppgavene følger rett under — riktig for en mindre prøve.
+% Bryteren leses to steder: \maketitle og \del.
+%
+% hefte — for tosidig utskrift og falsing: slår på forside,
+% gir forsiden en tom bakside så Del 1 begynner på en
+% høyreside, lar hver senere \del begynne på en høyreside
+% (en tom side skytes inn ved behov, så Del 2 starter på et
+% nytt ark og kan skilles fra Del 1), og fyller opp med
+% tomme sider til slutt til sidetallet er delelig med 4,
+% som et falset hefte krever. Leses i \maketitle, \del og
+% ved dokumentslutt. Ikke bruk det på en prøve som skrives
+% ut ensidig — da er de tomme sidene bare papir.
+%
+% statussjekk — en lettere tittelblokk til en statussjekk
+% i stedet for en prøve: tittel, undertittel og dato, uten
+% navnelinje, tid og hjelpemidler. Oppgavene deles gjerne i
+% Nivå 1, 2 og 3 med \nivå, som er \del med et annet ord.
+% Leses i \maketitle.
+%
+% innrykk — avsnittsinnrykk i stedet for luft mellom
+% avsnittene. Standard er luft (blokkavsnitt), i motsetning
+% til handoutstilen: en prøve er oppgaver og korte
+% instrukser, og har ingen løpende prosa for innrykket å
+% arbeide i.
+% ============================================================
+\newif\ifproveforside
+\newif\ifprovehefte
+\newif\ifprovestatussjekk
+\newif\ifproveblokkavsnitt
+\proveblokkavsnitttrue
+\DeclareOption{forside}{\proveforsidetrue}
+\DeclareOption{hefte}{\proveheftetrue\proveforsidetrue}
+\DeclareOption{statussjekk}{\provestatussjekktrue}
+\DeclareOption{blokkavsnitt}{\proveblokkavsnitttrue}
+\DeclareOption{innrykk}{\proveblokkavsnittfalse}
+\DeclareOption*{\PackageWarning{provestil}{Ukjent valg '\CurrentOption'}}
+\ProcessOptions\relax
+
+
+% ============================================================
+% SPRÅK
+% ============================================================
+\RequirePackage[norsk]{babel}
+
+
+% ============================================================
+% TALL OG ENHETER (siunitx)
+%
+% Samme krok som i handoutstilen: main.tex laster siunitx,
+% stilen bærer de norske valgene (desimalkomma, halvhøy
+% prikk, «til», «og», m/s^2). Gjør ingenting om siunitx
+% aldri lastes.
+% ============================================================
+\AddToHook{package/siunitx/after}{%
+  \sisetup{
+    output-decimal-marker = {,},
+    exponent-product      = \cdot,
+    range-phrase          = { til },
+    list-final-separator  = { og },
+    list-pair-separator   = { og },
+    per-mode              = symbol,
+    separate-uncertainty  = true,
+  }%
+}
+
+
+% ============================================================
+% FONT OG MIKROTYPOGRAFI
+%
+% NewComputerModern Book i tekst og matematikk, som i
+% handoutstilen. Pakka setter også \sffamily til
+% NewComputerModern Sans (Book-vekt) — samme tegner, samme
+% x-høyde, samme tyngde på arket — og det er den som bærer
+% tittelblokka, delene og oppgavehodene nedenfor. Ingen
+% egen sans-font lastes; grotesken hører til familien.
+%
+% Dokumentet settes i 12 pt (se main.tex). Det er ett steg
+% over handout-en, og med vilje: en prøve leses fort, under
+% press, av en elev, og ofte som kopi.
+% ============================================================
+\RequirePackage{newcomputermodern}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% SIDEGEOMETRI (A4, SYMMETRISK)
+%
+% Samme 3 cm som handout-en. Ved 12 pt er satsbredden på
+% 150 mm 2,8 lilleboksalfabeter — nærmere Bringhursts vindu
+% enn ved 11 pt, og oppgavetekst er kort uansett. Bunnmargen
+% er litt større for å gi «Side 2 av 5» luft.
+% ============================================================
+\RequirePackage[
+  a4paper,
+  left=3.0cm,
+  right=3.0cm,
+  top=2.6cm,
+  bottom=3.0cm,
+  footskip=1.4cm
+]{geometry}
+
+
+% ============================================================
+% AVSNITT OG KJEGLE
+%
+% \setstretch{1.04} som i handout-en: ved 12 pt går
+% grunnlinjen fra 14,5 pt til 15,1 pt.
+%
+% Med [blokkavsnitt] (standard): innrykket nulles, og en
+% halv grunnlinje skiller avsnittene. Verdien settes ved
+% \begin{document}, etter at \normalsize og setspace har
+% gjort grunnlinjen ferdig. Lister rammes ikke. Ikke bruk
+% parskip-pakka i tillegg.
+% ============================================================
+\setlength{\parindent}{15pt}
+\setlength{\parskip}{0pt}
+
+\RequirePackage{setspace}
+\setstretch{1.04}
+
+\ifproveblokkavsnitt
+  \setlength{\parindent}{0pt}
+  \AtBeginDocument{%
+    \setlength{\parskip}{.5\baselineskip plus 2pt minus 1pt}}
+\fi
+
+
+% ============================================================
+% AVSTAND RUNDT VISTE LIGNINGER OG I ALIGN
+%
+% Identisk med handoutstilen. \AtBeginDocument fordi
+% \begin{document} nullstiller skipene til klassens standard.
+% ============================================================
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\belowdisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\abovedisplayshortskip}{6pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayshortskip}{10pt plus 3pt minus 2pt}%
+}
+\setlength{\jot}{8pt}
+
+
+% ============================================================
+% FIGURTEKSTER
+% ============================================================
+\RequirePackage[font=small,labelfont=bf,labelsep=period]{caption}
+
+
+% ============================================================
+% DELER — Del 1 og Del 2, Nivå 1, 2 og 3
+%
+%   \del{1}                          % bare «Del 1»
+%   \del[Uten hjelpemidler]{1}       % med undertekst
+%   \nivå[Grunnleggende]{1}          % «Nivå 1», til statussjekk
+%
+% Slik eksamen i matematikk og fysikk er delt: Del 1 uten
+% hjelpemidler, Del 2 med. En mindre prøve trenger ingen
+% deler, og da lar man bare være å bruke kommandoen —
+% oppgavene telles uansett flatt gjennom hele dokumentet,
+% Oppgave 1, 2, 3, og fortsetter over delskillet.
+%
+% Overskriften er en unummerert \section i sans: «Del 1»
+% stort og fett, underteksten på linja under i vanlig vekt.
+% \del setter ikke sideskift selv — sett \clearpage foran
+% Del 2 i main.tex om Del 1 skal leveres inn for seg.
+% Trenger en prøve å begynne på Oppgave 1 igjen i Del 2:
+% \setcounter{oppgaveinner}{0} rett etter \del.
+%
+% Med [forside] gjør den første \del ett unntak: den lukker
+% forsiden med \clearpage og setter sidetelleren til 1, så
+% Del 1 begynner på «Side 1 av N». Alt som står mellom
+% \maketitle og første \del — instrukser, poengfordeling —
+% blir stående på forsiden. Bare første \del gjør dette;
+% flagget nulles etterpå.
+%
+% \nivå er samme kommando med ordet «Nivå» — samme font,
+% samme luft, samme forside- og heftelogikk — til en
+% statussjekk der oppgavene er sortert etter vanskegrad.
+% Den eneste forskjellen: \nivå trekker en tynn mørkerød
+% linje under overskriften, i samme vekt som linja under
+% tittelblokka, så nivåskillene leses som blokker.
+% Kommandonavnet har å: LuaLaTeX gir Unicode-bokstaver
+% bokstavkode, så det er lovlig her, men det er ikke
+% flyttbart til pdflatex.
+%
+% Med [hefte] kommer en tom, unummerert side etter forsiden
+% (baksiden av arket), og hver \del etter den første går
+% til neste oddetallsside — som er en høyreside, siden Side 1
+% står på et høyre oppslag. Den tomme siden som eventuelt
+% skytes inn her har bunntekst som de andre, så «Side 2 av 4»
+% viser at ingenting mangler — den står inne i prøven. De
+% tomme sidene etter siste oppgave står utenfor, som
+% forsiden (se SIDESTIL).
+% ============================================================
+\RequirePackage{titlesec}
+
+\setcounter{secnumdepth}{0}
+
+\titleformat{\section}
+  {\sffamily\Large\bfseries}
+  {}{0pt}{}
+
+\titlespacing*{\section}
+  {0pt}
+  {5ex plus 2ex minus .8ex}
+  {2.4ex plus .5ex}
+
+\makeatletter
+\newif\ifprove@forsideaapen
+\ifproveforside \prove@forsideaapentrue \fi
+
+% Tom side: ingenting på siden utenom sidestilen som gjelder.
+\newcommand{\prove@tomside}{\null\clearpage}
+
+% Lukker forsiden: sideskift, med [hefte] også en tom bakside,
+% sidetelleren til 1 og flagget av — bunnteksten (se
+% SIDESTIL) leser flagget ved utskrift av hver side.
+% Kalles fra \del og \nivå — og fra første oppgave, så en
+% prøve med [forside] men uten deler også får lukket forsiden
+% riktig. Gjør ingenting etter første gang.
+\newcommand{\prove@lukkforside}{%
+  \ifprove@forsideaapen
+    \clearpage
+    \ifprovehefte
+      \prove@tomside
+    \fi
+    \setcounter{page}{1}%
+    \global\prove@forsideaapenfalse
+  \fi}
+
+% \prove@delhode{<ord>}[<undertekst>]{<nummer>} er felles
+% for \del og \nivå.
+\newcommand{\prove@delhode}[1]{\@ifnextchar[{\prove@delhode@{#1}}{\prove@delhode@{#1}[]}}
+\def\prove@delhode@#1[#2]#3{%
+  \ifprove@forsideaapen
+    \prove@lukkforside
+  \else
+    \ifprovehefte
+      \clearpage
+      \ifodd\value{page}\else \prove@tomside \fi
+    \fi
+  \fi
+  \section*{#1 #3}%
+  \def\prove@tmp{#2}\ifx\prove@tmp\@empty\else
+    \vspace{-1.6ex}%
+    {\sffamily\normalsize #2\par}%
+    \vspace{1.6ex}%
+  \fi
+  \ifprove@dellinje
+    \vspace{-1.8ex}%
+    {\color{darkred}\hrule height 0.5pt}\par
+    \vspace{0.3ex}% oppgaven under legger sine egne 4,5 ex
+  \fi}
+
+\newif\ifprove@dellinje
+\newcommand{\del}{\prove@dellinjefalse\prove@delhode{Del}}
+\newcommand{\nivå}{\prove@dellinjetrue\prove@delhode{Nivå}}
+\makeatother
+
+% Overskrifter sluker blokkluft — samme krok som handout-en,
+% så overgangen oppgave -> Del 2 ikke blir et hull.
+\makeatletter
+\newcommand{\overskriftsluk}[1]{%
+  \par
+  \@tempskipb\z@skip
+  \@whiledim\lastskip>\z@\do{%
+    \advance\@tempskipb\lastskip
+    \removelastskip}%
+  \ifdim\@tempskipb>#1\relax
+    \kern\dimexpr\@tempskipb-#1\relax
+  \fi}
+\makeatother
+\AddToHook{cmd/section/before}{\overskriftsluk{5ex}}
+
+
+% ============================================================
+% SIDESTIL — «Side 2 av 5»
+%
+% Bunntekst sentrert på hver side, også side 1: en prøve
+% skal kunne telles i hånda. Ingen topptekst og ingen
+% streker. Med [forside] står forsiden utenfor tellingen:
+% den er tom, og telleren starter på nytt ved første \del,
+% så N er antall oppgavesider.
+%
+% N kommer fra et eget merke, prove@sisteside, som skrives
+% til .aux ved dokumentslutt med nummeret på siste side med
+% innhold — ikke fra lastpage-pakka, som teller den aller
+% siste utsendte siden og dermed ville tatt med hefte-
+% utfyllingen. Merket trenger to kjøringer; latexmk ser at
+% .aux endres og kjører på nytt selv.
+%
+% Med [hefte] fylles det opp med tomme sider etter merket
+% til det fysiske sidetallet — forside, tom bakside og N —
+% er delelig med 4. De står utenfor tellingen, som forsiden:
+% uten sidetall. Etter \clearpage er \value{page} nummeret
+% på neste side, så siste innholdsside er page - 1, og
+% antall fysiske sider hittil er page + 1.
+% ============================================================
+\makeatletter
+\newcommand{\prove@skrivsisteside}{%
+  \immediate\write\@auxout{%
+    \string\newlabel{prove@sisteside}{{}{\the\numexpr\value{page}-1\relax}}}}
+
+% \numexpr runder ved divisjon, så resten regnes med \divide,
+% som trunkerer.
+\newcommand{\prove@fyllopp}{%
+  \@tempcnta=\numexpr\value{page}+1\relax
+  \@tempcntb=\@tempcnta
+  \divide\@tempcntb by 4
+  \multiply\@tempcntb by 4
+  \ifnum\@tempcnta>\@tempcntb
+    \thispagestyle{empty}\prove@tomside
+    \expandafter\prove@fyllopp
+  \fi}
+
+\AtEndDocument{%
+  \clearpage
+  \prove@skrivsisteside
+  \ifprovehefte \prove@fyllopp \fi}
+\makeatother
+
+\RequirePackage{fancyhdr}
+
+% Bunnteksten er tom så lenge forsiden er åpen (flagget
+% settes globalt i \prove@lukkforside), så forsiden og en
+% eventuell bakside skrives ut uten sidetall uten at
+% sidestilen byttes — \pagestyle inne i en omgivelse er
+% lokal og ville blitt nullstilt ved \end{oppgave}.
+\makeatletter
+\fancypagestyle{prove}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\ifprove@forsideaapen\else
+    \sffamily\footnotesize Side \thepage\ av \pageref{prove@sisteside}\fi}%
+}
+\makeatother
+\pagestyle{prove}
+
+
+% ============================================================
+% TITTELBLOKK
+%
+%   \title{Prøve i Fysikk 1}
+%   \undertittel{Kapittel 3 og 4: Krefter og bevegelse}
+%   \date{12. oktober 2026}
+%   \tid{90 minutter}
+%   \hjelpemidler{Del 1: ingen. Del 2: alle}
+%   \maketitle
+%
+% Tittel og undertittel i sans, venstrestilt. Under dem et
+% felt med fire linjer: Navn (åpen linje å skrive på), Dato,
+% Tid, Hjelpemidler. Etiketter i sans, verdier i antikva.
+% En tynn mørkerød linje avslutter blokka, samme vekt som
+% \separator. Tomme felt utelates ikke — en prøve uten
+% oppgitt tid skal vise at feltet er tomt, ikke at det
+% mangler. \visnavnfeltfalse i preamblet tar bort navnelinja;
+% de andre feltene står alltid.
+%
+% \navnetikett kan endres («Kandidatnummer:») i main.tex.
+%
+% Med [forside] settes blokka på en egen side uten sidetall:
+% mer luft over tittelen, ett steg større tittel, og litt mer
+% rom mellom feltene. Teksten som følger etter \maketitle
+% hører til forsiden fram til første \del.
+%
+% Med [statussjekk] faller feltene bort: tittel, undertittel
+% og dato på linja under, i sans — og ingen rød linje, siden
+% linja under første \nivå kommer rett etter og ville gitt
+% to like streker på tre centimeter. \tid og \hjelpemidler
+% ignoreres.
+% ============================================================
+\makeatletter
+\newcommand{\undertittel}[1]{\def\@undertittel{#1}}
+\newcommand{\tid}[1]{\def\@tid{#1}}
+\newcommand{\hjelpemidler}[1]{\def\@hjelpemidler{#1}}
+\newcommand{\navnetikett}[1]{\def\@navnetikett{#1}}
+\def\@undertittel{}
+\def\@tid{}
+\def\@hjelpemidler{}
+\def\@navnetikett{Navn}
+\newif\ifvisnavnfelt
+\visnavnfelttrue
+
+\newcommand{\@feltetikett}[1]{{\sffamily\bfseries\small #1}}
+
+\renewcommand{\maketitle}{%
+  \thispagestyle{prove}% bunnteksten er tom mens forsiden er åpen
+  \begingroup
+    \setlength{\parindent}{0pt}%
+    \setlength{\parskip}{0pt}%
+    \ifproveforside
+      \vspace*{4em}
+      {\sffamily\huge\bfseries \@title\par}
+    \else
+      \vspace*{0.4em}
+      {\sffamily\LARGE\bfseries \@title\par}
+    \fi
+    \ifx\@undertittel\@empty\else
+      \vspace{0.6ex}
+      {\sffamily\large \@undertittel\par}
+    \fi
+    \ifprovestatussjekk
+      \vspace{1.4ex}
+      {\sffamily\normalsize \@date\par}
+      \vspace{1.2ex plus .5ex}% ingen linje: den under første \nivå overtar
+    \else
+      \vspace{3.2ex}
+      \begin{tabular}{@{}p{7.5em}@{}p{\dimexpr\linewidth-7.5em\relax}@{}}
+        \ifvisnavnfelt
+          \@feltetikett{\@navnetikett}
+            & \raisebox{-0.3ex}{\rule{\linewidth}{0.4pt}} \\[1.4ex]
+        \fi
+        \@feltetikett{Dato}         & \@date         \\[0.6ex]
+        \@feltetikett{Tid}          & \@tid          \\[0.6ex]
+        \@feltetikett{Hjelpemidler} & \@hjelpemidler \\
+      \end{tabular}\par
+      \vspace{2.4ex}
+      {\color{darkred}\hrule height 0.5pt}\par
+      \vspace{3.6ex plus 1ex}
+    \fi
+  \endgroup
+}
+\makeatother
+
+
+% ============================================================
+% FARGER
+%
+% Samme tre som resten av familien:
+%   darkred      linjen under tittelblokka, \separator, lenker
+%   darkorange   figurer: streker, noder, fylte områder
+%   darkolive    figurer: andrefarge til kurver og fyll
+% ============================================================
+\RequirePackage{xcolor}
+\definecolor{darkred}   {RGB}{120, 20,  20}
+\definecolor{darkorange}{RGB}{184, 92,   0}
+\definecolor{darkolive} {RGB}{ 74,107,  18}
+
+
+% ============================================================
+% SEPARATORLINJE
+%
+%   \separator
+%
+% Kort mørkerød linje med luft på begge sider — mellom
+% oppgaver som hører til ulike tema, eller foran en
+% avsluttende instruks.
+% ============================================================
+\makeatletter
+\let\orig@footnoterule\footnoterule
+\newcommand{\separator}{%
+  \par
+  \vspace{3.5ex plus 1.5ex minus .5ex}
+  {\color{darkred}\orig@footnoterule}
+  \vspace{1.2ex}
+}
+\makeatother
+
+
+% ============================================================
+% OPPGAVER
+%
+%   \begin{oppgave}[Valgfri tittel]
+%   Oppgavetekst.
+%   \begin{deloppgaver}
+%     \item Første del.
+%     \item Andre del.
+%   \end{deloppgaver}
+%   \end{oppgave}
+%
+% Samme omgivelse som i handout- og notatstilen, så en
+% oppgave kan flyttes hit uendret. To forskjeller: telleren
+% er flat gjennom hele prøven (Oppgave 1, 2, 3 — også over
+% Del 1 / Del 2), og hodet står i sans: «Oppgave 3 – Tittel»
+% i fet grotesk ett steg opp (\large), kroppen i antikva. Grotesken gjør det lett
+% å bla seg fram til riktig oppgave, og antikvaen holder
+% oppgaveteksten lesbar.
+%
+% \poeng{4} setter «(4 poeng)» i grått, tenkt bak tittelen:
+% \begin{oppgave}[Derivasjon \poeng{4}]. Utelat om prøven
+% ikke oppgir poeng.
+% ============================================================
+\RequirePackage{amsthm}
+
+\newtheoremstyle{proveex}
+  {1ex}                          % avstand over
+  {1ex}                          % avstand under
+  {\normalfont}                  % kroppsfont
+  {0pt}                          % innrykk
+  {\sffamily\large\bfseries}    % hodefont
+  {}                             % hodetegnsetting
+  {\newline}                     % avstand mellom hode og kropp
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ -- #3}}
+
+\theoremstyle{proveex}
+\newtheorem{oppgaveinner}{Oppgave}
+\theoremstyle{plain}
+
+\newcommand{\poeng}[1]{{\sffamily\mdseries\normalsize\color{gray}(#1 poeng)}}
+
+% {\newline}-skillet setter kroppen på egen linje under hodet;
+% \leavevmode\par\vspace{-2ex} trekker den opp igjen til et
+% tett mellomrom, og \vspace{-\parskip} tar bort avsnittsluften
+% blokkavsnitt ellers legger foran kroppen. \nobreak rett
+% etter \par forbyr sideskift mellom hode og kropp — alt
+% derfra til første kroppslinje er lim og kan ikke brytes
+% ved. \needspace foran sikrer i tillegg plass til hodet og
+% et par linjer, så en oppgave ikke starter med to linjer
+% nederst på en side. Den må stå ETTER \addvspace: den
+% legger inn egne (null-)glue-er, og sto den før, ville
+% \addvspace ikke sett luften fra forrige oppgave og lagt
+% 4,5 ex oppå 6,75 i stedet for å ta maksimum.
+%
+% \prove@lukkforside først: en prøve med [forside] men uten
+% \del får forsiden lukket av første oppgave i stedet.
+%
+% Luft: 4,5 ex før og 6,75 ex etter, som i handout-en.
+\RequirePackage{needspace}
+
+\makeatletter
+\newenvironment{oppgave}[1][]
+{%
+  \prove@lukkforside
+  \par\addvspace{4.5ex plus 1.5ex minus .8ex}%
+  \needspace{4\baselineskip}%
+  \setlength{\parindent}{0pt}%
+  \def\prove@tmp{#1}\ifx\prove@tmp\@empty
+    \begin{oppgaveinner}\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}
+  \else
+    \begin{oppgaveinner}[#1]\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}
+  \fi
+}
+{%
+  \end{oppgaveinner}
+  \par\addvspace{6.75ex plus 2.2ex minus 1.2ex}
+}
+\makeatother
+
+
+% ============================================================
+% DELOPPGAVER — a), b), c)
+%
+% Identisk med handout-en: egen liste, magre bokstaver,
+% samme venstrekant som enumerate og itemize. Fortsett
+% bokstavrekka etter mellomtekst med
+% \begin{deloppgaver}[resume].
+% ============================================================
+\RequirePackage{enumitem}
+
+\newlist{deloppgaver}{enumerate}{1}
+
+\setlist[deloppgaver]{%
+  label=\alph*),
+  leftmargin=\leftmargini,
+  labelsep=0.6em,
+  itemsep=0.8ex,
+  parsep=0.8ex,
+  topsep=0.8ex
+}
+
+
+% ============================================================
+% KODEEKSEMPLER
+%
+%   \begin{python}
+%   def f(x):
+%       return x**2
+%   \end{python}
+%
+% Til programmeringsoppgaver i R2. Gruvbox Light, linjenummer,
+% linje over og under — som i handout-en. æ, ø, å kartlagt
+% eksplisitt så listings ikke mister dem i kommentarer.
+% ============================================================
+\RequirePackage{listings}
+
+\definecolor{gruvbg}    {HTML}{fdfcf2}
+\definecolor{gruvfg}    {HTML}{3c3836}
+\definecolor{gruvkw}    {HTML}{9d0006}
+\definecolor{gruvstr}   {HTML}{79740e}
+\definecolor{gruvcom}   {HTML}{928374}
+\definecolor{gruvnum}   {HTML}{b57614}
+\definecolor{gruvbi}    {HTML}{076678}
+
+\lstdefinestyle{gruvboxlight}{
+  backgroundcolor   = \color{gruvbg},
+  basicstyle        = \small\ttfamily\color{gruvfg},
+  keywordstyle      = \color{gruvkw}\bfseries,
+  stringstyle       = \color{gruvstr},
+  commentstyle      = \color{gruvcom}\itshape,
+  numberstyle       = \color{gruvnum},
+  identifierstyle   = \color{gruvfg},
+  breaklines        = true,
+  showstringspaces  = false,
+  numbers           = left,
+  numbersep         = 10pt,
+  frame             = tb,
+  xleftmargin       = 2em,
+  xrightmargin      = 0em,
+  framexleftmargin  = 2em,
+  framexrightmargin = 0em,
+  aboveskip         = 2.4ex,
+  belowskip         = 2.4ex,
+  extendedchars     = true,
+  inputencoding     = utf8,
+  literate          =
+    {æ}{{\ae}}1 {ø}{{\o}}1 {å}{{\aa}}1
+    {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
+}
+
+\lstnewenvironment{python}
+  {\lstset{language=Python, style=gruvboxlight,
+           morekeywords={True,False,None,self}}}
+  {}
+
+
+% ============================================================
+% VEKTORPILER (esvect)
+%
+% Størrelsesfiksen esvect trenger under unicode-math, vaktet
+% så den bare slår til når main.tex laster pakka. Se
+% handoutstilen for hvorfor.
+% ============================================================
+\AtBeginDocument{%
+  \IfPackageLoadedTF{esvect}{%
+    \DeclareFontFamily{U}{esvect}{}%
+    \DeclareFontShape{U}{esvect}{m}{n}{%
+      <-5.5>    vect5
+      <5.5-6.5> vect6
+      <6.5-7.5> vect7
+      <7.5-8.5> vect8
+      <8.5-9.5> vect9
+      <9.5->    vect10
+    }{}%
+  }{}%
+}
+
+
+% ============================================================
+% SLUTT PÅ FIL
+% ============================================================
+\endinput

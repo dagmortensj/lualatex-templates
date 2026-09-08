@@ -20,6 +20,10 @@
 #     siunitx's defaults for those
 #   - \providecommand guards may differ where babel supplies
 #     one language but not the other
+#   - the exam style's visible strings: Del/Part, Nivå/Level,
+#     Navn/Name, Dato/Date, Tid/Time, Hjelpemidler/Aids,
+#     Oppgave/Exercise, poeng/points, «Side … av»/"Page … of",
+#     and the option-warning text
 # Anything else is drift.
 # ============================================================
 set -u
@@ -38,6 +42,35 @@ map() {
       -e 's/deloppgaver/subproblems/g' \
       -e 's/oppgaveinner/exerciseinner/g' \
       -e 's/oppgave/exercise/g' \
+      -e 's/provestatussjekk/examstatuscheck/g' \
+      -e 's/statussjekk/statuscheck/g' \
+      -e 's/forsideaapen/coveropen/g' \
+      -e 's/lukkforside/closecover/g' \
+      -e 's/proveforside/examcoverpage/g' \
+      -e 's/forside/coverpage/g' \
+      -e 's/provehefte/exambooklet/g' \
+      -e 's/hefte/booklet/g' \
+      -e 's/proveblokkavsnitt/examblockparagraphs/g' \
+      -e 's/innrykk/indent/g' \
+      -e 's/tomside/blankpage/g' \
+      -e 's/delhode/parthead/g' \
+      -e 's/dellinje/partrule/g' \
+      -e 's/skrivsisteside/writelastpage/g' \
+      -e 's/sisteside/lastpage/g' \
+      -e 's/fyllopp/padout/g' \
+      -e 's/\\del\([^a-zA-Z]\)/\\exampart\1/g' \
+      -e 's/\\nivå/\\level/g' \
+      -e 's/undertittel/subtitle/g' \
+      -e 's/hjelpemidler/aids/g' \
+      -e 's/navnetikett/namelabel/g' \
+      -e 's/visnavnfelt/shownamefield/g' \
+      -e 's/feltetikett/fieldlabel/g' \
+      -e 's/\\tid\([^a-zA-Z]\)/\\duration\1/g' \
+      -e 's/@tid\([^a-zA-Z]\)/@duration\1/g' \
+      -e 's/poeng/points/g' \
+      -e 's/proveex/examex/g' \
+      -e 's/provestil/examstyle/g' \
+      -e 's/prove/exam/g' \
       -e 's/notatstil/notesstyle/g' \
       -e 's/notatex/notesex/g' \
       -e 's/bokstil/bookstyle/g' \
@@ -81,6 +114,8 @@ compare no/ffv/ffvstil.sty        en/ffv/ffvstyle.sty
 compare no/ffv/main.tex           en/ffv/main.tex
 compare no/handout/handoutstyle.sty en/handout/handoutstyle.sty
 compare no/handout/main.tex       en/handout/main.tex
+compare no/prove/provestil.sty    en/exam/examstyle.sty
+compare no/prove/main.tex         en/exam/main.tex
 
 if [ "$fail" -eq 0 ]; then
   printf '\nAll pairs structurally identical.\n'

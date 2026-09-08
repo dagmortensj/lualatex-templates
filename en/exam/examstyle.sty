@@ -1,0 +1,693 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{examstyle}[2026/09/08 v1.0 Exam style — tests and exams for upper secondary school]
+
+% ============================================================
+% examstyle.sty — tests for the classroom
+%
+% For tests in physics and mathematics at upper secondary
+% level: printed, handed out, answered on paper. Same family
+% as the handout style, and derived from it, but stripped of
+% what a test does not need (theorems, boxes) and given what
+% it does: a title block with fields for name, date, time and
+% aids, Part 1 / Part 2 the way the Norwegian exams are
+% split, and "Page 2 of 5" on every page.
+%
+% Everything about how the test looks is set here; main.tex
+% holds the content and any extra packages.
+%
+% Engine: LuaLaTeX. The font is OpenType and loads through
+% unicode-math, which pdflatex cannot do.
+%
+% Order below: package options, language, numbers, fonts,
+% geometry, spacing, parts (Part 1 / Part 2), page furniture,
+% title block, colours, exercises, code listings.
+%
+% No hyperref, deliberately: a test is printed and answered
+% on paper, and a coloured "figure 1" is only noise on the
+% copy. Should a document need links after all, load hyperref
+% last in main.tex.
+% ============================================================
+
+
+% ============================================================
+% PACKAGE OPTIONS
+%
+%   \usepackage[coverpage]{examstyle}
+%   \usepackage[booklet]{examstyle}
+%   \usepackage[statuscheck]{examstyle}
+%   \usepackage[indent]{examstyle}
+%   \usepackage[booklet,indent]{examstyle}
+%
+% coverpage — the title block gets a page of its own, without
+% a page number, and the first \exampart begins on a new page
+% that counts as page 1. That is how full-day tests and exams
+% are laid out: a cover with name, time and aids, and the
+% instructions, and then Part 1 from page 1. Without the
+% option the title block sits at the top of page 1 with the
+% exercises straight below — right for a smaller test. The
+% switch is read in two places: \maketitle and \exampart.
+%
+% booklet — for duplex printing and folding: turns on
+% coverpage, gives the cover a blank back so Part 1 begins on
+% a right-hand page, lets every later \exampart begin on a
+% right-hand page (a blank page is inserted when needed, so
+% Part 2 starts on a fresh sheet and can be separated from
+% Part 1), and pads with blank pages at the end until the
+% page count is divisible by 4, as a folded booklet requires.
+% Read in \maketitle, \exampart and at the end of the
+% document. Do not use it for a test printed single-sided —
+% there the blank pages are just paper.
+%
+% statuscheck — a lighter title block for a status check
+% rather than a test: title, subtitle and date, without the
+% name line, time and aids. The exercises are typically split
+% into Level 1, 2 and 3 with \level, which is \exampart with
+% a different word. Read in \maketitle.
+%
+% indent — paragraph indentation instead of space between
+% paragraphs. The default is space (block paragraphs), unlike
+% the handout style: a test is exercises and short
+% instructions, with no running prose for the indent to work
+% in.
+% ============================================================
+\newif\ifexamcoverpage
+\newif\ifexambooklet
+\newif\ifexamstatuscheck
+\newif\ifexamblockparagraphs
+\examblockparagraphstrue
+\DeclareOption{coverpage}{\examcoverpagetrue}
+\DeclareOption{booklet}{\exambooklettrue\examcoverpagetrue}
+\DeclareOption{statuscheck}{\examstatuschecktrue}
+\DeclareOption{blockparagraphs}{\examblockparagraphstrue}
+\DeclareOption{indent}{\examblockparagraphsfalse}
+\DeclareOption*{\PackageWarning{examstyle}{Unknown option '\CurrentOption'}}
+\ProcessOptions\relax
+
+
+% ============================================================
+% LANGUAGE
+% ============================================================
+\RequirePackage[english]{babel}
+
+
+% ============================================================
+% NUMBERS AND UNITS (siunitx)
+%
+% Same hook as in the handout style: main.tex loads siunitx,
+% the style carries the two house choices (m/s^2 rather than
+% m s^-2, and combined uncertainty). Does nothing if siunitx
+% is never loaded.
+% ============================================================
+\AddToHook{package/siunitx/after}{%
+  \sisetup{
+    per-mode              = symbol,
+    separate-uncertainty  = true,
+  }%
+}
+
+
+% ============================================================
+% FONT AND MICROTYPOGRAPHY
+%
+% NewComputerModern Book for text and mathematics, as in the
+% handout style. The package also sets \sffamily to
+% NewComputerModern Sans (Book weight) — same designer, same
+% x-height, same weight on the page — and that is what
+% carries the title block, the parts and the exercise heads
+% below. No separate sans font is loaded; the grotesque
+% belongs to the family.
+%
+% The document is set in 12 pt (see main.tex). That is one
+% step above the handout, and deliberately so: a test is read
+% quickly, under pressure, by a student, and often as a copy.
+% ============================================================
+\RequirePackage{newcomputermodern}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% PAGE GEOMETRY (A4, SYMMETRIC)
+%
+% The same 3 cm as the handout. At 12 pt the 150 mm measure
+% is 2.8 lowercase alphabets — closer to Bringhurst's window
+% than at 11 pt, and exercise text is short in any case. The
+% bottom margin is slightly larger to give "Page 2 of 5" air.
+% ============================================================
+\RequirePackage[
+  a4paper,
+  left=3.0cm,
+  right=3.0cm,
+  top=2.6cm,
+  bottom=3.0cm,
+  footskip=1.4cm
+]{geometry}
+
+
+% ============================================================
+% PARAGRAPHS AND LEADING
+%
+% \setstretch{1.04} as in the handout: at 12 pt the baseline
+% goes from 14.5 pt to 15.1 pt.
+%
+% With [blockparagraphs] (default): the indent is zeroed and
+% half a baseline separates paragraphs. The value is set at
+% \begin{document}, after \normalsize and setspace have
+% finished the baseline. Lists are unaffected. Do not load
+% the parskip package as well.
+% ============================================================
+\setlength{\parindent}{15pt}
+\setlength{\parskip}{0pt}
+
+\RequirePackage{setspace}
+\setstretch{1.04}
+
+\ifexamblockparagraphs
+  \setlength{\parindent}{0pt}
+  \AtBeginDocument{%
+    \setlength{\parskip}{.5\baselineskip plus 2pt minus 1pt}}
+\fi
+
+
+% ============================================================
+% SPACE AROUND DISPLAYED EQUATIONS AND IN ALIGN
+%
+% Identical to the handout style. \AtBeginDocument because
+% \begin{document} resets the skips to the class defaults.
+% ============================================================
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\belowdisplayskip}{10pt plus 3pt minus 2pt}%
+  \setlength{\abovedisplayshortskip}{6pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayshortskip}{10pt plus 3pt minus 2pt}%
+}
+\setlength{\jot}{8pt}
+
+
+% ============================================================
+% CAPTIONS
+% ============================================================
+\RequirePackage[font=small,labelfont=bf,labelsep=period]{caption}
+
+
+% ============================================================
+% PARTS — Part 1 and Part 2, Level 1, 2 and 3
+%
+%   \exampart{1}                       % just "Part 1"
+%   \exampart[Without aids]{1}         % with a subline
+%   \level[Foundation]{1}              % "Level 1", for a status check
+%
+% The way the Norwegian exams in mathematics and physics are
+% split: Part 1 without aids, Part 2 with. A smaller test
+% needs no parts, and then one simply does not use the
+% command — the exercises count flat through the whole
+% document either way, Exercise 1, 2, 3, continuing across
+% the part boundary.
+%
+% The heading is an unnumbered \section in sans: "Part 1"
+% large and bold, the subline on the line below in regular
+% weight. \exampart does not break the page itself — put
+% \clearpage before Part 2 in main.tex if Part 1 is to be
+% handed in separately. Should a test restart at Exercise 1
+% in Part 2: \setcounter{exerciseinner}{0} right after
+% \exampart.
+%
+% With [coverpage] the first \exampart makes one exception:
+% it closes the cover with \clearpage and sets the page
+% counter to 1, so Part 1 begins on "Page 1 of N". Everything
+% between \maketitle and the first \exampart — instructions,
+% mark allocation — stays on the cover. Only the first
+% \exampart does this; the flag is cleared afterwards.
+%
+% \level is the same command with the word "Level" — same
+% font, same spacing, same cover and booklet logic — for a
+% status check where the exercises are sorted by difficulty.
+% The one difference: \level draws a thin dark-red rule under
+% the heading, in the same weight as the rule under the title
+% block, so the level boundaries read as blocks.
+%
+% With [booklet] a blank, unnumbered page follows the cover
+% (the back of the sheet), and every \exampart after the
+% first goes to the next odd page — which is a right-hand
+% page, since Page 1 sits on a right-hand spread. The blank
+% page that may be inserted here carries the footer like the
+% others, so "Page 2 of 4" shows nothing is missing — it sits
+% inside the test. The blank pages after the last exercise
+% sit outside, like the cover (see PAGE STYLE).
+% ============================================================
+\RequirePackage{titlesec}
+
+\setcounter{secnumdepth}{0}
+
+\titleformat{\section}
+  {\sffamily\Large\bfseries}
+  {}{0pt}{}
+
+\titlespacing*{\section}
+  {0pt}
+  {5ex plus 2ex minus .8ex}
+  {2.4ex plus .5ex}
+
+\makeatletter
+\newif\ifexam@coveropen
+\ifexamcoverpage \exam@coveropentrue \fi
+
+% Blank page: nothing on the page beyond the current page style.
+\newcommand{\exam@blankpage}{\null\clearpage}
+
+% Closes the cover: page break, with [booklet] also a blank
+% back, page counter to 1 and the flag off — the footer (see
+% PAGE STYLE) reads the flag as each page is shipped out.
+% Called from \exampart and \level — and from the first
+% exercise, so a test with [coverpage] but no parts also gets
+% its cover closed correctly. Does nothing after the first
+% time.
+\newcommand{\exam@closecover}{%
+  \ifexam@coveropen
+    \clearpage
+    \ifexambooklet
+      \exam@blankpage
+    \fi
+    \setcounter{page}{1}%
+    \global\exam@coveropenfalse
+  \fi}
+
+% \exam@parthead{<word>}[<subline>]{<number>} is shared by
+% \exampart and \level.
+\newcommand{\exam@parthead}[1]{\@ifnextchar[{\exam@parthead@{#1}}{\exam@parthead@{#1}[]}}
+\def\exam@parthead@#1[#2]#3{%
+  \ifexam@coveropen
+    \exam@closecover
+  \else
+    \ifexambooklet
+      \clearpage
+      \ifodd\value{page}\else \exam@blankpage \fi
+    \fi
+  \fi
+  \section*{#1 #3}%
+  \def\exam@tmp{#2}\ifx\exam@tmp\@empty\else
+    \vspace{-1.6ex}%
+    {\sffamily\normalsize #2\par}%
+    \vspace{1.6ex}%
+  \fi
+  \ifexam@partrule
+    \vspace{-1.8ex}%
+    {\color{darkred}\hrule height 0.5pt}\par
+    \vspace{0.3ex}% the exercise below adds its own 4.5 ex
+  \fi}
+
+\newif\ifexam@partrule
+\newcommand{\exampart}{\exam@partrulefalse\exam@parthead{Part}}
+\newcommand{\level}{\exam@partruletrue\exam@parthead{Level}}
+\makeatother
+
+% Headings swallow block space — the same hook as the
+% handout, so the transition exercise -> Part 2 is not a hole.
+\makeatletter
+\newcommand{\headingswallow}[1]{%
+  \par
+  \@tempskipb\z@skip
+  \@whiledim\lastskip>\z@\do{%
+    \advance\@tempskipb\lastskip
+    \removelastskip}%
+  \ifdim\@tempskipb>#1\relax
+    \kern\dimexpr\@tempskipb-#1\relax
+  \fi}
+\makeatother
+\AddToHook{cmd/section/before}{\headingswallow{5ex}}
+
+
+% ============================================================
+% PAGE STYLE — "Page 2 of 5"
+%
+% Footer centred on every page, page 1 included: a test
+% should be countable in the hand. No header and no rules.
+% With [coverpage] the cover sits outside the count: it is
+% blank, and the counter restarts at the first \exampart, so
+% N is the number of exercise pages.
+%
+% N comes from a label of our own, exam@lastpage, written to
+% .aux at the end of the document with the number of the last
+% page holding content — not from the lastpage package, which
+% counts the very last page shipped and would therefore
+% include the booklet padding. The label needs two runs;
+% latexmk sees the .aux change and reruns by itself.
+%
+% With [booklet] blank pages are added after the label until
+% the physical page count — cover, blank back and N — is
+% divisible by 4. They sit outside the count, like the cover:
+% no page number. After \clearpage, \value{page} is the number
+% of the next page, so the last content page is page - 1, and
+% the number of physical pages so far is page + 1.
+% ============================================================
+\makeatletter
+\newcommand{\exam@writelastpage}{%
+  \immediate\write\@auxout{%
+    \string\newlabel{exam@lastpage}{{}{\the\numexpr\value{page}-1\relax}}}}
+
+% \numexpr rounds on division, so the remainder is computed
+% with \divide, which truncates.
+\newcommand{\exam@padout}{%
+  \@tempcnta=\numexpr\value{page}+1\relax
+  \@tempcntb=\@tempcnta
+  \divide\@tempcntb by 4
+  \multiply\@tempcntb by 4
+  \ifnum\@tempcnta>\@tempcntb
+    \thispagestyle{empty}\exam@blankpage
+    \expandafter\exam@padout
+  \fi}
+
+\AtEndDocument{%
+  \clearpage
+  \exam@writelastpage
+  \ifexambooklet \exam@padout \fi}
+\makeatother
+
+\RequirePackage{fancyhdr}
+
+% The footer is empty while the cover is open (the flag is
+% set globally in \exam@closecover), so the cover and any
+% blank back print without a page number without switching
+% page style — \pagestyle inside an environment is local and
+% would be undone at \end{exercise}.
+\makeatletter
+\fancypagestyle{exam}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\ifexam@coveropen\else
+    \sffamily\footnotesize Page \thepage\ of \pageref{exam@lastpage}\fi}%
+}
+\makeatother
+\pagestyle{exam}
+
+
+% ============================================================
+% TITLE BLOCK
+%
+%   \title{Physics 1 Test}
+%   \subtitle{Chapters 3 and 4: Forces and motion}
+%   \date{12 October 2026}
+%   \duration{90 minutes}
+%   \aids{Part 1: none. Part 2: all}
+%   \maketitle
+%
+% Title and subtitle in sans, left-aligned. Below them a
+% field with four lines: Name (an open line to write on),
+% Date, Time, Aids. Labels in sans, values in roman. A thin
+% dark-red rule closes the block, the same weight as
+% \separator. Empty fields are not omitted — a test without a
+% stated time should show that the field is empty, not that
+% it is missing. \shownamefieldfalse in the preamble removes
+% the name line; the other fields always stand.
+%
+% \namelabel can be changed ("Candidate number") in main.tex.
+%
+% With [coverpage] the block is set on a page of its own
+% without a page number: more air above the title, the title
+% one step larger, and a little more room between the fields.
+% The text following \maketitle belongs to the cover up to
+% the first \exampart.
+%
+% With [statuscheck] the fields fall away: title, subtitle
+% and the date on the line below, in sans — and no red rule,
+% since the rule under the first \level follows immediately
+% and would give two identical rules within three
+% centimetres. \duration and \aids are ignored.
+% ============================================================
+\makeatletter
+\newcommand{\subtitle}[1]{\def\@subtitle{#1}}
+\newcommand{\duration}[1]{\def\@duration{#1}}
+\newcommand{\aids}[1]{\def\@aids{#1}}
+\newcommand{\namelabel}[1]{\def\@namelabel{#1}}
+\def\@subtitle{}
+\def\@duration{}
+\def\@aids{}
+\def\@namelabel{Name}
+\newif\ifshownamefield
+\shownamefieldtrue
+
+\newcommand{\@fieldlabel}[1]{{\sffamily\bfseries\small #1}}
+
+\renewcommand{\maketitle}{%
+  \thispagestyle{exam}% the footer is empty while the cover is open
+  \begingroup
+    \setlength{\parindent}{0pt}%
+    \setlength{\parskip}{0pt}%
+    \ifexamcoverpage
+      \vspace*{4em}
+      {\sffamily\huge\bfseries \@title\par}
+    \else
+      \vspace*{0.4em}
+      {\sffamily\LARGE\bfseries \@title\par}
+    \fi
+    \ifx\@subtitle\@empty\else
+      \vspace{0.6ex}
+      {\sffamily\large \@subtitle\par}
+    \fi
+    \ifexamstatuscheck
+      \vspace{1.4ex}
+      {\sffamily\normalsize \@date\par}
+      \vspace{1.2ex plus .5ex}% no rule: the one under the first \level takes over
+    \else
+      \vspace{3.2ex}
+      \begin{tabular}{@{}p{7.5em}@{}p{\dimexpr\linewidth-7.5em\relax}@{}}
+        \ifshownamefield
+          \@fieldlabel{\@namelabel}
+            & \raisebox{-0.3ex}{\rule{\linewidth}{0.4pt}} \\[1.4ex]
+        \fi
+        \@fieldlabel{Date} & \@date     \\[0.6ex]
+        \@fieldlabel{Time} & \@duration \\[0.6ex]
+        \@fieldlabel{Aids} & \@aids     \\
+      \end{tabular}\par
+      \vspace{2.4ex}
+      {\color{darkred}\hrule height 0.5pt}\par
+      \vspace{3.6ex plus 1ex}
+    \fi
+  \endgroup
+}
+\makeatother
+
+
+% ============================================================
+% COLOURS
+%
+% The same three as the rest of the family:
+%   darkred      the rule under the title block, \separator
+%   darkorange   figures: strokes, nodes, filled regions
+%   darkolive    figures: second colour for curves and fills
+% ============================================================
+\RequirePackage{xcolor}
+\definecolor{darkred}   {RGB}{120, 20,  20}
+\definecolor{darkorange}{RGB}{184, 92,   0}
+\definecolor{darkolive} {RGB}{ 74,107,  18}
+
+
+% ============================================================
+% SEPARATOR RULE
+%
+%   \separator
+%
+% A short dark-red rule with air on both sides — between
+% exercises on different topics, or before a closing
+% instruction.
+% ============================================================
+\makeatletter
+\let\orig@footnoterule\footnoterule
+\newcommand{\separator}{%
+  \par
+  \vspace{3.5ex plus 1.5ex minus .5ex}
+  {\color{darkred}\orig@footnoterule}
+  \vspace{1.2ex}
+}
+\makeatother
+
+
+% ============================================================
+% EXERCISES
+%
+%   \begin{exercise}[Optional title]
+%   Exercise text.
+%   \begin{subproblems}
+%     \item First part.
+%     \item Second part.
+%   \end{subproblems}
+%   \end{exercise}
+%
+% The same environment as in the handout and notes styles, so
+% an exercise can be moved here unchanged. Two differences:
+% the counter is flat through the whole test (Exercise 1, 2,
+% 3 — across Part 1 / Part 2 too), and the head is set in
+% sans: "Exercise 3 – Title" in bold grotesque one step up
+% (\large), the body in roman. The grotesque makes it easy to
+% leaf to the right exercise, and the roman keeps the
+% exercise text readable.
+%
+% \points{4} sets "(4 points)" in grey, meant after the title:
+% \begin{exercise}[Differentiation \points{4}]. Leave it out
+% if the test does not state points.
+% ============================================================
+\RequirePackage{amsthm}
+
+\newtheoremstyle{examex}
+  {1ex}                          % space above
+  {1ex}                          % space below
+  {\normalfont}                  % body font
+  {0pt}                          % indent
+  {\sffamily\large\bfseries}    % head font
+  {}                             % head punctuation
+  {\newline}                     % space between head and body
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ -- #3}}
+
+\theoremstyle{examex}
+\newtheorem{exerciseinner}{Exercise}
+\theoremstyle{plain}
+
+\newcommand{\points}[1]{{\sffamily\mdseries\normalsize\color{gray}(#1 points)}}
+
+% The {\newline} separator puts the body on its own line under
+% the head; \leavevmode\par\vspace{-2ex} pulls it back up to a
+% tight gap, and \vspace{-\parskip} removes the paragraph space
+% block paragraphs would otherwise put before the body.
+% \nobreak right after \par forbids a page break between head
+% and body — everything from there to the first body line is
+% glue and cannot be broken at. \needspace before it also
+% secures room for the head and a couple of lines, so an
+% exercise does not start with two lines at the foot of a
+% page. It must come AFTER \addvspace: it inserts (zero) glue
+% of its own, and placed before, \addvspace would not see the
+% space left by the previous exercise and would add 4.5 ex on
+% top of 6.75 instead of taking the maximum.
+%
+% \exam@closecover first: a test with [coverpage] but no
+% \exampart gets its cover closed by the first exercise
+% instead.
+%
+% Space: 4.5 ex before and 6.75 ex after, as in the handout.
+\RequirePackage{needspace}
+
+\makeatletter
+\newenvironment{exercise}[1][]
+{%
+  \exam@closecover
+  \par\addvspace{4.5ex plus 1.5ex minus .8ex}%
+  \needspace{4\baselineskip}%
+  \setlength{\parindent}{0pt}%
+  \def\exam@tmp{#1}\ifx\exam@tmp\@empty
+    \begin{exerciseinner}\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}
+  \else
+    \begin{exerciseinner}[#1]\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}
+  \fi
+}
+{%
+  \end{exerciseinner}
+  \par\addvspace{6.75ex plus 2.2ex minus 1.2ex}
+}
+\makeatother
+
+
+% ============================================================
+% SUBPROBLEMS — a), b), c)
+%
+% Identical to the handout: a list of its own, lean letters,
+% the same left edge as enumerate and itemize. Continue the
+% letter sequence after intervening text with
+% \begin{subproblems}[resume].
+% ============================================================
+\RequirePackage{enumitem}
+
+\newlist{subproblems}{enumerate}{1}
+
+\setlist[subproblems]{%
+  label=\alph*),
+  leftmargin=\leftmargini,
+  labelsep=0.6em,
+  itemsep=0.8ex,
+  parsep=0.8ex,
+  topsep=0.8ex
+}
+
+
+% ============================================================
+% CODE LISTINGS
+%
+%   \begin{python}
+%   def f(x):
+%       return x**2
+%   \end{python}
+%
+% For programming exercises. Gruvbox Light, line numbers, a
+% rule above and below — as in the handout. æ, ø, å are mapped
+% explicitly so listings does not lose them in comments.
+% ============================================================
+\RequirePackage{listings}
+
+\definecolor{gruvbg}    {HTML}{fdfcf2}
+\definecolor{gruvfg}    {HTML}{3c3836}
+\definecolor{gruvkw}    {HTML}{9d0006}
+\definecolor{gruvstr}   {HTML}{79740e}
+\definecolor{gruvcom}   {HTML}{928374}
+\definecolor{gruvnum}   {HTML}{b57614}
+\definecolor{gruvbi}    {HTML}{076678}
+
+\lstdefinestyle{gruvboxlight}{
+  backgroundcolor   = \color{gruvbg},
+  basicstyle        = \small\ttfamily\color{gruvfg},
+  keywordstyle      = \color{gruvkw}\bfseries,
+  stringstyle       = \color{gruvstr},
+  commentstyle      = \color{gruvcom}\itshape,
+  numberstyle       = \color{gruvnum},
+  identifierstyle   = \color{gruvfg},
+  breaklines        = true,
+  showstringspaces  = false,
+  numbers           = left,
+  numbersep         = 10pt,
+  frame             = tb,
+  xleftmargin       = 2em,
+  xrightmargin      = 0em,
+  framexleftmargin  = 2em,
+  framexrightmargin = 0em,
+  aboveskip         = 2.4ex,
+  belowskip         = 2.4ex,
+  extendedchars     = true,
+  inputencoding     = utf8,
+  literate          =
+    {æ}{{\ae}}1 {ø}{{\o}}1 {å}{{\aa}}1
+    {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
+}
+
+\lstnewenvironment{python}
+  {\lstset{language=Python, style=gruvboxlight,
+           morekeywords={True,False,None,self}}}
+  {}
+
+
+% ============================================================
+% VECTOR ARROWS (esvect)
+%
+% The size fix esvect needs under unicode-math, guarded so it
+% only kicks in when main.tex loads the package. See the
+% handout style for why.
+% ============================================================
+\AtBeginDocument{%
+  \IfPackageLoadedTF{esvect}{%
+    \DeclareFontFamily{U}{esvect}{}%
+    \DeclareFontShape{U}{esvect}{m}{n}{%
+      <-5.5>    vect5
+      <5.5-6.5> vect6
+      <6.5-7.5> vect7
+      <7.5-8.5> vect8
+      <8.5-9.5> vect9
+      <9.5->    vect10
+    }{}%
+  }{}%
+}
+
+
+% ============================================================
+% END OF FILE
+% ============================================================
+\endinput
