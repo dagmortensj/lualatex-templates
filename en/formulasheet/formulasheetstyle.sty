@@ -92,9 +92,11 @@
 % ============================================================
 % PAGE GEOMETRY — TWO LOGICAL PAGES ON ONE SHEET
 %
-% The document is set as landscape A5 pages with an 8 mm
-% margin, and pgfpages stacks them two by two on a portrait A4
-% sheet. Page 1 is the upper half, page 2 the lower. The fold
+% The document is set as landscape pages of exactly half an
+% A4 sheet (210 x 148.5 mm) with an 8 mm margin, and pgfpages
+% stacks them two by two on a portrait A4 sheet. Not a5paper:
+% ISO A5 is 148 mm tall, not 148.5, and that half millimetre
+% would put the two fold marks half a millimetre apart. Page 1 is the upper half, page 2 the lower. The fold
 % falls where the two pages meet, and each page has an 8 mm
 % margin towards it — the same as towards the paper edge. The
 % text area per page is 194 x 132.5 mm.
@@ -114,8 +116,8 @@
 % No page numbers.
 % ============================================================
 \RequirePackage[
-  a5paper,
-  landscape,
+  paperwidth=210mm,
+  paperheight=148.5mm,
   margin=8mm
 ]{geometry}
 \pagestyle{empty}
@@ -145,10 +147,10 @@
 % the fold on the finished sheet.
 \RequirePackage{xcolor}
 \newcommand{\formulasheet@foldmark}{%
-  \ifodd\value{page}
+  \ifodd\value{page}%
     \raisebox{-\paperheight}{\color{gray}\rule{5mm}{0.3pt}}%
   \else
-    {\color{gray}\rule{5mm}{0.3pt}}%
+    \color{gray}\rule{5mm}{0.3pt}%
   \fi}
 \AddToHook{shipout/background}{%
   \put(0,0){\makebox[0pt][l]{\formulasheet@foldmark}}%

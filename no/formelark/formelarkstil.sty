@@ -93,9 +93,12 @@
 % ============================================================
 % SIDEGEOMETRI — TO LOGISKE SIDER PÅ ETT ARK
 %
-% Dokumentet settes som liggende A5-sider med 8 mm marg, og
-% pgfpages legger to og to av dem oppå hverandre på et stående
-% A4-ark. Side 1 er øvre halvdel, side 2 nedre. Bretten faller
+% Dokumentet settes som liggende sider på nøyaktig et halvt
+% A4-ark (210 x 148,5 mm) med 8 mm marg, og pgfpages legger to
+% og to av dem oppå hverandre på et stående A4-ark. Ikke
+% a5paper: ISO A5 er 148 mm høy, ikke 148,5, og den halve
+% millimeteren ville gitt to brettemerker en halv millimeter
+% fra hverandre. Side 1 er øvre halvdel, side 2 nedre. Bretten faller
 % der de to sidene møtes, og hver side har 8 mm marg mot den
 % — samme som mot papirkanten. Satsflaten per side blir
 % 194 x 132,5 mm.
@@ -115,8 +118,8 @@
 % Ingen sidetall.
 % ============================================================
 \RequirePackage[
-  a5paper,
-  landscape,
+  paperwidth=210mm,
+  paperheight=148.5mm,
   margin=8mm
 ]{geometry}
 \pagestyle{empty}
@@ -146,10 +149,10 @@
 % øverste — begge steder er bretten på det ferdige arket.
 \RequirePackage{xcolor}
 \newcommand{\formelark@brettemerke}{%
-  \ifodd\value{page}
+  \ifodd\value{page}%
     \raisebox{-\paperheight}{\color{gray}\rule{5mm}{0.3pt}}%
   \else
-    {\color{gray}\rule{5mm}{0.3pt}}%
+    \color{gray}\rule{5mm}{0.3pt}%
   \fi}
 \AddToHook{shipout/background}{%
   \put(0,0){\makebox[0pt][l]{\formelark@brettemerke}}%
