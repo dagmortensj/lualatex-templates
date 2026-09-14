@@ -1,0 +1,165 @@
+% ============================================================
+% main.tex — selve formelarket
+%
+% Denne fila er innhold. Alle typografiske valg bor i
+% formelarkstil.sty, som også laster babel og siunitx.
+%
+% Arket er stående A4, brettet på tvers: to liggende A5-sider
+% oppå hverandre. Øvre halvdel konstanter, nedre halvdel
+% formler, hver halvdel i to spalter. Eksempelinnholdet er et
+% formelark til Fysikk 1.
+%
+% Kompiler med lualatex:
+%   latexmk -lualatex main
+% ============================================================
+
+
+\documentclass[10pt]{article}
+
+
+% ============================================================
+% LAST INN FORMELARKSTIL
+%
+% [tett]: tettere formelrader og mindre luft over
+% overskriftene, for et ark med flere formler enn 10 pt gir
+% plass til. Sett i tillegg \begin{halvdel}[\small]{...}{...}
+% på halvdelen som er full.
+% ============================================================
+\usepackage{formelarkstil}
+% \usepackage[tett]{formelarkstil}
+
+
+% ============================================================
+% EGENDEFINERTE PAKKER
+%
+% Legg til prosjektspesifikke pakker her.
+% Ikke sett pakker andre steder i filen.
+% ============================================================
+
+% --- Vektorer: \vv{F}, flat pil over symbolet. Indekser utenfor: \vv{F}_1 ---
+\usepackage[e]{esvect}
+
+
+\begin{document}
+
+% ============================================================
+% ØVRE HALVDEL — KONSTANTER
+% ============================================================
+\begin{halvdel}{Fysikk 1}{Konstanter}
+\gruppe{Konstanter}
+\begin{konstanter}
+Konstanten i Wiens forskyvningslov & $a$ & \qty{2.90e-3}{K.m} \\
+Boltzmanns konstant       & $k$      & \qty{1.38e-23}{J/K} \\
+Stefan--Boltzmann-konstanten & $\sigma$ & \qty{5.67e-8}{W/m^2K^4} \\
+Plancks konstant          & $h$      & \qty{6.63e-34}{J.s} \\
+Bohrs konstant            & $B$      & \qty{2.18e-18}{J} \\
+Lysfarten i vakuum        & $c$      & \qty{3.00e8}{m/s} \\
+Elementærladningen        & $e$      & \qty{1.60e-19}{C} \\
+Tyngdeakselerasjonen      & $g$      & \qty{9.81}{m/s^2} \\
+Atommasseenheten          & $u$      & \qty{1.66e-27}{kg} \\
+Lysår                     & $1\,\text{ly}$ & \qty{9.46e15}{m} \\
+\end{konstanter}
+
+\gruppe{Masser}
+\begin{tabellto}
+Elektron     & $\num{5.4858e-4}$ u $= \qty{9.1094e-31}{kg}$ \\
+Proton       & $\num{1.007276}$ u $= \qty{1.6726e-27}{kg}$ \\
+Nøytron      & $\num{1.008665}$ u $= \qty{1.6749e-27}{kg}$ \\
+Hydrogen     & $\num{1.007825}$ u \\
+Deuterium    & $\num{2.014102}$ u \\
+Tritium      & $\num{3.016049}$ u \\
+Helium-3     & $\num{3.016029}$ u \\
+Helium-4     & $\num{4.002603}$ u \\
+Alfapartikkel & $\num{4.001506}$ u \\
+\end{tabellto}
+
+\gruppe{Jorda}
+\begin{tabellto}
+Masse                          & \qty{5.972e24}{kg} \\
+Middelradius                   & \qty{6371}{km} \\
+Middelavstand fra sola         & \qty{1.496e11}{m} \\
+Lysintensitet utenfor atmosfæren & \qty{1361}{W/m^2} \\
+\end{tabellto}
+
+\gruppe{Sola}
+\begin{tabellto}
+Masse               & \qty{1.99e30}{kg} \\
+Radius              & \qty{6.96e8}{m} \\
+Overflatetemperatur & \qty{5780}{K} \\
+Utstrålt effekt     & \qty{3.83e26}{W} \\
+\end{tabellto}
+
+\gruppe{SI-prefikser}
+\begin{tabularx}{\columnwidth}{@{}l l Y l l Y l l l@{}}
+$10^{-18}$ & atto  & a          & $10^{-3}$ & milli & m  & $10^{3}$  & kilo & k \\
+$10^{-15}$ & femto & f          & $10^{-2}$ & centi & c  & $10^{6}$  & mega & M \\
+$10^{-12}$ & piko  & p          & $10^{-1}$ & desi  & d  & $10^{9}$  & giga & G \\
+$10^{-9}$  & nano  & n          & $10^{1}$  & deka  & da & $10^{12}$ & tera & T \\
+$10^{-6}$  & mikro & \textmu{}  & $10^{2}$  & hekto & h  & $10^{15}$ & peta & P \\
+\end{tabularx}
+\end{halvdel}
+
+% ============================================================
+% NEDRE HALVDEL — FORMLER
+% ============================================================
+\begin{halvdel}{Fysikk 1}{Formler}
+\gruppe{Bevegelse og krefter}
+\begin{formler}
+$v = at + v_0$ & $s = \dfrac{v + v_0}{2}\,t$ & \\
+$v^2 - v_0^2 = 2as$ & $s = \frac{1}{2}at^2 + v_0 t$ & \\
+\end{formler}
+\formelrad{$\Sigma F = 0 \iff v$ konstant og rettlinjet}
+\begin{formler}
+$\Sigma\vv{F} = m\vv{a}$ & $F^{*} = F$ & $G = mg$ \\
+$R = \mu N$ & $B = \rho_f V g$ & $L = kv^2$ \\
+$\vv{p} = m\vv{v}$ & $\Sigma\vv{F}\cdot t = \Delta\vv{p}$ & \\
+\end{formler}
+\formelrad{$m_A v_A + m_B v_B = m_A v_{A0} + m_B v_{B0}$}
+
+\gruppe{Mekanisk energi og effekt}
+\begin{formler}
+$W = Fs\cos\theta$ & $W_{\Sigma F} = \Delta E_k$ & $P = W/t$ \\
+$E_k = \frac{1}{2}mv^2$ & $E_p = mgh$ & $E = E_k + E_p$ \\
+\end{formler}
+\formelrad{$\frac{1}{2}mv^2 + mgh = \frac{1}{2}mv_0^2 + mgh_0$}
+\formelrad{$\eta = \dfrac{\text{nyttbar energi}}{\text{tilført energi}} = \dfrac{\text{nyttbar effekt}}{\text{tilført effekt}}$}
+
+\gruppe{Trykk og temperatur}
+\begin{formler}
+$p = F/A$ & $T = t + 273$ & $E_k = \frac{3}{2}kT$ \\
+$c = \dfrac{Q}{m\,\Delta T}$ & $C = \dfrac{Q}{\Delta T}$ & $\Delta U = W + Q$ \\
+\end{formler}
+\columnbreak
+\gruppe{Trykk og temperatur (forts.)}
+\begin{formlerto}
+$\mathit{COP} = \dfrac{Q_{\text{avgitt}}}{E_{\text{elektrisk}}}$ &
+$\mathit{COP}_{\text{Carnot}} = \dfrac{T_{\text{avgitt}}}{T_{\text{avgitt}} - T_{\text{opptatt}}}$ \\
+\end{formlerto}
+
+\gruppe{Bølger og stråling}
+\begin{formler}
+$f = 1/T$ & $v = \lambda f$ & $U = P/A$ \\
+$\lambda_{\text{topp}}\cdot T = a$ & $U = \sigma T^4$ & $I = \dfrac{P}{4\pi r^2}$ \\
+\end{formler}
+
+\gruppe{Atomfysikk og kjernefysikk}
+\begin{formler}
+$E = hf = \dfrac{hc}{\lambda}$ & $E_n = -\dfrac{B}{n^2}$ & \\
+\end{formler}
+\begin{formlerto}
+$hf = E_n - E_m,\quad n > m$ & $hf = B\left(\dfrac{1}{m^2} - \dfrac{1}{n^2}\right)$ \\
+\end{formlerto}
+\begin{formler}
+$A = Z + N$ & $E_0 = mc^2$ & $\Delta E_0 = \Delta m\cdot c^2$ \\
+\end{formler}
+
+\gruppe{Elektrisitet}
+\begin{formler}
+$I = \dfrac{Q}{t}$ & $U = \dfrac{W}{Q}$ & $R = \dfrac{U}{I}$ \\
+$W = UIt$ & $P = UI = RI^2 = \dfrac{U^2}{R}$ & \\
+\end{formler}
+\formelrad{Seriekobling: \quad $R_{\text{tot}} = R_1 + R_2 + \cdots + R_n$}
+\formelrad{Parallellkobling: \quad $R_{\text{tot}} = \left(\dfrac{1}{R_1} + \dfrac{1}{R_2} + \cdots + \dfrac{1}{R_n}\right)^{-1}$}
+\end{halvdel}
+
+\end{document}

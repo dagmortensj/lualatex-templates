@@ -1,0 +1,340 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{formelarkstil}[2026/09/14 v1.1 Formelarkstil — ett A4-ark, brettet på tvers, konstanter og formler (lualatex)]
+
+% ============================================================
+% formelarkstil.sty — formelark
+%
+% Til formelark og konstanttabeller til fysikk og matematikk:
+% ett A4-ark i stående format, brettet på tvers i midten. Øvre
+% halvdel konstanter, nedre halvdel formler, hver halvdel i to
+% spalter. Brettet én gang blir arket et liggende A5-ark med
+% konstantene på den ene siden og formlene på den andre.
+%
+% Samme familie som handout- og prøvestilen: NewComputerModern for
+% tekst og matematikk, overskrifter i grotesken fra samme
+% familie, mørkerød som eneste farge. Alt som handler om å få
+% plass, bor her: små marger og kompakte tabeller.
+%
+% Alt om hvordan arket ser ut settes her; main.tex inneholder
+% innholdet og eventuelle ekstra pakker.
+%
+% Motor: lualatex.
+%
+% Rekkefølgen nedenfor: pakkevalg, språk, fonter, tall,
+% geometri og sideoppsett, halvdeler, avsnitt, farger,
+% overskrifter, tabeller, vektorpiler.
+% ============================================================
+
+
+% ============================================================
+% PAKKEVALG
+%
+%   \usepackage[tett]{formelarkstil}
+%
+% tett — for et ark med flere formler enn 10 pt gir plass til:
+% radavstanden i formeltabellene går fra 1,62 til 1,45, og
+% luften over overskriftene krympes. Leses under OVERSKRIFTER
+% og under FORMLER. Skriftstørrelsen røres ikke her; den
+% settes per halvdel med det valgfrie argumentet til halvdel,
+% siden det er der det er kjent hvilken halvdel som er full.
+%
+% Uten valg er alt som før.
+% ============================================================
+\newif\ifformelarktett
+\DeclareOption{tett}{\formelarktetttrue}
+\DeclareOption*{\PackageWarning{formelarkstil}{Ukjent valg '\CurrentOption'}}
+\ProcessOptions\relax
+
+
+% ============================================================
+% SPRÅK
+%
+% babel lastes her og ikke i main.tex, slik at det å laste
+% stilen er nok til å få orddeling og tegnsetting riktig.
+% ============================================================
+\RequirePackage[norsk]{babel}
+
+
+% ============================================================
+% FONT OG MIKROTYPOGRAFI
+%
+% NewComputerModern Book i tekst og matematikk, som i handout-
+% og prøvestilen. Pakka laster unicode-math selv og setter
+% \sffamily til NewComputerModern Sans, som bærer tittellinjene
+% og temaoverskriftene.
+% ============================================================
+\RequirePackage{newcomputermodern}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true
+]{microtype}
+
+
+% ============================================================
+% TALL OG ENHETER (siunitx)
+%
+% Lastes her, ikke i main.tex: et formelark uten \qty finnes
+% ikke. Samme norske oppsett som i handoutstilen: desimalkomma,
+% halvhøy prikk i standardform, skråstrek i enheter, tynt
+% mellomrom som tusenskille fra fem sifre.
+% ============================================================
+\RequirePackage{amsmath}
+\RequirePackage{siunitx}
+\sisetup{
+  output-decimal-marker = {,},
+  exponent-product      = \cdot,
+  per-mode              = symbol,
+  group-minimum-digits  = 5,
+  group-separator       = {\,}
+}
+
+
+% ============================================================
+% SIDEGEOMETRI — TO LOGISKE SIDER PÅ ETT ARK
+%
+% Dokumentet settes som liggende A5-sider med 8 mm marg, og
+% pgfpages legger to og to av dem oppå hverandre på et stående
+% A4-ark. Side 1 er øvre halvdel, side 2 nedre. Bretten faller
+% der de to sidene møtes, og hver side har 8 mm marg mot den
+% — samme som mot papirkanten. Satsflaten per side blir
+% 194 x 132,5 mm.
+%
+% Poenget med logiske sider framfor bokser med fast høyde er
+% at alt er vanlig sideflyt: renner innholdet over, blir det
+% en side 3 og dermed et nytt A4-ark, og det ser du på
+% sidetallet — slik LaTeX alltid har vist «for mye innhold».
+% Ingenting måles, ingenting klippes stille. En liten sjekk
+% ved dokumentslutt sier fra i loggen om arket ble mer enn
+% to sider.
+%
+% Inne i hver side setter multicol to spalter med 8 mm
+% mellomrom, som gir spalter på 93 mm. \raggedcolumns hindrer
+% at luften i en spalte strekkes for å fylle den til bunnen.
+%
+% Ingen sidetall.
+% ============================================================
+\RequirePackage[
+  a5paper,
+  landscape,
+  margin=8mm
+]{geometry}
+\pagestyle{empty}
+
+\RequirePackage{pgfpages}
+\pgfpagesuselayout{2 on 1}[a4paper,border shrink=0mm]
+
+\RequirePackage{multicol}
+\setlength{\columnsep}{8mm}
+\setlength{\columnseprule}{0pt}
+\setlength{\multicolsep}{0pt}
+\raggedcolumns
+
+\AtEndDocument{%
+  \clearpage
+  \ifnum\value{page}>3
+    \PackageWarning{formelarkstil}{Arket ble
+      \the\numexpr\value{page}-1\relax\space logiske sider, ikke 2 --
+      innholdet fyller mer enn ett A4-ark}%
+  \fi}
+
+% Brettemerker: to korte grå streker ytterst til venstre og
+% høyre ved bretten, utenfor satsflaten, som hjelp til å
+% brette rett. Kroken tegner på hver logiske side fra dens
+% øverste venstre hjørne: på oddetallssider (øvre halvdel)
+% langs nederste kant, på partallssider (nedre halvdel) langs
+% øverste — begge steder er bretten på det ferdige arket.
+\RequirePackage{xcolor}
+\newcommand{\formelark@brettemerke}{%
+  \ifodd\value{page}
+    \raisebox{-\paperheight}{\color{gray}\rule{5mm}{0.3pt}}%
+  \else
+    {\color{gray}\rule{5mm}{0.3pt}}%
+  \fi}
+\AddToHook{shipout/background}{%
+  \put(0,0){\makebox[0pt][l]{\formelark@brettemerke}}%
+  \put(0,0){\makebox[0pt][l]{%
+    \hskip\dimexpr\paperwidth-5mm\relax\formelark@brettemerke}}}
+
+
+% ============================================================
+% HALVDELER
+%
+%   \begin{halvdel}{Fysikk 1}{Konstanter}
+%     ... to spalter ...
+%   \end{halvdel}
+%   \begin{halvdel}[\small]{Fysikk 1}{Formler}
+%     ...
+%   \end{halvdel}
+%
+% En halvdel er én logisk side: tittellinje i sans øverst over
+% full bredde, to spalter under, og sideskift til slutt. Det
+% valgfrie argumentet settes rett etter tittellinja og gjelder
+% hele halvdelen — \small for en halvdel med for mye innhold
+% til 10 pt.
+%
+% Spaltene er multicols* — venstre spalte fylles helt før
+% høyre begynner, uten balansering, så rekkefølgen er
+% forutsigbar. Tving et spaltebytte med \columnbreak der et
+% tema ellers ville blitt delt på et dumt sted.
+% ============================================================
+\newenvironment{halvdel}[3][]
+  {{\sffamily\bfseries\large #2\quad{\mdseries\color{darkred}#3}\par}%
+   \vspace{0.6ex}#1%
+   \begin{multicols*}{2}}
+  {\end{multicols*}\clearpage}
+
+
+% ============================================================
+% AVSNITT
+% ============================================================
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+
+% ============================================================
+% FARGER
+%
+% Samme mørkerøde som resten av familien: overskrifter og
+% streker. Ingen figurfarger — et formelark har ingen figurer.
+% ============================================================
+\definecolor{darkred}{RGB}{120,20,20}
+
+
+% ============================================================
+% OVERSKRIFTER
+%
+%   \gruppe{Konstanter}
+%
+% Ett nivå er nok på et formelark: temaoverskrift i sans, fet,
+% mørkerød, med en tynn strek under i samme farge. Streken
+% gjør samme jobb som luften i handoutstilen ville gjort, på
+% en brøkdel av plassen. Med [tett] krympes luften over.
+% \needspace sørger for at en overskrift aldri blir stående
+% alene nederst i en spalte — den tar med seg minst fire
+% linjer, ellers flyttes den til neste spalte.
+% ============================================================
+\RequirePackage{titlesec}
+\setcounter{secnumdepth}{0}
+
+\titleformat{\section}
+  {\sffamily\bfseries\normalsize\color{darkred}}
+  {}{0pt}{}
+  [\vspace{-1.2ex}{\color{darkred}\rule{\columnwidth}{0.4pt}}]
+
+\ifformelarktett
+  \titlespacing*{\section}
+    {0pt}
+    {1.8ex plus .6ex minus .3ex}
+    {0.9ex plus .3ex}
+\else
+  \titlespacing*{\section}
+    {0pt}
+    {2.2ex plus .8ex minus .4ex}
+    {1.0ex plus .3ex}
+\fi
+
+\RequirePackage{needspace}
+\newcommand{\gruppe}[1]{\needspace{5\baselineskip}\section*{#1}}
+
+
+% ============================================================
+% KONSTANTTABELLER
+%
+%   \begin{konstanter}
+%     Plancks konstant & $h$ & \qty{6.63e-34}{J.s} \\
+%   \end{konstanter}
+%
+% Tre kolonner: navn, symbol, verdi. Symbol og verdi er
+% høyre- og venstrestilt inn mot likhetstegnet, så tallene
+% står i en rett kant. Navnet får det som er igjen av
+% bredden og brytes om ved behov.
+%
+%   \begin{tabellto}
+%     Masse & \qty{5.972e24}{kg} \\
+%   \end{tabellto}
+%
+% To kolonner, navn og verdi, for masser og planetdata der
+% navnet er nok.
+% ============================================================
+\RequirePackage{array,tabularx}
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3pt}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\newenvironment{konstanter}
+  {\tabularx{\columnwidth}{@{}Y r @{${}={}$} l@{}}}
+  {\endtabularx\par\vspace{0.6ex}}
+
+\newenvironment{tabellto}
+  {\tabularx{\columnwidth}{@{}Y l@{}}}
+  {\endtabularx\par\vspace{0.6ex}}
+
+
+% ============================================================
+% FORMLER
+%
+%   \begin{formler}
+%     $v = at + v_0$ & $s = \frac{v + v_0}{2}t$ & $\ldots$ \\
+%   \end{formler}
+%
+% Tre kolonner med formler, venstrestilt, som i lærebokas
+% formelsamling. Luften fordeles jevnt mellom kolonnene, og en
+% formel brytes aldri. Tomme celler er lov. formlerto er det
+% samme med to kolonner, for lange formler.
+%
+%   \formelrad{...}  — én formel som får hele bredden
+%
+% Radavstanden styres av \formelstrekk (arraystretch i
+% formeltabellene): 1,62 gir god luft, og [tett] setter 1,45.
+% Et dokument kan overstyre med \renewcommand i main.tex.
+% To rader med brøker rett over hverandre kan trenge litt
+% ekstra: skriv \\[3pt] etter den første.
+% ============================================================
+\ifformelarktett
+  \newcommand{\formelstrekk}{1.45}
+\else
+  \newcommand{\formelstrekk}{1.62}
+\fi
+
+\newenvironment{formler}
+  {\renewcommand{\arraystretch}{\formelstrekk}%
+   \csname tabular*\endcsname{\columnwidth}{@{\extracolsep{\fill}}l l l@{}}}
+  {\csname endtabular*\endcsname\par\vspace{0.4ex}}
+
+\newenvironment{formlerto}
+  {\renewcommand{\arraystretch}{\formelstrekk}%
+   \csname tabular*\endcsname{\columnwidth}{@{\extracolsep{\fill}}l l@{}}}
+  {\csname endtabular*\endcsname\par\vspace{0.4ex}}
+
+\newcommand{\formelrad}[1]{\par\vspace{0.8ex}#1\par\vspace{0.8ex}}
+
+
+% ============================================================
+% , vektorpilerPILER (esvect)
+%
+% main.tex laster esvect når et ark vil ha \vv-piler; stilen
+% bærer bare størrelsesfiksen pakka trenger under unicode-math
+% — samme som i handoutstilen. Vaktet, så den gjør ingenting i
+% et dokument som aldri laster esvect.
+% ============================================================
+\AtBeginDocument{%
+  \IfPackageLoadedTF{esvect}{%
+    \DeclareFontFamily{U}{esvect}{}%
+    \DeclareFontShape{U}{esvect}{m}{n}{%
+      <-5.5>    vect5
+      <5.5-6.5> vect6
+      <6.5-7.5> vect7
+      <7.5-8.5> vect8
+      <8.5-9.5> vect9
+      <9.5->    vect10
+    }{}%
+  }{}%
+}
+
+
+% ============================================================
+% SLUTT PÅ FIL
+% ============================================================
+\endinput

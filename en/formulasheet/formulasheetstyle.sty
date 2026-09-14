@@ -1,0 +1,341 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{formulasheetstyle}[2026/09/14 v1.1 Formula sheet style — one A4 sheet, folded across, constants and formulas (lualatex)]
+
+% ============================================================
+% formulasheetstyle.sty — formula sheets
+%
+% For formula sheets and tables of constants in physics and
+% mathematics: one A4 sheet in portrait, folded across the
+% middle. Upper half constants, lower half formulas, each half
+% in two columns. Folded once, the sheet becomes a landscape
+% A5 with the constants on one side and the formulas on the
+% other.
+%
+% Same family as the handout and exam styles: NewComputerModern for
+% text and mathematics, headings in the grotesque of the same
+% family, dark red as the only colour. Everything about fitting
+% things in lives here: small margins and compact tables.
+%
+% Everything about how the sheet looks is set here; main.tex
+% holds the content and any extra packages.
+%
+% Engine: lualatex.
+%
+% Order below: package options, language, fonts, numbers,
+% geometry and page layout, halves, paragraphs, colours,
+% headings, tables, vector arrows.
+% ============================================================
+
+
+% ============================================================
+% PACKAGE OPTIONS
+%
+%   \usepackage[tight]{formulasheetstyle}
+%
+% tight — for a sheet with more formulas than 10 pt has room
+% for: the row spacing in the formula tables goes from 1.62 to
+% 1.45, and the space above headings shrinks. Read under
+% HEADINGS and under FORMULAS. The font size is not touched
+% here; it is set per half with the optional argument of half,
+% since that is where it is known which half is full.
+%
+% Without the option everything is as before.
+% ============================================================
+\newif\ifformulasheettight
+\DeclareOption{tight}{\formulasheettighttrue}
+\DeclareOption*{\PackageWarning{formulasheetstyle}{Unknown option '\CurrentOption'}}
+\ProcessOptions\relax
+
+
+% ============================================================
+% LANGUAGE
+%
+% babel is loaded here rather than in main.tex, so that
+% loading the style is enough to get hyphenation and
+% punctuation right.
+% ============================================================
+\RequirePackage[english]{babel}
+
+
+% ============================================================
+% FONT AND MICROTYPOGRAPHY
+%
+% NewComputerModern Book in text and mathematics, as in the
+% handout and exam styles. The package loads unicode-math itself
+% and sets \sffamily to NewComputerModern Sans, which carries
+% the title lines and topic headings.
+% ============================================================
+\RequirePackage{newcomputermodern}
+
+\RequirePackage[
+  expansion=true,
+  protrusion=true
+]{microtype}
+
+
+% ============================================================
+% NUMBERS AND UNITS (siunitx)
+%
+% Loaded here, not in main.tex: a formula sheet without \qty
+% does not exist. Slash in units, thin space as thousands
+% separator from five digits; the rest is siunitx's defaults.
+% ============================================================
+\RequirePackage{amsmath}
+\RequirePackage{siunitx}
+\sisetup{
+  per-mode              = symbol,
+  group-minimum-digits  = 5,
+  group-separator       = {\,}
+}
+
+
+% ============================================================
+% PAGE GEOMETRY — TWO LOGICAL PAGES ON ONE SHEET
+%
+% The document is set as landscape A5 pages with an 8 mm
+% margin, and pgfpages stacks them two by two on a portrait A4
+% sheet. Page 1 is the upper half, page 2 the lower. The fold
+% falls where the two pages meet, and each page has an 8 mm
+% margin towards it — the same as towards the paper edge. The
+% text area per page is 194 x 132.5 mm.
+%
+% The point of logical pages rather than boxes of fixed height
+% is that everything is ordinary page flow: if the content
+% overflows, there is a page 3 and hence a second A4 sheet,
+% and you see it in the page count — the way LaTeX has always
+% shown "too much content". Nothing is measured, nothing is
+% clipped silently. A small check at the end of the document
+% notes in the log if the sheet came to more than two pages.
+%
+% Inside each page, multicol sets two columns with an 8 mm
+% gap, giving columns of 93 mm. \raggedcolumns stops the space
+% in a column from being stretched to fill it to the bottom.
+%
+% No page numbers.
+% ============================================================
+\RequirePackage[
+  a5paper,
+  landscape,
+  margin=8mm
+]{geometry}
+\pagestyle{empty}
+
+\RequirePackage{pgfpages}
+\pgfpagesuselayout{2 on 1}[a4paper,border shrink=0mm]
+
+\RequirePackage{multicol}
+\setlength{\columnsep}{8mm}
+\setlength{\columnseprule}{0pt}
+\setlength{\multicolsep}{0pt}
+\raggedcolumns
+
+\AtEndDocument{%
+  \clearpage
+  \ifnum\value{page}>3
+    \PackageWarning{formulasheetstyle}{The sheet came to
+      \the\numexpr\value{page}-1\relax\space logical pages, not 2 --
+      the content fills more than one A4 sheet}%
+  \fi}
+
+% Fold marks: two short grey lines at the far left and right
+% at the fold, outside the text area, as a guide to folding
+% straight. The hook draws on each logical page from its
+% top-left corner: on odd pages (upper half) along the bottom
+% edge, on even pages (lower half) along the top — both are
+% the fold on the finished sheet.
+\RequirePackage{xcolor}
+\newcommand{\formulasheet@foldmark}{%
+  \ifodd\value{page}
+    \raisebox{-\paperheight}{\color{gray}\rule{5mm}{0.3pt}}%
+  \else
+    {\color{gray}\rule{5mm}{0.3pt}}%
+  \fi}
+\AddToHook{shipout/background}{%
+  \put(0,0){\makebox[0pt][l]{\formulasheet@foldmark}}%
+  \put(0,0){\makebox[0pt][l]{%
+    \hskip\dimexpr\paperwidth-5mm\relax\formulasheet@foldmark}}}
+
+
+% ============================================================
+% HALVES
+%
+%   \begin{half}{Physics 1}{Constants}
+%     ... two columns ...
+%   \end{half}
+%   \begin{half}[\small]{Physics 1}{Formulas}
+%     ...
+%   \end{half}
+%
+% A half is one logical page: a title line in sans at the top
+% across the full width, two columns below, and a page break
+% at the end. The optional argument is set right after the
+% title line and applies to the whole half — \small for a half
+% with too much content for 10 pt.
+%
+% The columns are multicols* — the left column is filled
+% completely before the right one starts, with no balancing,
+% so the order is predictable. Force a column break with
+% \columnbreak where a topic would otherwise be split in a bad
+% place.
+% ============================================================
+\newenvironment{half}[3][]
+  {{\sffamily\bfseries\large #2\quad{\mdseries\color{darkred}#3}\par}%
+   \vspace{0.6ex}#1%
+   \begin{multicols*}{2}}
+  {\end{multicols*}\clearpage}
+
+
+% ============================================================
+% PARAGRAPHS
+% ============================================================
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+
+% ============================================================
+% COLOURS
+%
+% The same dark red as the rest of the family: headings and
+% rules. No figure colours — a formula sheet has no figures.
+% ============================================================
+\definecolor{darkred}{RGB}{120,20,20}
+
+
+% ============================================================
+% HEADINGS
+%
+%   \topic{Constants}
+%
+% One level is enough on a formula sheet: a topic heading in
+% sans, bold, dark red, with a thin rule below in the same
+% colour. The rule does the job the space in the handout style
+% would have done, in a fraction of the room. With [tight] the
+% space above shrinks. \needspace makes sure a heading is never
+% left alone at the bottom of a column — it takes at least four
+% lines with it, or moves to the next column.
+% ============================================================
+\RequirePackage{titlesec}
+\setcounter{secnumdepth}{0}
+
+\titleformat{\section}
+  {\sffamily\bfseries\normalsize\color{darkred}}
+  {}{0pt}{}
+  [\vspace{-1.2ex}{\color{darkred}\rule{\columnwidth}{0.4pt}}]
+
+\ifformulasheettight
+  \titlespacing*{\section}
+    {0pt}
+    {1.8ex plus .6ex minus .3ex}
+    {0.9ex plus .3ex}
+\else
+  \titlespacing*{\section}
+    {0pt}
+    {2.2ex plus .8ex minus .4ex}
+    {1.0ex plus .3ex}
+\fi
+
+\RequirePackage{needspace}
+\newcommand{\topic}[1]{\needspace{5\baselineskip}\section*{#1}}
+
+
+% ============================================================
+% TABLES OF CONSTANTS
+%
+%   \begin{constants}
+%     Planck's constant & $h$ & \qty{6.63e-34}{J.s} \\
+%   \end{constants}
+%
+% Three columns: name, symbol, value. Symbol and value are
+% right- and left-aligned towards the equals sign, so the
+% numbers stand in a straight edge. The name gets what is left
+% of the width and wraps when needed.
+%
+%   \begin{twocol}
+%     Mass & \qty{5.972e24}{kg} \\
+%   \end{twocol}
+%
+% Two columns, name and value, for masses and planetary data
+% where the name is enough.
+% ============================================================
+\RequirePackage{array,tabularx}
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3pt}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\newenvironment{constants}
+  {\tabularx{\columnwidth}{@{}Y r @{${}={}$} l@{}}}
+  {\endtabularx\par\vspace{0.6ex}}
+
+\newenvironment{twocol}
+  {\tabularx{\columnwidth}{@{}Y l@{}}}
+  {\endtabularx\par\vspace{0.6ex}}
+
+
+% ============================================================
+% FORMULAS
+%
+%   \begin{formulas}
+%     $v = at + v_0$ & $s = \frac{v + v_0}{2}t$ & $\ldots$ \\
+%   \end{formulas}
+%
+% Three columns of formulas, left-aligned, as in the textbook's
+% formula collection. The space is shared evenly between the
+% columns, and a formula is never broken. Empty cells are
+% allowed. formulastwo is the same with two columns, for long
+% formulas.
+%
+%   \formularow{...}  — one formula given the full width
+%
+% The row spacing is governed by \formulastretch (arraystretch
+% in the formula tables): 1.62 gives good air, and [tight]
+% sets 1.45. A document can override with \renewcommand in
+% main.tex. Two rows of fractions right above each other may
+% need a little extra: write \\[3pt] after the first.
+% ============================================================
+\ifformulasheettight
+  \newcommand{\formulastretch}{1.45}
+\else
+  \newcommand{\formulastretch}{1.62}
+\fi
+
+\newenvironment{formulas}
+  {\renewcommand{\arraystretch}{\formulastretch}%
+   \csname tabular*\endcsname{\columnwidth}{@{\extracolsep{\fill}}l l l@{}}}
+  {\csname endtabular*\endcsname\par\vspace{0.4ex}}
+
+\newenvironment{formulastwo}
+  {\renewcommand{\arraystretch}{\formulastretch}%
+   \csname tabular*\endcsname{\columnwidth}{@{\extracolsep{\fill}}l l@{}}}
+  {\csname endtabular*\endcsname\par\vspace{0.4ex}}
+
+\newcommand{\formularow}[1]{\par\vspace{0.8ex}#1\par\vspace{0.8ex}}
+
+
+% ============================================================
+% VECTOR ARROWS (esvect)
+%
+% main.tex loads esvect when a sheet wants \vv arrows; the
+% style only carries the size fix the package needs under
+% unicode-math — the same as in the handout style. Guarded, so
+% it does nothing in a document that never loads esvect.
+% ============================================================
+\AtBeginDocument{%
+  \IfPackageLoadedTF{esvect}{%
+    \DeclareFontFamily{U}{esvect}{}%
+    \DeclareFontShape{U}{esvect}{m}{n}{%
+      <-5.5>    vect5
+      <5.5-6.5> vect6
+      <6.5-7.5> vect7
+      <7.5-8.5> vect8
+      <8.5-9.5> vect9
+      <9.5->    vect10
+    }{}%
+  }{}%
+}
+
+
+% ============================================================
+% END OF FILE
+% ============================================================
+\endinput

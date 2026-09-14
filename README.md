@@ -1,12 +1,12 @@
 # lualatex-templates
 
-Five LaTeX templates for academic and teaching work — a monograph, a
-two-column article, lecture notes, problem sheets, and classroom
-tests — each in English and Norwegian. Copy a folder, edit `main.tex`,
+Six LaTeX templates for academic and teaching work — a monograph, a
+two-column article, lecture notes, problem sheets, classroom tests,
+and a folded formula sheet — each in English and Norwegian. Copy a folder, edit `main.tex`,
 compile.
 
 Typeset with **LuaLaTeX** and `unicode-math`, OpenType fonts throughout.
-An earlier pdflatex edition of the first four lives in
+A pdflatex edition lives in
 [pdflatex-templates](https://github.com/dagmortensj/pdflatex-templates).
 
 ## Templates
@@ -20,13 +20,17 @@ English in `en/`, Norwegian in `no/`.
 | **notes** / **notat** | A4 | Long-form notes: theorem and exercise environments, emphasis boxes, framed contents, Python listings |
 | **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, emphasis boxes, Python listings; optional unnumbered mode |
 | **exam** / **prove** | A4, 12 pt | Classroom tests: title block with name, date, time and aids; Part 1 / Part 2 or Level 1–3; multiple-choice lists; "Page 2 of 5" on every page; optional cover page and booklet padding for duplex printing |
+| **formulasheet** / **formelark** | A4, folded to A5 | A formula sheet: two landscape A5 pages stacked on one sheet — constants above the fold, formulas below, two columns each; fold marks; optional tight mode |
 
 `notes`, `handout` and `exam` share their exercise environments, so a
 problem set moves between them unchanged; `book` and `notes` share their
 equation spacing, so the two read as a family. `exam` is `handout`
 stripped of theorems and boxes and given what a test needs instead; it
 is the only one that loads neither `hyperref` nor a bibliography
-package, since a test is printed.
+package, since a test is printed. `formulasheet` is the odd one out:
+no prose, no exercises — two landscape A5 pages that `pgfpages` stacks
+on one A4 sheet, tables in each, and the same fonts and dark red as
+`exam`.
 
 ## Fonts and engine
 
@@ -42,8 +46,9 @@ rather than a helpful message. Use `latexmk -lualatex`: `notes` and
 | **notes** | NewComputerModern Book, 11 pt | NewCM Math Book |
 | **handout** | NewComputerModern Book, 11 pt | NewCM Math Book |
 | **exam** | NewComputerModern Book, 12 pt; NewCM Sans for headings | NewCM Math Book |
+| **formulasheet** | NewComputerModern Book, 10 pt; NewCM Sans for headings | NewCM Math Book |
 
-Three rules follow from `unicode-math` and hold for all four:
+Three rules follow from `unicode-math` and hold for all six:
 
 - **Bold maths is `\symbf` / `\symbfit` / `\symbfup`**, never `\bm`, which
   is incompatible and hard-errors on Greek. `\boldmath` does not work
@@ -62,9 +67,10 @@ table of what was checked.
 
 `notes` and `handout` also load `esvect`, `siunitx`, `tensor` and
 `physics2` ready to use, for vectors, units, tensor indices and bra-ket;
-`exam` loads `esvect` and `siunitx`.
+`exam` loads `esvect` and `siunitx`; `formulasheet` loads `siunitx`
+and carries the `esvect` size fix for when `main.tex` loads it.
 
-All ten build with no warnings.
+All twelve build with no warnings.
 
 ## Quick start
 
@@ -76,13 +82,19 @@ All ten build with no warnings.
 Every folder holds `main.tex`, a style file where all the formatting
 lives, and its own `README.md`. `book`, `ffv` and `notes` add a `.bib`
 with example entries; `book`, `notes` and `handout` add a `figures/`
-folder with a stock figure. The bundled `main.pdf` shows what each one
+folder with a stock figure; `formulasheet` ships only `main.tex`, its
+style file and `README.md`. The bundled `main.pdf` shows what each one
 produces before you compile anything.
 
 `exam` has four package options — none, `[coverpage]`, `[booklet]` and
 `[statuscheck]` — for a short test, a full-day test with a cover, the
 same laid out for duplex printing and folding, and a levelled status
 check. Its `README.md` shows each.
+
+`formulasheet` has one, `[tight]`, for a sheet with more formulas than
+10 pt has room for; the half that is full takes `\small` as an
+argument. Too much content shows up the way it always does in LaTeX: as
+an extra page, here a second A4 sheet.
 
 ## Languages
 
@@ -98,7 +110,12 @@ The two versions are functionally equivalent. What differs:
   `\poeng`, and options `forside`, `hefte`, `statussjekk`, `innrykk`;
   the English one `\exampart`, `\level`, `\subtitle`, `\duration`,
   `\aids`, `\points`, and `coverpage`, `booklet`, `statuscheck`,
-  `indent`. `parity-diff.sh` maps one onto the other.
+  `indent`. The Norwegian `formulasheet` (`formelark`) uses `halvdel`,
+  `\gruppe`, `konstanter`, `tabellto`, `formler`,
+  `formlerto`, `\formelrad`, `\formelstrekk` and the option `tett`;
+  the English one `half`, `\topic`, `constants`, `twocol`,
+  `formulas`, `formulastwo`, `\formularow`, `\formulastretch` and
+  `tight`. `parity-diff.sh` maps one onto the other.
 - **Comments and placeholder text** — in the matching language
 - **Numbers** — the Norwegian style files set `siunitx` to a decimal
   comma, a half-high dot in scientific notation, «til» in `\qtyrange` and

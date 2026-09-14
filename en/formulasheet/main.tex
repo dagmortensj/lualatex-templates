@@ -1,0 +1,165 @@
+% ============================================================
+% main.tex — the formula sheet itself
+%
+% This file is content. All typographic choices live in
+% formulasheetstyle.sty, which also loads babel and siunitx.
+%
+% The sheet is portrait A4, folded across: two landscape A5
+% pages stacked. Upper half constants, lower half formulas,
+% each half in two columns. The example content is a formula
+% sheet for Physics 1.
+%
+% Compile with lualatex:
+%   latexmk -lualatex main
+% ============================================================
+
+
+\documentclass[10pt]{article}
+
+
+% ============================================================
+% LOAD THE FORMULA SHEET STYLE
+%
+% [tight]: tighter formula rows and less space above the
+% headings, for a sheet with more formulas than 10 pt has room
+% for. Also set \begin{half}[\small]{...}{...} on the half
+% that is full.
+% ============================================================
+\usepackage{formulasheetstyle}
+% \usepackage[tight]{formulasheetstyle}
+
+
+% ============================================================
+% CUSTOM PACKAGES
+%
+% Add project-specific packages here.
+% Do not put packages anywhere else in the file.
+% ============================================================
+
+% --- Vectors: \vv{F}, flat arrow over the symbol. Indices outside: \vv{F}_1 ---
+\usepackage[e]{esvect}
+
+
+\begin{document}
+
+% ============================================================
+% UPPER HALF — CONSTANTS
+% ============================================================
+\begin{half}{Physics 1}{Constants}
+\topic{Constants}
+\begin{constants}
+Wien's displacement constant & $a$ & \qty{2.90e-3}{K.m} \\
+Boltzmann's constant       & $k$      & \qty{1.38e-23}{J/K} \\
+Stefan--Boltzmann constant & $\sigma$ & \qty{5.67e-8}{W/m^2K^4} \\
+Planck's constant          & $h$      & \qty{6.63e-34}{J.s} \\
+Bohr's constant            & $B$      & \qty{2.18e-18}{J} \\
+Speed of light in vacuum        & $c$      & \qty{3.00e8}{m/s} \\
+Elementary charge        & $e$      & \qty{1.60e-19}{C} \\
+Acceleration of gravity      & $g$      & \qty{9.81}{m/s^2} \\
+Atomic mass unit          & $u$      & \qty{1.66e-27}{kg} \\
+Light year                     & $1\,\text{ly}$ & \qty{9.46e15}{m} \\
+\end{constants}
+
+\topic{Masses}
+\begin{twocol}
+Electron     & $\num{5.4858e-4}$ u $= \qty{9.1094e-31}{kg}$ \\
+Proton       & $\num{1.007276}$ u $= \qty{1.6726e-27}{kg}$ \\
+Neutron      & $\num{1.008665}$ u $= \qty{1.6749e-27}{kg}$ \\
+Hydrogen     & $\num{1.007825}$ u \\
+Deuterium    & $\num{2.014102}$ u \\
+Tritium      & $\num{3.016049}$ u \\
+Helium-3     & $\num{3.016029}$ u \\
+Helium-4     & $\num{4.002603}$ u \\
+Alpha particle & $\num{4.001506}$ u \\
+\end{twocol}
+
+\topic{Earth}
+\begin{twocol}
+Mass                          & \qty{5.972e24}{kg} \\
+Mean radius                   & \qty{6371}{km} \\
+Mean distance from the Sun         & \qty{1.496e11}{m} \\
+Solar irradiance outside the atmosphere & \qty{1361}{W/m^2} \\
+\end{twocol}
+
+\topic{Sun}
+\begin{twocol}
+Mass               & \qty{1.99e30}{kg} \\
+Radius              & \qty{6.96e8}{m} \\
+Surface temperature & \qty{5780}{K} \\
+Radiated power     & \qty{3.83e26}{W} \\
+\end{twocol}
+
+\topic{SI prefixes}
+\begin{tabularx}{\columnwidth}{@{}l l Y l l Y l l l@{}}
+$10^{-18}$ & atto  & a          & $10^{-3}$ & milli & m  & $10^{3}$  & kilo & k \\
+$10^{-15}$ & femto & f          & $10^{-2}$ & centi & c  & $10^{6}$  & mega & M \\
+$10^{-12}$ & pico  & p          & $10^{-1}$ & deci  & d  & $10^{9}$  & giga & G \\
+$10^{-9}$  & nano  & n          & $10^{1}$  & deca  & da & $10^{12}$ & tera & T \\
+$10^{-6}$  & micro & \textmu{}  & $10^{2}$  & hecto & h  & $10^{15}$ & peta & P \\
+\end{tabularx}
+\end{half}
+
+% ============================================================
+% LOWER HALF — FORMULAS
+% ============================================================
+\begin{half}{Physics 1}{Formulas}
+\topic{Motion and forces}
+\begin{formulas}
+$v = at + v_0$ & $s = \dfrac{v + v_0}{2}\,t$ & \\
+$v^2 - v_0^2 = 2as$ & $s = \frac{1}{2}at^2 + v_0 t$ & \\
+\end{formulas}
+\formularow{$\Sigma F = 0 \iff v$ constant and rectilinear}
+\begin{formulas}
+$\Sigma\vv{F} = m\vv{a}$ & $F^{*} = F$ & $G = mg$ \\
+$R = \mu N$ & $B = \rho_f V g$ & $L = kv^2$ \\
+$\vv{p} = m\vv{v}$ & $\Sigma\vv{F}\cdot t = \Delta\vv{p}$ & \\
+\end{formulas}
+\formularow{$m_A v_A + m_B v_B = m_A v_{A0} + m_B v_{B0}$}
+
+\topic{Mechanical energy and power}
+\begin{formulas}
+$W = Fs\cos\theta$ & $W_{\Sigma F} = \Delta E_k$ & $P = W/t$ \\
+$E_k = \frac{1}{2}mv^2$ & $E_p = mgh$ & $E = E_k + E_p$ \\
+\end{formulas}
+\formularow{$\frac{1}{2}mv^2 + mgh = \frac{1}{2}mv_0^2 + mgh_0$}
+\formularow{$\eta = \dfrac{\text{useful energy}}{\text{supplied energy}} = \dfrac{\text{useful power}}{\text{supplied power}}$}
+
+\topic{Pressure and temperature}
+\begin{formulas}
+$p = F/A$ & $T = t + 273$ & $E_k = \frac{3}{2}kT$ \\
+$c = \dfrac{Q}{m\,\Delta T}$ & $C = \dfrac{Q}{\Delta T}$ & $\Delta U = W + Q$ \\
+\end{formulas}
+\columnbreak
+\topic{Pressure and temperature (cont.)}
+\begin{formulastwo}
+$\mathit{COP} = \dfrac{Q_{\text{out}}}{E_{\text{electric}}}$ &
+$\mathit{COP}_{\text{Carnot}} = \dfrac{T_{\text{out}}}{T_{\text{out}} - T_{\text{in}}}$ \\
+\end{formulastwo}
+
+\topic{Waves and radiation}
+\begin{formulas}
+$f = 1/T$ & $v = \lambda f$ & $U = P/A$ \\
+$\lambda_{\text{peak}}\cdot T = a$ & $U = \sigma T^4$ & $I = \dfrac{P}{4\pi r^2}$ \\
+\end{formulas}
+
+\topic{Atomic and nuclear physics}
+\begin{formulas}
+$E = hf = \dfrac{hc}{\lambda}$ & $E_n = -\dfrac{B}{n^2}$ & \\
+\end{formulas}
+\begin{formulastwo}
+$hf = E_n - E_m,\quad n > m$ & $hf = B\left(\dfrac{1}{m^2} - \dfrac{1}{n^2}\right)$ \\
+\end{formulastwo}
+\begin{formulas}
+$A = Z + N$ & $E_0 = mc^2$ & $\Delta E_0 = \Delta m\cdot c^2$ \\
+\end{formulas}
+
+\topic{Electricity}
+\begin{formulas}
+$I = \dfrac{Q}{t}$ & $U = \dfrac{W}{Q}$ & $R = \dfrac{U}{I}$ \\
+$W = UIt$ & $P = UI = RI^2 = \dfrac{U^2}{R}$ & \\
+\end{formulas}
+\formularow{Series: \quad $R_{\text{tot}} = R_1 + R_2 + \cdots + R_n$}
+\formularow{Parallel: \quad $R_{\text{tot}} = \left(\dfrac{1}{R_1} + \dfrac{1}{R_2} + \cdots + \dfrac{1}{R_n}\right)^{-1}$}
+\end{half}
+
+\end{document}

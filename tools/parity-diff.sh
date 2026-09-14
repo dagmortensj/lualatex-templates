@@ -24,6 +24,7 @@
 #     Navn/Name, Dato/Date, Tid/Time, Hjelpemidler/Aids,
 #     Oppgave/Exercise, poeng/points, «Side … av»/"Page … of",
 #     and the option-warning text
+#   - the formula-sheet style's page-count warning text
 # Anything else is drift.
 # ============================================================
 set -u
@@ -33,7 +34,21 @@ cd "$(dirname "$0")/.." || exit 1
 # names first, so e.g. 'deloppgaver' is mapped before
 # 'oppgave' can eat its middle.
 map() {
-  sed -e 's/handoutunummerert/handoutunnumbered/g' \
+  sed -e 's/formelarkstil/formulasheetstyle/g' \
+      -e 's/formelarktett/formulasheettight/g' \
+      -e 's/formelark/formulasheet/g' \
+      -e 's/formelstrekk/formulastretch/g' \
+      -e 's/formelrad/formularow/g' \
+      -e 's/formlerto/formulastwo/g' \
+      -e 's/formler/formulas/g' \
+      -e 's/halvdel/half/g' \
+      -e 's/brettemerke/foldmark/g' \
+      -e 's/gruppe/topic/g' \
+      -e 's/konstanter/constants/g' \
+      -e 's/tabellto/twocol/g' \
+      -e 's/{tett}/{tight}/g' \
+      -e 's/\[tett\]/[tight]/g' \
+      -e 's/handoutunummerert/handoutunnumbered/g' \
       -e 's/unummerert/unnumbered/g' \
       -e 's/handoutblokkavsnitt/handoutblockparagraphs/g' \
       -e 's/blokkavsnitt/blockparagraphs/g' \
@@ -117,6 +132,8 @@ compare no/handout/handoutstyle.sty en/handout/handoutstyle.sty
 compare no/handout/main.tex       en/handout/main.tex
 compare no/prove/provestil.sty    en/exam/examstyle.sty
 compare no/prove/main.tex         en/exam/main.tex
+compare no/formelark/formelarkstil.sty en/formulasheet/formulasheetstyle.sty
+compare no/formelark/main.tex     en/formulasheet/main.tex
 
 if [ "$fail" -eq 0 ]; then
   printf '\nAll pairs structurally identical.\n'
