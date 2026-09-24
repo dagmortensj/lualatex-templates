@@ -241,9 +241,10 @@ er samlet i tabell~\ref{tab:konstanter} for referanse.
 \section{Numeriske metoder}
 
 % TikZ-figureksempel: bruk darkorange til energinivåer / strukturelementer,
-% darkolive til kurver / bølgefunksjoner, svart til akser og vegger, og grå
-% til sekundære etiketter. darkred er reservert for hyperlenker og
-% separatorlinjen -- bruk den ikke i figurer.
+% darkolive, darkblue og darkplum til kurver / bølgefunksjoner (i den
+% rekkefølgen), svart til akser og vegger, og grå til sekundære etiketter.
+% darkred er reservert for hyperlenker og separatorlinjen -- bruk den
+% ikke i figurer.
 \begin{figure}[H]
   \centering
   \begin{tikzpicture}[>=stealth]
@@ -259,12 +260,12 @@ er samlet i tabell~\ref{tab:konstanter} for referanse.
       \draw[darkorange,thick] (0,\y) -- (4,\y);
       \node[right,font=\small,darkorange] at (4.15,\y) {$E_{\n}$};
     }
-    % Bølgefunksjoner (darkolive)
+    % Bølgefunksjoner (darkolive, darkblue, darkplum)
     \draw[darkolive,thick,domain=0:4,samples=80]
       plot (\x, {0.65 + 0.38*sin(deg(\x*3.14159/4))});
-    \draw[darkolive,thick,domain=0:4,samples=80]
+    \draw[darkblue,thick,domain=0:4,samples=80]
       plot (\x, {1.70 + 0.38*sin(deg(2*\x*3.14159/4))});
-    \draw[darkolive,thick,domain=0:4,samples=80]
+    \draw[darkplum,thick,domain=0:4,samples=80]
       plot (\x, {3.10 + 0.38*sin(deg(3*\x*3.14159/4))});
     % x-aksemerker (grå for sekundær info)
     \node[below,font=\small,gray] at (0,-0.1) {$0$};
@@ -272,7 +273,9 @@ er samlet i tabell~\ref{tab:konstanter} for referanse.
   \end{tikzpicture}
   \caption{Uendelig dyp brønn: energinivåer $E_n \propto n^2$
            (\textcolor{darkorange}{oransje}) og tilhørende
-           egenfunksjoner $\psi_n$ (\textcolor{darkolive}{olivengrønn}).}
+           egenfunksjoner $\psi_1$, $\psi_2$ og $\psi_3$
+           (\textcolor{darkolive}{olivengrønn}, \textcolor{darkblue}{blå}
+           og \textcolor{darkplum}{plomme}).}
   \label{fig:bronnn}
 \end{figure}
 

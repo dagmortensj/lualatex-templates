@@ -241,9 +241,10 @@ are collected in Table~\ref{tab:constants} for reference.
 \section{Numerical Methods}
 
 % TikZ figure example: use darkorange for energy levels / structural
-% elements, darkolive for curves / wave functions, black for axes and
-% walls, and gray for secondary labels.  darkred is reserved for
-% hyperlinks and the separator rule -- do not use it in figures.
+% elements, darkolive, darkblue and darkplum for curves / wave functions
+% (in that order), black for axes and walls, and gray for secondary
+% labels.  darkred is reserved for hyperlinks and the separator rule --
+% do not use it in figures.
 \begin{figure}[H]
   \centering
   \begin{tikzpicture}[>=stealth]
@@ -259,12 +260,13 @@ are collected in Table~\ref{tab:constants} for reference.
       \draw[darkorange,thick] (0,\y) -- (4,\y);
       \node[right,font=\small,darkorange] at (4.15,\y) {$E_{\n}$};
     }
-    % Wave functions (darkolive), one half-period per quantum number
+    % Wave functions (darkolive, darkblue, darkplum), one half-period
+    % per quantum number
     \draw[darkolive,thick,domain=0:4,samples=80]
       plot (\x, {0.65 + 0.38*sin(deg(\x*3.14159/4))});
-    \draw[darkolive,thick,domain=0:4,samples=80]
+    \draw[darkblue,thick,domain=0:4,samples=80]
       plot (\x, {1.70 + 0.38*sin(deg(2*\x*3.14159/4))});
-    \draw[darkolive,thick,domain=0:4,samples=80]
+    \draw[darkplum,thick,domain=0:4,samples=80]
       plot (\x, {3.10 + 0.38*sin(deg(3*\x*3.14159/4))});
     % x-axis labels (gray for secondary info)
     \node[below,font=\small,gray] at (0,-0.1) {$0$};
@@ -272,7 +274,9 @@ are collected in Table~\ref{tab:constants} for reference.
   \end{tikzpicture}
   \caption{Infinite square well: energy levels $E_n \propto n^2$
            (\textcolor{darkorange}{orange}) and corresponding
-           eigenfunctions $\psi_n$ (\textcolor{darkolive}{olive}).}
+           eigenfunctions $\psi_1$, $\psi_2$ and $\psi_3$
+           (\textcolor{darkolive}{olive}, \textcolor{darkblue}{blue}
+           and \textcolor{darkplum}{plum}).}
   \label{fig:well}
 \end{figure}
 
