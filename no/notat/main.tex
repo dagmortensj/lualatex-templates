@@ -303,7 +303,7 @@ def energi(n, L=1.0, hbar=1.0, m=1.0):
 
 x = np.linspace(0, 1, 1000)
 for n in range(1, 4):
-    tetthet = psi(n, x)**2          # sannsynlighetstetthet |psi_n|^2
+    tetthet = psi(n, x)**2          # |psi_n|^2
     middelx = np.trapz(x * tetthet, x)
     print(f"n={n}  E_n={energi(n):.4f}  <x>={middelx:.4f}")
 \end{python}
