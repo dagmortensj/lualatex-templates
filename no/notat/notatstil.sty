@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{notatstil}[2026/09/08 v1.12 Notatstil — CUP-inspirert boktypografi i artikkelformat]
+\ProvidesPackage{notatstil}[2026/09/24 v1.13 Notatstil — CUP-inspirert boktypografi i artikkelformat]
 
 % ============================================================
 % notatstil.sty — langformede notater
@@ -104,16 +104,21 @@
 % ============================================================
 % FARGER
 %
-% Tre farger med faste roller, så et dokument aldri trenger
+% Fem farger med faste roller, så et dokument aldri trenger
 % å finne på en ny:
 %
 %   darkred      hyperlenker, fotnotelinje, \separator
 %   darkorange   figurer: streker, noder, fylte områder
 %   darkolive    figurer: andrefarge til kurver og fyll
+%   darkblue     figurer: tredjefarge
+%   darkplum     figurer: fjerdefarge
 %
 % Hold darkred utenfor figurer — den leses som struktur, ikke
-% innhold. Svart og grå er tilgjengelig til akser og
-% sekundære etiketter.
+% innhold.
+%
+% Svart og grå er strukturfargene i figurer: akser, rutenett,
+% hjelpelinjer, vegger og koordinatetiketter. Palettfargene
+% bærer innhold — kurver, serier, markerte områder.
 %
 % Definert tidlig så darkred finnes når \separator og
 % hyperref vil ha den.
@@ -122,6 +127,8 @@
 \definecolor{darkred}   {RGB}{120, 20,  20}
 \definecolor{darkorange}{RGB}{184, 92,   0}
 \definecolor{darkolive} {RGB}{ 74,107,  18}
+\definecolor{darkblue}  {RGB}{ 30, 96, 140}
+\definecolor{darkplum}  {RGB}{110, 50, 120}
 
 
 % ============================================================

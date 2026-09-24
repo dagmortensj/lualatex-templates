@@ -214,7 +214,7 @@ for the table of what has been verified and what replaces what.
 - **Headings:** "Part 1" in `\Large` bold sans, subline in regular
   sans below; exercise heads in `\large` bold sans
 - **Colours:** dark-red rule under the title block and in
-  `\separator`; `darkorange` and `darkolive` for figures, as in
-  the rest of the family
+  `\separator`; `darkorange`, `darkolive`, `darkblue` and `darkplum`
+  for figures, as in the rest of the family
 - **No hyperref:** a test is printed; references are set in
   black. If links are needed, load `hyperref` last in `main.tex`

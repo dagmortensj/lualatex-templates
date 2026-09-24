@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{handoutstyle}[2026/09/08 v1.11 Handout style — calm classic typography for problem sheets]
+\ProvidesPackage{handoutstyle}[2026/09/24 v1.12 Handout style — calm classic typography for problem sheets]
 
 % ============================================================
 % PACKAGE OPTIONS
@@ -368,21 +368,28 @@
 % ============================================================
 % COLOURS
 %
-% Three colours with fixed roles, so a document never has to
+% Five colours with fixed roles, so a document never has to
 % invent one:
 %
 %   darkred      hyperlinks, footnote rule, \separator
 %   darkorange   figures: strokes, nodes, filled areas
 %   darkolive    figures: a second colour for curves, fills
+%   darkblue     figures: third colour
+%   darkplum     figures: fourth colour
 %
 % Keep darkred out of figures — it reads as structure, not
-% content. Black and grey are available for axes and
-% secondary labels.
+% content.
+%
+% Black and grey are the structural colours in figures: axes,
+% grids, guide lines, walls and coordinate labels. The palette
+% colours carry content — curves, series, marked regions.
 % ============================================================
 \RequirePackage{xcolor}
 \definecolor{darkred}   {RGB}{120, 20,  20}
 \definecolor{darkorange}{RGB}{184, 92,   0}
 \definecolor{darkolive} {RGB}{ 74,107,  18}
+\definecolor{darkblue}  {RGB}{ 30, 96, 140}
+\definecolor{darkplum}  {RGB}{110, 50, 120}
 
 
 % ============================================================

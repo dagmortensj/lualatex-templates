@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{examstyle}[2026/09/08 v1.0 Exam style — tests and exams for upper secondary school]
+\ProvidesPackage{examstyle}[2026/09/24 v1.1 Exam style — tests and exams for upper secondary school]
 
 % ============================================================
 % examstyle.sty — tests for the classroom
@@ -475,15 +475,23 @@
 % ============================================================
 % COLOURS
 %
-% The same three as the rest of the family:
+% The same five as the rest of the family:
 %   darkred      the rule under the title block, \separator
 %   darkorange   figures: strokes, nodes, filled regions
 %   darkolive    figures: second colour for curves and fills
+%   darkblue     figures: third colour
+%   darkplum     figures: fourth colour
+%
+% Black and grey are the structural colours in figures: axes,
+% grids, guide lines, walls and coordinate labels. The palette
+% colours carry content — curves, series, marked regions.
 % ============================================================
 \RequirePackage{xcolor}
 \definecolor{darkred}   {RGB}{120, 20,  20}
 \definecolor{darkorange}{RGB}{184, 92,   0}
 \definecolor{darkolive} {RGB}{ 74,107,  18}
+\definecolor{darkblue}  {RGB}{ 30, 96, 140}
+\definecolor{darkplum}  {RGB}{110, 50, 120}
 
 
 % ============================================================

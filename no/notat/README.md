@@ -185,15 +185,20 @@ TikZ lastes fra pakkeblokken i `main.tex`, ikke fra `notatstil.sty`
 — fjern `\usepackage{tikz}`-linjen der om et dokument ikke trenger
 native figurer.
 
-Stilfilen definerer tre navngitte farger med faste roller:
+Stilfilen definerer fem navngitte farger med faste roller:
 
 | Farge        | RGB          | Rolle                                                          |
 |--------------|--------------|----------------------------------------------------------------|
 | `darkorange` | 184, 92, 0   | Primær figuraksent: streker, noder, søyler                     |
 | `darkolive`  | 74, 107, 18  | Sekundær figuraksent: kurver, fyll                             |
+| `darkblue`   | 30, 96, 140  | Tredje figuraksent                                             |
+| `darkplum`   | 110, 50, 120 | Fjerde figuraksent                                             |
 | `darkred`    | 120, 20, 20  | Reservert — hyperlenker og separatorlinje; ikke til figurer    |
 
-Svart og grå er tilgjengelig for akser, vegger og sekundære etiketter.
+Svart og grå er strukturfargene i figurer: akser, rutenett, hjelpelinjer,
+vegger og koordinatetiketter. Palettfargene bærer innhold — kurver, serier
+og markerte områder.
+
 Typisk bruk:
 
 ```latex
@@ -203,6 +208,8 @@ Typisk bruk:
 \draw[darkolive, thick, domain=0:3, samples=60]
     plot (\x, {sin(deg(\x))});
 \draw[->, darkolive!75] (0,0) -- (1,1);
+\draw[darkblue, thick, dashed] (0,1) -- (3,1);
+\draw[darkplum, thick, dotted] (0,0.5) -- (3,0.5);
 ```
 
 ### Tabeller

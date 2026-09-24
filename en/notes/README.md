@@ -184,15 +184,20 @@ TikZ is loaded from the custom packages block in `main.tex`, not from
 `notesstyle.sty` — remove the `\usepackage{tikz}` line there if a
 document does not need native figures.
 
-The style file defines three named colors. Their roles are fixed:
+The style file defines five named colors. Their roles are fixed:
 
 | Color        | RGB          | Role                                                      |
 |--------------|--------------|-----------------------------------------------------------|
 | `darkorange` | 184, 92, 0   | Primary figure accent: strokes, nodes, bars               |
 | `darkolive`  | 74, 107, 18  | Secondary figure accent: curves, fills                    |
+| `darkblue`   | 30, 96, 140  | Third figure accent                                       |
+| `darkplum`   | 110, 50, 120 | Fourth figure accent                                      |
 | `darkred`    | 120, 20, 20  | Reserved — hyperlinks and separator rule; not for figures |
 
-Black and gray are available for axes, walls, and secondary labels.
+Black and gray are the structural colors in figures: axes, grids, guide
+lines, walls, and coordinate labels. The palette colors carry content —
+curves, series, and marked regions.
+
 Typical usage:
 
 ```latex
@@ -202,6 +207,8 @@ Typical usage:
 \draw[darkolive, thick, domain=0:3, samples=60]
     plot (\x, {sin(deg(\x))});
 \draw[->, darkolive!75] (0,0) -- (1,1);
+\draw[darkblue, thick, dashed] (0,1) -- (3,1);
+\draw[darkplum, thick, dotted] (0,0.5) -- (3,0.5);
 ```
 
 ### Tables
