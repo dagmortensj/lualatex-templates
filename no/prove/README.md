@@ -60,7 +60,8 @@ alt som står mellom `\maketitle` og første `\del` — instrukser,
 poengfordeling — blir stående der. Første `\del` — eller første
 oppgave, om prøven ikke har deler — lukker forsiden og begynner på
 «Side 1 av N», så N teller bare oppgavesidene. Går forsiden over
-flere sider, står alle uten sidetall.
+flere sider, står alle uten sidetall. Nederst på forsiden, under
+instruksene, setter stilfila «Lykke til!» midtstilt i sans.
 Uten valget står tittelblokka øverst på side 1 med oppgavene rett
 under, slik en mindre prøve vil ha det.
 
@@ -175,6 +176,8 @@ linje brekkes — brekker den, forskyves nummereringen.
 
 - `\separator` — kort mørkerød linje med luft rundt, til
   temaskifte eller foran en avsluttende instruks
+- «Lykke til!» uten `[forside]`: sett den inn selv der den skal
+  stå, f.eks. sist i instruksen før Del 1
 - `[innrykk]` som pakkevalg henter tilbake avsnittsinnrykk i
   stedet for luft mellom avsnittene; kan kombineres med de andre
 - `esvect` (`\vv{F}`), `siunitx` (norsk oppsett fra stilfila)

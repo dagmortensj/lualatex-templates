@@ -62,7 +62,9 @@ a page number, and everything between `\maketitle` and the first
 first `\exampart` — or the first exercise, if the test has no
 parts — closes the cover and begins on "Page 1 of N", so N counts
 only the exercise pages. Should the cover run over several pages,
-all of them are unnumbered. Without the option the title block
+all of them are unnumbered. At the foot of the cover, below the
+instructions, the style sets "Good luck!" centred in sans.
+Without the option the title block
 sits at the top of page 1 with the exercises straight below, as
 a smaller test wants.
 
@@ -183,6 +185,8 @@ if one does, the numbering shifts.
 
 - `\separator` — a short dark-red rule with air around it, for a
   change of topic or before a closing instruction
+- "Good luck!" without `[coverpage]`: put it in yourself where
+  it belongs, e.g. last in the instructions before Part 1
 - `[indent]` as a package option brings back paragraph
   indentation instead of space between paragraphs; combines with
   the others

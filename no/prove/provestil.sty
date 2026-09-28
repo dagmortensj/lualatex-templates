@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{provestil}[2026/09/28 v1.3 Prøvestil — prøver og heldagsprøver for videregående]
+\ProvidesPackage{provestil}[2026/09/28 v1.4 Prøvestil — prøver og heldagsprøver for videregående]
 
 % ============================================================
 % provestil.sty — prøver til skolen
@@ -310,7 +310,8 @@
 % Tom side: ingenting på siden utenom sidestilen som gjelder.
 \newcommand{\prove@tomside}{\null\clearpage}
 
-% Lukker forsiden: sideskift, med [hefte] også en tom bakside,
+% Lukker forsiden: «Lykke til!» midtstilt i sans under
+% instruksene, sideskift, med [hefte] også en tom bakside,
 % sidetelleren til 1 og flagget av — bunnteksten (se
 % SIDESTIL) leser flagget ved utskrift av hver side.
 % Kalles fra \del og \nivå — og fra første oppgave, så en
@@ -318,6 +319,8 @@
 % riktig. Gjør ingenting etter første gang.
 \newcommand{\prove@lukkforside}{%
   \ifprove@forsideaapen
+    \par\vspace{4ex}%
+    {\centering\sffamily Lykke til!\par}%
     \clearpage
     \ifprovehefte
       \prove@tomside

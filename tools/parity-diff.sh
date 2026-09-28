@@ -23,7 +23,7 @@
 #   - the exam style's visible strings: Del/Part, Nivå/Level,
 #     Navn/Name, Dato/Date, Tid/Time, Hjelpemidler/Aids,
 #     Oppgave/Exercise, poeng/points, «Side … av»/"Page … of",
-#     and the option-warning text
+#     «Lykke til!»/"Good luck!", and the option-warning text
 #   - the formula-sheet style's page-count warning text
 # Anything else is drift.
 # ============================================================

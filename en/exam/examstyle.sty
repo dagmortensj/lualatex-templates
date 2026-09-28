@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{examstyle}[2026/09/28 v1.3 Exam style — tests and exams for upper secondary school]
+\ProvidesPackage{examstyle}[2026/09/28 v1.4 Exam style — tests and exams for upper secondary school]
 
 % ============================================================
 % examstyle.sty — tests for the classroom
@@ -308,7 +308,8 @@
 % Blank page: nothing on the page beyond the current page style.
 \newcommand{\exam@blankpage}{\null\clearpage}
 
-% Closes the cover: page break, with [booklet] also a blank
+% Closes the cover: "Good luck!" centred in sans below the
+% instructions, page break, with [booklet] also a blank
 % back, page counter to 1 and the flag off — the footer (see
 % PAGE STYLE) reads the flag as each page is shipped out.
 % Called from \exampart and \level — and from the first
@@ -317,6 +318,8 @@
 % time.
 \newcommand{\exam@closecover}{%
   \ifexam@coveropen
+    \par\vspace{4ex}%
+    {\centering\sffamily Good luck!\par}%
     \clearpage
     \ifexambooklet
       \exam@blankpage
