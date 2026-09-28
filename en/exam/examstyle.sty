@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{examstyle}[2026/09/28 v1.2 Exam style — tests and exams for upper secondary school]
+\ProvidesPackage{examstyle}[2026/09/28 v1.3 Exam style — tests and exams for upper secondary school]
 
 % ============================================================
 % examstyle.sty — tests for the classroom
@@ -325,6 +325,31 @@
     \global\exam@coveropenfalse
   \fi}
 
+% A heading must never stand alone at the foot of a page.
+% Two things see to that:
+%
+% 1. \exam@headingspace reserves room for the space above,
+%    the heading, subline and rule, and the head and first
+%    lines of the exercise below — otherwise everything moves
+%    to the next page. The space the previous exercise left
+%    is taken off before \needspace and put back after, so
+%    \addvspace in \section* still sees it and takes the
+%    maximum instead of adding 5 ex on top of 6.75.
+%
+% 2. After the heading there are no legal breaks: \nobreak
+%    after subline and rule, and \@afterheading, which stops
+%    the first exercise from inserting its break penalty. The
+%    flag \ifexam@afterheading makes the first exercise skip
+%    its own \needspace — it would otherwise insert a possible
+%    break right below the heading.
+\newif\ifexam@afterheading
+\newcommand{\exam@headingspace}{%
+  \par
+  \@tempskipa\lastskip
+  \ifdim\@tempskipa>\z@ \vskip-\@tempskipa \fi
+  \needspace{11\baselineskip}%
+  \ifdim\@tempskipa>\z@ \vskip\@tempskipa \fi}
+
 % \exam@parthead{<word>}[<subline>]{<number>} is shared by
 % \exampart and \level.
 \newcommand{\exam@parthead}[1]{\@ifnextchar[{\exam@parthead@{#1}}{\exam@parthead@{#1}[]}}
@@ -337,17 +362,22 @@
       \ifodd\value{page}\else \exam@blankpage \fi
     \fi
   \fi
+  \exam@headingspace
   \section*{#1 #3}%
   \def\exam@tmp{#2}\ifx\exam@tmp\@empty\else
     \vspace{-1.6ex}%
     {\sffamily\normalsize #2\par}%
+    \nobreak
     \vspace{1.6ex}%
   \fi
   \ifexam@partrule
     \vspace{-1.8ex}%
     {\color{darkred}\hrule height 0.5pt}\par
+    \nobreak
     \vspace{0.3ex}% the exercise below adds its own 4.5 ex
-  \fi}
+  \fi
+  \@afterheading
+  \global\exam@afterheadingtrue}
 
 \newif\ifexam@partrule
 \newcommand{\exampart}{\exam@partrulefalse\exam@parthead{Part}}
@@ -614,8 +644,10 @@
 % glue and cannot be broken at. \needspace before it also
 % secures room for the head and a couple of lines, so an
 % exercise does not start with two lines at the foot of a
-% page. It must come AFTER \addvspace: it inserts (zero) glue
-% of its own, and placed before, \addvspace would not see the
+% page — but not right below an \exampart or \level
+% heading, which has already reserved the room (see above).
+% It must come AFTER \addvspace: it inserts (zero) glue of
+% its own, and placed before, \addvspace would not see the
 % space left by the previous exercise and would add 4.5 ex on
 % top of 6.75 instead of taking the maximum.
 %
@@ -631,7 +663,11 @@
 {%
   \exam@closecover
   \par\addvspace{4.5ex plus 1.5ex minus .8ex}%
-  \needspace{4\baselineskip}%
+  \ifexam@afterheading
+    \global\exam@afterheadingfalse
+  \else
+    \needspace{4\baselineskip}%
+  \fi
   \setlength{\parindent}{0pt}%
   \def\exam@tmp{#1}\ifx\exam@tmp\@empty
     \begin{exerciseinner}\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}

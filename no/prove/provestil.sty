@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{provestil}[2026/09/28 v1.2 Prøvestil — prøver og heldagsprøver for videregående]
+\ProvidesPackage{provestil}[2026/09/28 v1.3 Prøvestil — prøver og heldagsprøver for videregående]
 
 % ============================================================
 % provestil.sty — prøver til skolen
@@ -326,6 +326,31 @@
     \global\prove@forsideaapenfalse
   \fi}
 
+% Overskriften skal aldri stå alene nederst på en side.
+% To ting sørger for det:
+%
+% 1. \prove@plassforoverskrift reserverer plass til luften
+%    over, overskriften, undertekst og linje, og hodet og de
+%    første linjene i oppgaven under — ellers går alt til
+%    neste side. Luften forrige oppgave la etter seg, tas av
+%    før \needspace og legges tilbake etter, så \addvspace i
+%    \section* fortsatt ser den og tar maksimum i stedet for
+%    å legge 5 ex oppå 6,75.
+%
+% 2. Etter overskriften er det ingen lovlige brudd: \nobreak
+%    etter undertekst og linje, og \@afterheading, som hindrer
+%    at første oppgave legger inn sin bruddstraff. Flagget
+%    \ifprove@etteroverskrift får første oppgave til å hoppe
+%    over sin egen \needspace — den ville ellers lagt inn et
+%    mulig brudd rett under overskriften.
+\newif\ifprove@etteroverskrift
+\newcommand{\prove@plassforoverskrift}{%
+  \par
+  \@tempskipa\lastskip
+  \ifdim\@tempskipa>\z@ \vskip-\@tempskipa \fi
+  \needspace{11\baselineskip}%
+  \ifdim\@tempskipa>\z@ \vskip\@tempskipa \fi}
+
 % \prove@delhode{<ord>}[<undertekst>]{<nummer>} er felles
 % for \del og \nivå.
 \newcommand{\prove@delhode}[1]{\@ifnextchar[{\prove@delhode@{#1}}{\prove@delhode@{#1}[]}}
@@ -338,17 +363,22 @@
       \ifodd\value{page}\else \prove@tomside \fi
     \fi
   \fi
+  \prove@plassforoverskrift
   \section*{#1 #3}%
   \def\prove@tmp{#2}\ifx\prove@tmp\@empty\else
     \vspace{-1.6ex}%
     {\sffamily\normalsize #2\par}%
+    \nobreak
     \vspace{1.6ex}%
   \fi
   \ifprove@dellinje
     \vspace{-1.8ex}%
     {\color{darkred}\hrule height 0.5pt}\par
+    \nobreak
     \vspace{0.3ex}% oppgaven under legger sine egne 4,5 ex
-  \fi}
+  \fi
+  \@afterheading
+  \global\prove@etteroverskrifttrue}
 
 \newif\ifprove@dellinje
 \newcommand{\del}{\prove@dellinjefalse\prove@delhode{Del}}
@@ -612,8 +642,10 @@
 % derfra til første kroppslinje er lim og kan ikke brytes
 % ved. \needspace foran sikrer i tillegg plass til hodet og
 % et par linjer, så en oppgave ikke starter med to linjer
-% nederst på en side. Den må stå ETTER \addvspace: den
-% legger inn egne (null-)glue-er, og sto den før, ville
+% nederst på en side — men ikke rett under en \del- eller
+% \nivå-overskrift, som alt har reservert plassen (se over).
+% Den må stå ETTER \addvspace: den legger inn egne
+% (null-)glue-er, og sto den før, ville
 % \addvspace ikke sett luften fra forrige oppgave og lagt
 % 4,5 ex oppå 6,75 i stedet for å ta maksimum.
 %
@@ -628,7 +660,11 @@
 {%
   \prove@lukkforside
   \par\addvspace{4.5ex plus 1.5ex minus .8ex}%
-  \needspace{4\baselineskip}%
+  \ifprove@etteroverskrift
+    \global\prove@etteroverskriftfalse
+  \else
+    \needspace{4\baselineskip}%
+  \fi
   \setlength{\parindent}{0pt}%
   \def\prove@tmp{#1}\ifx\prove@tmp\@empty
     \begin{oppgaveinner}\leavevmode\par\nobreak\vspace{-2ex}\vspace{-\parskip}
