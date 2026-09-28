@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{examstyle}[2026/09/24 v1.1 Exam style — tests and exams for upper secondary school]
+\ProvidesPackage{examstyle}[2026/09/28 v1.2 Exam style — tests and exams for upper secondary school]
 
 % ============================================================
 % examstyle.sty — tests for the classroom
@@ -151,8 +151,12 @@
 % ============================================================
 % PARAGRAPHS AND LEADING
 %
-% \setstretch{1.04} as in the handout: at 12 pt the baseline
-% goes from 14.5 pt to 15.1 pt.
+% \setstretch{1.25}: at 12 pt the baseline goes from 14.5 pt
+% to 18.1 pt, i.e. 1.5 times the type size, as recommended
+% by WCAG 1.4.8. More air than the handout (1.04): a test
+% is read under pressure, and pupils with dyslexia and
+% reading difficulties benefit from the space. Fractions and
+% powers in running text also fit without pushing lines apart.
 %
 % With [blockparagraphs] (default): the indent is zeroed and
 % half a baseline separates paragraphs. The value is set at
@@ -164,13 +168,58 @@
 \setlength{\parskip}{0pt}
 
 \RequirePackage{setspace}
-\setstretch{1.04}
+\setstretch{1.25}
 
 \ifexamblockparagraphs
   \setlength{\parindent}{0pt}
   \AtBeginDocument{%
     \setlength{\parskip}{.5\baselineskip plus 2pt minus 1pt}}
 \fi
+
+
+% ============================================================
+% RAGGED RIGHT, NO HYPHENATION
+%
+% Even spaces between words and no word split across two
+% lines; an uneven right margin is the price. The reason is
+% the same as for the leading: pupils with dyslexia and
+% reading difficulties.
+%
+% The right margin gets infinite stretch (1fil), as in
+% LaTeX's \raggedright. Interword spaces then never stretch,
+% and no line can run into the margin (unless a single word
+% is wider than the line). A finite stretch (ragged2e's 2em)
+% gives a slightly more even margin, but without hyphenation
+% it runs out at long words: TeX then stretches the interword
+% spaces instead, and the line looks justified.
+%
+% \@rightskip is set as well: lists (\list) set \rightskip
+% to it, so without it exercise parts and multiple choice
+% would be justified again. \raggedright does the same; it
+% is not used itself because it also redefines \\.
+%
+% Hyphenation is switched off by penalty, not by swapping
+% out the patterns: babel reloads the patterns at every
+% language switch, the penalty stays. \exhyphenpenalty is
+% left alone, so words that already contain a hyphen
+% ("horizontal- and") can break after it.
+%
+% minipage, \parbox and p columns reset \rightskip (via
+% \@arrayparboxrestore, which \@parboxrestore also calls);
+% so the ragged setting is added there too. \centering and
+% \raggedleft inside such boxes work as before, because they
+% are set afterwards.
+%
+% ragged2e is not used: it redefines \\ and \newline, and
+% \newline separates the exercise head from its body.
+% ============================================================
+\newcommand{\exam@raggedright}{%
+  \@rightskip\@flushglue
+  \rightskip\@flushglue
+  \parfillskip\@flushglue}
+\AtBeginDocument{\exam@raggedright}
+\g@addto@macro\@arrayparboxrestore{\exam@raggedright}
+\hyphenpenalty=10000
 
 
 % ============================================================
@@ -699,8 +748,12 @@
     {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
 }
 
+% The code keeps the tight leading (1.04): the lines are
+% read as a block, not as prose, and a short program should
+% preferably fit without a page break.
 \lstnewenvironment{python}
-  {\lstset{language=Python, style=gruvboxlight,
+  {\setstretch{1.04}%
+   \lstset{language=Python, style=gruvboxlight,
            morekeywords={True,False,None,self}}}
   {}
 

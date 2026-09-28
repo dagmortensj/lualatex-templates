@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{provestil}[2026/09/24 v1.1 Prøvestil — prøver og heldagsprøver for videregående]
+\ProvidesPackage{provestil}[2026/09/28 v1.2 Prøvestil — prøver og heldagsprøver for videregående]
 
 % ============================================================
 % provestil.sty — prøver til skolen
@@ -153,8 +153,12 @@
 % ============================================================
 % AVSNITT OG KJEGLE
 %
-% \setstretch{1.04} som i handout-en: ved 12 pt går
-% grunnlinjen fra 14,5 pt til 15,1 pt.
+% \setstretch{1.25}: ved 12 pt går grunnlinjen fra 14,5 pt
+% til 18,1 pt, altså 1,5 ganger skriftstørrelsen, som
+% WCAG 1.4.8 anbefaler. Mer luft enn handout-en (1,04):
+% en prøve leses under press, og elever med dysleksi og
+% lesevansker har nytte av luften. Brøker og potenser i
+% teksten får også plass uten å skyve linjene fra hverandre.
 %
 % Med [blokkavsnitt] (standard): innrykket nulles, og en
 % halv grunnlinje skiller avsnittene. Verdien settes ved
@@ -166,13 +170,57 @@
 \setlength{\parskip}{0pt}
 
 \RequirePackage{setspace}
-\setstretch{1.04}
+\setstretch{1.25}
 
 \ifproveblokkavsnitt
   \setlength{\parindent}{0pt}
   \AtBeginDocument{%
     \setlength{\parskip}{.5\baselineskip plus 2pt minus 1pt}}
 \fi
+
+
+% ============================================================
+% VENSTRESTILT, UTEN ORDDELING
+%
+% Lik avstand mellom ordene og ingen ord delt over to
+% linjer; ujevn høyremarg er prisen. Hensynet er det samme
+% som for linjeavstanden: elever med dysleksi og lesevansker.
+%
+% Høyremargen får uendelig strekk (1fil), som i LaTeX sin
+% \raggedright. Da strekkes aldri ordmellomrommene, og ingen
+% linje kan stikke ut i margen (så lenge ett enkelt ord ikke
+% er bredere enn linja). En begrenset strekk (ragged2e sin
+% 2em) gir litt jevnere høyremarg, men uten orddeling går den
+% tom ved lange ord som «vertikalkomponenten»: da strekker TeX
+% ordmellomrommene i stedet, og linja ser blokkjustert ut.
+%
+% \@rightskip settes også: lister (\list) setter \rightskip
+% til den, så uten den ville deloppgaver og flervalg bli
+% blokkjustert igjen. \raggedright gjør det samme; selve
+% \raggedright brukes ikke fordi den også definerer om \\.
+%
+% Orddeling slås av med straff, ikke ved å bytte bort
+% mønstrene: babel setter mønstrene på nytt ved hvert
+% språkbytte, straffen står. \exhyphenpenalty står urørt,
+% så ord med bindestrek fra før («horisontal- og») kan
+% brytes etter streken.
+%
+% minipage, \parbox og p-kolonner nullstiller \rightskip
+% (via \@arrayparboxrestore, som \@parboxrestore også
+% kaller); derfor legges venstrestillingen inn der.
+% \centering og \raggedleft inni slike bokser virker som
+% før, fordi de settes etter.
+%
+% ragged2e brukes ikke: den definerer om \\ og \newline,
+% og \newline skiller oppgavehodet fra kroppen.
+% ============================================================
+\newcommand{\prove@raggedright}{%
+  \@rightskip\@flushglue
+  \rightskip\@flushglue
+  \parfillskip\@flushglue}
+\AtBeginDocument{\prove@raggedright}
+\g@addto@macro\@arrayparboxrestore{\prove@raggedright}
+\hyphenpenalty=10000
 
 
 % ============================================================
@@ -697,8 +745,12 @@
     {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
 }
 
+% Koden beholder den tette linjeavstanden (1,04): linjene
+% leses som en blokk, ikke som prosa, og et kort program
+% skal helst få plass uten sideskift.
 \lstnewenvironment{python}
-  {\lstset{language=Python, style=gruvboxlight,
+  {\setstretch{1.04}%
+   \lstset{language=Python, style=gruvboxlight,
            morekeywords={True,False,None,self}}}
   {}
 

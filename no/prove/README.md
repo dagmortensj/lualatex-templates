@@ -198,7 +198,11 @@ for tabellen over hva som er verifisert og hva som erstatter hva.
 - **Motor:** LuaLaTeX (`unicode-math`, OpenType)
 - **Sideoppsett:** A4, 3,0 cm marger; satsbredde 150 mm
   (2,8 lilleboksalfabeter ved 12 pt)
-- **Linjeavstand:** 1,04
+- **Linjeavstand:** 1,25 — 1,5 ganger skriftstørrelsen (WCAG 1.4.8);
+  mer enn handout-en av hensyn til elever med dysleksi og
+  lesevansker, og så brøker i teksten får plass
+- **Justering:** venstrestilt, uten orddeling — like ordmellomrom
+  og ingen delte ord; også i lister, minipages og tabellkolonner
 - **Avsnitt:** luft (en halv grunnlinje), ikke innrykk
 - **Sidetall:** «Side 2 av 5» sentrert nederst, også på side 1;
   forsiden (med `[forside]`) står utenfor tellingen

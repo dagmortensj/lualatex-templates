@@ -207,7 +207,11 @@ for the table of what has been verified and what replaces what.
 - **Engine:** LuaLaTeX (`unicode-math`, OpenType)
 - **Page layout:** A4, 3.0 cm margins; 150 mm measure
   (2.8 lowercase alphabets at 12 pt)
-- **Leading:** 1.04
+- **Leading:** 1.25 — 1.5 times the type size (WCAG 1.4.8);
+  more than the handout for pupils with dyslexia and reading
+  difficulties, and so fractions in running text fit
+- **Alignment:** ragged right, no hyphenation — even word spaces
+  and no split words; also in lists, minipages and table columns
 - **Paragraphs:** space (half a baseline), not indentation
 - **Page numbers:** "Page 2 of 5" centred at the foot, page 1
   included; the cover (with `[coverpage]`) sits outside the count
