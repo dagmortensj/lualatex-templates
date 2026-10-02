@@ -65,10 +65,12 @@ Those three are not the whole story — a maths package written for
 pdflatex may or may not work here. Each template's README carries its own
 table of what was checked.
 
-`notes` and `handout` also load `esvect`, `siunitx`, `tensor` and
-`physics2` ready to use, for vectors, units, tensor indices and bra-ket;
-`exam` loads `esvect` and `siunitx`; `formulasheet` loads `siunitx`
-and carries the `esvect` size fix for when `main.tex` loads it.
+`notes` and `handout` also load `siunitx`, `tensor` and `physics2`
+ready to use, for units, tensor indices and bra-ket; `exam` and
+`formulasheet` load `siunitx`. Every style file gives vector arrows
+with `\vv{F}` and `\vv{AB}` without an extra package (do not load
+`esvect`), and switches on `\mathitalicsmode=1` so italic correction
+works as in pdflatex.
 
 All twelve build with no warnings.
 

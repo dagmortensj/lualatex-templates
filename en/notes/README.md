@@ -238,12 +238,11 @@ are `listings` and `tikz`.
 
 | Package | For | Example |
 |---|---|---|
-| `esvect` | vectors | `$\vv{F} = m\vv{a}$`, `$\vv{AB}$` |
 | `siunitx` | units and numbers | `\qty{9.81}{\metre\per\second\squared}`, `\num{6.022e23}`, `\qtyrange{10}{20}{\kilo\metre}` |
 | `tensor` | indexed tensors | `$\tensor{R}{^\rho_\sigma_\mu_\nu}$`, `$\tensor*[^{14}_{6}]{C}{}$` |
 | `physics2` (`braket`) | bra-ket | `$\bra{\psi}$`, `$\ket{\phi}$`, `$\braket{\psi}{\phi}$` |
 
-All four are verified under `unicode-math` with LuaLaTeX, and together they
+All three are verified under `unicode-math` with LuaLaTeX, and together they
 add about 50 ms to a build — measurement noise.
 
 `siunitx` is configured by the style file the moment the package is loaded.
@@ -270,12 +269,16 @@ modules (`ab.legacy`, `nabla.legacy`, `op.legacy`, `diagmat`, `xmat`, …) as ne
 
 The `derivative` package is a fuller ready-made alternative if you prefer one.
 
-`esvect` needs a font-shape fix under `unicode-math`: the package's own
-font definition lists exact sizes only, while `unicode-math` asks for
-fractional maths sizes, and without it the arrows in subscripts come out
-about 9 % too small with a warning — the same fix the `overarrows` author
-later adopted upstream. The fix lives in the style file, guarded by
-`\IfPackageLoadedTF`, so `main.tex` just loads the package.
+Vector arrows come from the style file, not from a package: `\vv{F}` gives
+the font's own arrow (`\vec`) over a single symbol and a stretched arrow
+(`\overrightarrow`) over several, such as `\vv{AB}`. The arrow sits where
+the font's anchor says, with a small adjustment for letters such as b, h
+and k. Indices go outside the arrow: `\vv{F}_1`. Do not load `esvect`
+as well.
+
+The style file also sets `\mathitalicsmode=1`. It switches on italic
+correction between ordinary maths characters, as pdfLaTeX always has;
+without it ∂u, ∂p and f(x) sit too tight in LuaLaTeX.
 
 ### mathtools
 

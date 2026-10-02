@@ -28,9 +28,8 @@ for Physics 1.
 latexmk -lualatex main
 ```
 
-The style loads babel and siunitx itself. If the sheet needs
-vector arrows, load `esvect` in the package block of `main.tex`
-— the example does.
+The style loads babel and siunitx itself and provides vector
+arrows with `\vv{F}` without an extra package.
 
 ## Structure
 

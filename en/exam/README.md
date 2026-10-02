@@ -190,9 +190,10 @@ if one does, the numbering shifts.
 - `[indent]` as a package option brings back paragraph
   indentation instead of space between paragraphs; combines with
   the others
-- `esvect` (`\vv{F}`), `siunitx` and `tikz` are loaded from
-  `main.tex`; remove what is not needed. Indices belong outside
-  the arrow: `\vv{F}_1`, not `\vv{F_1}` — otherwise the arrow
+- `siunitx` and `tikz` are loaded from `main.tex`; remove what
+  is not needed. Vector arrows (`\vv{F}`) come from the style
+  file, without a package. Indices belong outside the arrow:
+  `\vv{F}_1`, not `\vv{F_1}` — otherwise the arrow
   spans the index too
 
 ## Mathematics

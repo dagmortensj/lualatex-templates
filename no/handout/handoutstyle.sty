@@ -49,10 +49,10 @@
 % Motor: LuaLaTeX. Fonten er OpenType og lastes gjennom
 % unicode-math, og det kan ikke pdflatex.
 %
-% Rekkefølgen nedenfor: pakkevalg, språk, fonter, geometri,
-% avstander, seksjonering med slukeregel, sidemøblering,
-% farger, strukturerte omgivelser, kodeeksempler,
-% viktig-bokser, hyperref sist.
+% Rekkefølgen nedenfor: pakkevalg, språk, vektorpiler, fonter,
+% geometri, avstander, seksjonering med slukeregel,
+% sidemøblering, farger, strukturerte omgivelser,
+% kodeeksempler, viktig-bokser, hyperref sist.
 % ============================================================
 
 
@@ -104,6 +104,83 @@
     separate-uncertainty  = true,
   }%
 }
+
+
+% ============================================================
+% VEKTORPILER OG KURSIVKORREKSJON
+%
+% Står foran fontoppsettet fordi rettingen av ankerpunktene
+% under må være på plass før matematikkfonten lastes.
+%
+% \vv{F} gir vektorpil uten ekstra pakke; esvect skal ikke
+% lastes. Ett symbol får fontens egen korte pil (\vec), flere
+% symboler får en pil som strekkes over hele argumentet
+% (\overrightarrow): \vv{F}, \vv{\nabla}, \vv{AB}. En liten
+% Lua-funksjon teller tegnene under pila. Indekser og
+% eksponenter hektes rett på pila, så \vv{F}_1 står som F_1.
+% \vv*{F}{net} er det samme som \vv{F}_{net}. Definisjonen
+% settes ved \begin{document}, så den vinner også i et eldre
+% dokument som fortsatt laster esvect.
+%
+% Pila står der fontens ankerpunkt for aksenter sier. NewCM
+% har ankeret til venstre for midten på noen kursive bokstaver
+% (b, h og k, og flere i eksponenter, der fonten bruker egne
+% glyfer). For dem flyttes ankeret i fonten til midten pluss
+% 0,08 x høyden, så pila følger hellingen. Det gjelder alle
+% aksenter på disse bokstavene, også \hat og \dot.
+%
+% \mathitalicsmode=1 slår på kursivkorreksjon mellom vanlige
+% tegn i matte, slik pdfLaTeX alltid har gjort. Uten den står
+% for eksempel ∂u, ∂p og f(x) for tett. Indekser og
+% eksponenter påvirkes ikke.
+% ============================================================
+\ifdefined\mathitalicsmode \mathitalicsmode=1 \fi
+\directlua{
+  vvfix = vvfix or {}
+  function vvfix.count(n)
+    local glyph = node.id("glyph")
+    local k = 0
+    local function walk(h)
+      for x in node.traverse(h) do
+        if x.id == glyph then
+          k = k + 1
+        elseif x.head then
+          walk(x.head)
+        end
+      end
+    end
+    local b = tex.box[n]
+    if b and b.head then walk(b.head) end
+    tex.sprint(k)
+  end
+  local function italic(u)
+    return (u >= 0x1D434 and u <= 0x1D49B)
+        or (u >= 0x1D6E2 and u <= 0x1D755)
+  end
+  luatexbase.add_to_callback("luaotfload.patch_font", function(tfm)
+    if not tfm.characters then return end
+    for u, c in pairs(tfm.characters) do
+      if type(u) == "number" and italic(u) and c.top_accent
+         and c.width and c.top_accent < c.width / 2 then
+        c.top_accent = c.width / 2 + 0.08 * (c.height or 0)
+      end
+    end
+  end, "vvfix.anchors")
+}
+\expandafter\chardef\csname vvfix@atcode\endcsname=\catcode`\@
+\catcode`\@=11
+\def\VV@one#1{%
+  \setbox\z@\hbox{$\m@th#1$}%
+  \ifnum\directlua{vvfix.count(0)}>\@ne
+    \expandafter\overrightarrow
+  \else
+    \expandafter\vec
+  \fi{#1}%
+}
+\def\VV@star#1#2{\VV@one{#1}_{#2}}
+\DeclareRobustCommand{\VV@vv}{\@ifstar\VV@star\VV@one}
+\AtBeginDocument{\let\vv\VV@vv}
+\catcode`\@=\vvfix@atcode
 
 
 % ============================================================
@@ -658,36 +735,6 @@
   {\lstset{language=Python, style=gruvboxlight,
            morekeywords={True,False,None,self}}}
   {}
-
-
-% ============================================================
-% VEKTORPILER (esvect)
-%
-% main.tex laster esvect når et dokument vil ha \vv-piler;
-% stilen bærer bare størrelsesfiksen pakka trenger under
-% unicode-math. esvect sin egen fontdefinisjon lister bare
-% eksakte størrelser (5, 6, ..., 10 pt), mens unicode-math ber
-% om brøkne mattestørrelser -- NewCM sin scriptscript er
-% 0,50 x 10,95 = 5,475 pt -- og LaTeX bytter bare stille
-% innenfor 0,4 pt; uten fiksen blir pilene i subskript rundt
-% 9 % for små, med advarsel. Sammenhengende intervaller dekker
-% alle størrelser -- samme fiks som forfatteren av overarrows
-% tok inn upstream. Vaktet, så den gjør ingenting i et dokument
-% som aldri laster esvect.
-% ============================================================
-\AtBeginDocument{%
-  \IfPackageLoadedTF{esvect}{%
-    \DeclareFontFamily{U}{esvect}{}%
-    \DeclareFontShape{U}{esvect}{m}{n}{%
-      <-5.5>    vect5
-      <5.5-6.5> vect6
-      <6.5-7.5> vect7
-      <7.5-8.5> vect8
-      <8.5-9.5> vect9
-      <9.5->    vect10
-    }{}%
-  }{}%
-}
 
 
 % ============================================================

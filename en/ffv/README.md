@@ -103,7 +103,7 @@ preamble, three habits have to change:
 | `\bm{v}`, `\boldsymbol{v}` | `\symbf{v}`, `\symbfit`, `\symbfup` | `bm` is incompatible with `unicode-math`: silently un-bold on Latin letters, a hard error on Greek |
 | `\boldmath` | `\symbf` | STIX Two Math has no bold weight, so `\boldmath` sets regular-weight maths |
 | `\usepackage{amssymb}` | nothing | `unicode-math` supplies the symbols; loading both breaks the build (`\eth already defined`) |
-| `\vec`, `\overrightarrow` | `\usepackage[e]{esvect}`, `\vv{F}` | the collection's vector convention, if a document wants arrows |
+| `\vec`, `\overrightarrow`, `esvect` | `\vv{F}`, `\vv{AB}` | the style file gives the font's short arrow over one symbol and a stretched arrow over several; indices outside the arrow: `\vv{F}_1` |
 
 `\symbf` reaches STIX Two's drawn Unicode bold alphabets in the same font
 file, which is why it works on Greek where `\bm` does not. Maths inside a
@@ -111,8 +111,10 @@ bold heading stays regular weight: the face has no bold maths, and that
 is the face, not a fault.
 
 The table is not exhaustive. A maths package written for pdflatex may or
-may not work here — `esvect`, `siunitx`, `tensor` and `physics2` are
-verified.
+may not work here — `siunitx`, `tensor` and `physics2` are verified.
+
+The style file also sets `\mathitalicsmode=1`. It switches on italic
+correction between ordinary maths characters, as pdfLaTeX always has.
 
 ### mathtools
 

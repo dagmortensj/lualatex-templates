@@ -28,8 +28,8 @@ Fysikk 1.
 latexmk -lualatex main
 ```
 
-Stilen laster babel og siunitx selv. Trenger arket vektorpiler,
-last `esvect` i pakkeblokken i `main.tex` — eksemplet gjør det.
+Stilen laster babel og siunitx selv, og gir vektorpiler med
+`\vv{F}` uten ekstra pakke.
 
 ## Oppbygning
 

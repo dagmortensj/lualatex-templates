@@ -238,12 +238,11 @@ fungere eller ikke — de fire malen laster for deg er verifisert, likeså
 
 | Pakke | Til | Eksempel |
 |---|---|---|
-| `esvect` | vektorer | `$\vv{F} = m\vv{a}$`, `$\vv{AB}$` |
 | `siunitx` | enheter og tall | `\qty{9.81}{\metre\per\second\squared}`, `\num{6.022e23}`, `\qtyrange{10}{20}{\kilo\metre}` |
 | `tensor` | indekserte tensorer | `$\tensor{R}{^\rho_\sigma_\mu_\nu}$`, `$\tensor*[^{14}_{6}]{C}{}$` |
 | `physics2` (`braket`) | bra-ket | `$\bra{\psi}$`, `$\ket{\phi}$`, `$\braket{\psi}{\phi}$` |
 
-Alle fire er verifisert under `unicode-math` med LuaLaTeX, og til sammen
+Alle tre er verifisert under `unicode-math` med LuaLaTeX, og til sammen
 koster de rundt 50 ms i byggetid — altså målestøy.
 
 `siunitx` settes opp norsk av stilfila i det øyeblikket pakka lastes:
@@ -268,12 +267,15 @@ modulene (`ab.legacy`, `nabla.legacy`, `op.legacy`, `diagmat`, `xmat`, …) ved 
 
 Pakka `derivative` er et fyldigere ferdiglaget alternativ om du vil ha ett.
 
-`esvect` trenger en fontfiks under `unicode-math`: pakkas egen
-fontdefinisjon lister bare eksakte størrelser, mens `unicode-math` ber om
-brøkne mattestørrelser, og uten den blir pilene i subskript rundt 9 % for
-små — med advarsel. Det er samme fiks som forfatteren av `overarrows`
-senere tok inn upstream. Fiksen bor i stilfila, vaktet med
-`\IfPackageLoadedTF`, så `main.tex` bare laster pakka.
+Vektorpiler kommer fra stilfila, ikke fra en pakke: `\vv{F}` gir fontens
+egen pil (`\vec`) over ett symbol og en strukket pil (`\overrightarrow`)
+over flere, som `\vv{AB}`. Pila står der fontens ankerpunkt sier, med en
+liten justering for bokstaver som b, h og k. Indekser står utenfor pila:
+`\vv{F}_1`. Last ikke `esvect` i tillegg.
+
+Stilfila setter også `\mathitalicsmode=1`. Det slår på kursivkorreksjon
+mellom vanlige tegn i matte, slik pdfLaTeX alltid har gjort; uten den står
+∂u, ∂p og f(x) for tett i LuaLaTeX.
 
 ### mathtools
 

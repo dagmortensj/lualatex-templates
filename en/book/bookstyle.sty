@@ -35,9 +35,9 @@
 % Engine: LuaLaTeX. The fonts are OpenType and load through
 % unicode-math, which pdflatex cannot do.
 %
-% Order below: language, fonts, microtypography, geometry,
-% spacing, sectioning, page furniture, hyperref, citations
-% last.
+% Order below: language, vector arrows, fonts,
+% microtypography, geometry, spacing, sectioning, page
+% furniture, hyperref, citations last.
 % ============================================================
 
 
@@ -85,6 +85,83 @@
     separate-uncertainty  = true,
   }%
 }
+
+
+% ============================================================
+% VECTOR ARROWS AND ITALIC CORRECTION
+%
+% Placed before the font setup because the anchor fix below
+% must be in place before the maths font is loaded.
+%
+% \vv{F} gives a vector arrow without an extra package; esvect
+% should not be loaded. A single symbol gets the font's own short
+% arrow (\vec), several symbols get an arrow stretched over the
+% whole argument (\overrightarrow): \vv{F}, \vv{\nabla},
+% \vv{AB}. A small Lua function counts the glyphs under the
+% arrow. Indices and exponents attach directly to the arrow, so
+% \vv{F}_1 sits like F_1. \vv*{F}{net} is the same as
+% \vv{F}_{net}. The definition is set at \begin{document}, so
+% it also wins in an older document that still loads esvect.
+%
+% The arrow sits where the font's accent anchor says. If an
+% italic letter has its anchor left of centre, the anchor is
+% moved in the font to the centre plus 0.08 x the height, so the
+% arrow follows the slant. STIX Two has no such letters, so the
+% fix does nothing here; it matches the other styles and takes
+% effect if the maths font is changed.
+%
+% \mathitalicsmode=1 switches on italic correction between
+% ordinary maths characters, as pdfLaTeX always has. Without it
+% ∂u, ∂p and f(x), for example, sit too tight. Indices and
+% exponents are not affected.
+% ============================================================
+\ifdefined\mathitalicsmode \mathitalicsmode=1 \fi
+\directlua{
+  vvfix = vvfix or {}
+  function vvfix.count(n)
+    local glyph = node.id("glyph")
+    local k = 0
+    local function walk(h)
+      for x in node.traverse(h) do
+        if x.id == glyph then
+          k = k + 1
+        elseif x.head then
+          walk(x.head)
+        end
+      end
+    end
+    local b = tex.box[n]
+    if b and b.head then walk(b.head) end
+    tex.sprint(k)
+  end
+  local function italic(u)
+    return (u >= 0x1D434 and u <= 0x1D49B)
+        or (u >= 0x1D6E2 and u <= 0x1D755)
+  end
+  luatexbase.add_to_callback("luaotfload.patch_font", function(tfm)
+    if not tfm.characters then return end
+    for u, c in pairs(tfm.characters) do
+      if type(u) == "number" and italic(u) and c.top_accent
+         and c.width and c.top_accent < c.width / 2 then
+        c.top_accent = c.width / 2 + 0.08 * (c.height or 0)
+      end
+    end
+  end, "vvfix.anchors")
+}
+\expandafter\chardef\csname vvfix@atcode\endcsname=\catcode`\@
+\catcode`\@=11
+\def\VV@one#1{%
+  \setbox\z@\hbox{$\m@th#1$}%
+  \ifnum\directlua{vvfix.count(0)}>\@ne
+    \expandafter\overrightarrow
+  \else
+    \expandafter\vec
+  \fi{#1}%
+}
+\def\VV@star#1#2{\VV@one{#1}_{#2}}
+\DeclareRobustCommand{\VV@vv}{\@ifstar\VV@star\VV@one}
+\AtBeginDocument{\let\vv\VV@vv}
+\catcode`\@=\vvfix@atcode
 
 
 % ============================================================

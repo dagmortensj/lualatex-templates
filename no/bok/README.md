@@ -114,7 +114,7 @@ er det tre vaner som må endres:
 | `\bm{v}`, `\boldsymbol{v}` | `\symbf{v}`, `\symbfit`, `\symbfup` | `bm` er inkompatibel med `unicode-math`: stille ikke-fet på latinske bokstaver, hard feil på gresk |
 | `\boldmath` | `\symbf` | STIX Two Math har ingen fet vekt, så `\boldmath` setter matte i vanlig vekt |
 | `\usepackage{amssymb}` | ingenting | `unicode-math` leverer symbolene; lastes begge, brekker bygget (`\eth already defined`) |
-| `\vec`, `\overrightarrow` | `\usepackage[e]{esvect}`, `\vv{F}` | samlingens vektorkonvensjon, om et dokument vil ha piler |
+| `\vec`, `\overrightarrow`, `esvect` | `\vv{F}`, `\vv{AB}` | stilfila gir fontens korte pil over ett symbol og en strukket pil over flere; indekser utenfor pila: `\vv{F}_1` |
 
 `\symbf` når STIX Two sine tegnede fete Unicode-alfabeter i samme fontfil,
 og det er derfor den virker på gresk der `\bm` ikke gjør det. Matte inne i
@@ -122,8 +122,10 @@ en fet overskrift står i vanlig vekt: fonten har ingen fet matematikk, og
 det følger av fonten, ikke av en feil.
 
 Tabellen er ikke uttømmende. En mattepakke skrevet for pdflatex kan
-fungere eller ikke — `esvect`, `siunitx`, `tensor` og `physics2` er
-verifisert.
+fungere eller ikke — `siunitx`, `tensor` og `physics2` er verifisert.
+
+Stilfila setter også `\mathitalicsmode=1`. Det slår på kursivkorreksjon
+mellom vanlige tegn i matte, slik pdfLaTeX alltid har gjort.
 
 ### mathtools
 
