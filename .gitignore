@@ -51,7 +51,6 @@
 .DS_Store
 ._*
 
-# Uncomment to keep VS Code settings out of the repo. Left
-# tracked by default: a committed .vscode/settings.json is a
-# convenient place for the latexmk-lualatex recipe.
+# Uncomment to keep VS Code settings out of the repo. Not needed
+# for the build: each template's .latexmkrc selects the engine.
 # .vscode/

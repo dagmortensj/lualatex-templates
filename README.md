@@ -39,6 +39,14 @@ load through `unicode-math`. The wrong engine gives you a wall of errors
 rather than a helpful message. Use `latexmk -lualatex`: `notes` and
 `book` need biber, and `exam` needs a second pass for "Page 2 of 5".
 
+Each template folder carries a `.latexmkrc` that selects LuaLaTeX, so a
+plain `latexmk main` uses the right engine. It also covers editors that
+call latexmk with `-pdf`, as the default recipe in VS Code's LaTeX
+Workshop does. The file is hidden in Finder and Explorer; keep it when
+you copy a folder. `main.tex` starts with `% !TEX program = lualatex`,
+which TeXShop, TeXstudio and similar editors read. On Overleaf, set the
+compiler to LuaLaTeX in the project menu.
+
 | Template | Text | Mathematics |
 |---|---|---|
 | **book** | Garamond Libre, 12 pt | STIX Two Math at `Scale=0.90` |
