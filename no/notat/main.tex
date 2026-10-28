@@ -109,11 +109,7 @@
 \maketitle
 
 \begin{abstract}
-Disse notatene utvikler en liten bit av teoretisk maskineri og
-arbeider gjennom konsekvensene i detalj. Framstillingen holdes
-selvstendig, med definisjoner, formuleringer, korte bevis og
-gjennomgåtte eksempler vekslet med prosa. De avsluttende
-seksjonene samler noen oppgaver til øving.
+Disse notatene utvikler en liten bit av teoretisk maskineri og arbeider gjennom konsekvensene i detalj. Framstillingen holdes selvstendig, med definisjoner, formuleringer, korte bevis og gjennomgåtte eksempler vekslet med prosa. De avsluttende seksjonene samler noen oppgaver til øving.
 \end{abstract}
 
 \clearpage
@@ -124,15 +120,9 @@ seksjonene samler noen oppgaver til øving.
 % ============================================================
 \section{Bakgrunn}
 
-Disse notatene utvikler en liten bit av teoretisk maskineri
-for å illustrere strukturen i malen. Framstillingen følger
-det typiske mønsteret for matematikk- og fysikknotater:
-definisjoner, formuleringer av resultater, korte bevis, og
-gjennomgåtte eksempler vekslet med prosa.
+Disse notatene utvikler en liten bit av teoretisk maskineri for å illustrere strukturen i malen. Framstillingen følger det typiske mønsteret for matematikk- og fysikknotater: definisjoner, formuleringer av resultater, korte bevis, og gjennomgåtte eksempler vekslet med prosa.
 
-Siteringer vises i hakeparenteser, f.eks.\ \cite{eksempel-artikkel},
-og flere kilder kombineres og komprimeres til intervaller
-automatisk~\cite{eksempel-artikkel,eksempel-bok}.
+Siteringer vises i hakeparenteser, f.eks.\ \cite{eksempel-artikkel}, og flere kilder kombineres og komprimeres til intervaller automatisk~\cite{eksempel-artikkel,eksempel-bok}.
 
 
 % ============================================================
@@ -142,19 +132,15 @@ automatisk~\cite{eksempel-artikkel,eksempel-bok}.
 % nummereringen fortsetter i samme rekke som utenfor.
 \begin{viktig}
 \begin{definisjon}
-  La $\mathcal{H}$ være et komplekst separabelt Hilbertrom. En
-  \emph{tilstand} er en enhetsvektor $\psi \in \mathcal{H}$,
-  betraktet opp til en fasefaktor $e^{i\theta}$.
+  La $\mathcal{H}$ være et komplekst separabelt Hilbertrom. En \emph{tilstand} er en enhetsvektor $\psi \in \mathcal{H}$, betraktet opp til en fasefaktor $e^{i\theta}$.
 \end{definisjon}
 \end{viktig}
 
 \begin{definisjon}
-  En \emph{observabel} er en selvadjungert lineær operator
-  $\hat{A}$ som virker på $\mathcal{H}$.
+  En \emph{observabel} er en selvadjungert lineær operator $\hat{A}$ som virker på $\mathcal{H}$.
 \end{definisjon}
 
-Forventningsverdien til en observabel i en gitt tilstand er
-definert ved
+Forventningsverdien til en observabel i en gitt tilstand er definert ved
 \begin{equation}
   \langle A \rangle_\psi
   = \langle \psi | \hat{A} | \psi \rangle .
@@ -170,19 +156,15 @@ definert ved
 \end{hovedresultat}
 
 \begin{proof}
-  Per definisjon,
-  $\overline{\langle A \rangle_\psi}
+  Per definisjon, $\overline{\langle A \rangle_\psi}
   = \overline{\langle \psi | \hat{A} | \psi \rangle}
   = \langle \psi | \hat{A}^\dagger | \psi \rangle
   = \langle \psi | \hat{A} | \psi \rangle
-  = \langle A \rangle_\psi$,
-  hvor vi brukte $\hat{A}^\dagger = \hat{A}$.
+  = \langle A \rangle_\psi$, hvor vi brukte $\hat{A}^\dagger = \hat{A}$.
 \end{proof}
 
 \begin{merknad}
-  At forventningsverdier er reelle, er det som gjør
-  selvadjungerte operatorer til den naturlige matematiske
-  modellen for observerbare størrelser i kvantemekanikk.
+  At forventningsverdier er reelle, er det som gjør selvadjungerte operatorer til den naturlige matematiske modellen for observerbare størrelser i kvantemekanikk.
 \end{merknad}
 
 \subsection{Tidsutvikling}
@@ -193,17 +175,13 @@ Tidsutvikling i kvantemekanikk styres av Schr\"odinger-ligningen:
   = \hat{H}\psi ,
   \label{eq:schrodinger}
 \end{equation}
-hvor $\hat{H}$ er Hamilton-operatoren. For tidsuavhengig
-$\hat{H}$ integrerer ligning~\eqref{eq:schrodinger} til
+hvor $\hat{H}$ er Hamilton-operatoren. For tidsuavhengig $\hat{H}$ integrerer ligning~\eqref{eq:schrodinger} til
 \begin{equation}
   \psi(t) = e^{-i\hat{H}t/\hbar}\,\psi(0).
 \end{equation}
 
 \subsubsection{Stasjonære tilstander}
-En \emph{stasjonær tilstand} er en egentilstand til $\hat{H}$;
-tidsavhengigheten er en ren fase, så enhver forventningsverdi
-er konstant i tid. Run-in-overskrifter som denne markerer det
-laveste strukturnivået og holdes utenfor innholdsfortegnelsen.
+En \emph{stasjonær tilstand} er en egentilstand til $\hat{H}$; tidsavhengigheten er en ren fase, så enhver forventningsverdi er konstant i tid. Run-in-overskrifter som denne markerer det laveste strukturnivået og holdes utenfor innholdsfortegnelsen.
 
 
 % ============================================================
@@ -216,9 +194,7 @@ laveste strukturnivået og holdes utenfor innholdsfortegnelsen.
   \label{fig:nivaer}
 \end{figure}
 
-Figur~\ref{fig:nivaer} viser en typisk struktur som dukker
-opp gjennom resten av notatene. Noen fundamentale konstanter
-er samlet i tabell~\ref{tab:konstanter} for referanse.
+Figur~\ref{fig:nivaer} viser en typisk struktur som dukker opp gjennom resten av notatene. Noen fundamentale konstanter er samlet i tabell~\ref{tab:konstanter} for referanse.
 
 \begin{table}[ht]
   \centering
@@ -271,23 +247,14 @@ er samlet i tabell~\ref{tab:konstanter} for referanse.
     \node[below,font=\small,gray] at (4,-0.1) {$L$};
   \end{tikzpicture}
   \caption{Uendelig dyp brønn: energinivåer $E_n \propto n^2$
-           (\textcolor{darkorange}{oransje}) og tilhørende
-           egenfunksjoner $\psi_1$, $\psi_2$ og $\psi_3$
-           (\textcolor{darkolive}{olivengrønn}, \textcolor{darkblue}{blå}
-           og \textcolor{darkplum}{plomme}).}
+           (\textcolor{darkorange}{oransje}) og tilhørende egenfunksjoner $\psi_1$, $\psi_2$ og $\psi_3$ (\textcolor{darkolive}{olivengrønn}, \textcolor{darkblue}{blå} og \textcolor{darkplum}{plomme}).}
   \label{fig:bronnn}
 \end{figure}
 
 \verb|python|-omgivelsen setter kode med Gruvbox Light
-syntaksutheving direkte i notatene — godt egnet til korte skript
-som følger en analytisk utledning. Eksempelsystemet gjennom hele
-malen er den uendelig dype brønnen, vist i figur~\ref{fig:bronnn}
-med de tre første energinivåene og egenfunksjonene.
+syntaksutheving direkte i notatene — godt egnet til korte skript som følger en analytisk utledning. Eksempelsystemet gjennom hele malen er den uendelig dype brønnen, vist i figur~\ref{fig:bronnn} med de tre første energinivåene og egenfunksjonene.
 
-Skriptet nedenfor evaluerer sannsynlighetstettheten
-$|\psi_n(x)|^2$ numerisk, og integrerer
-$\langle x \rangle = \int_0^L x\,|\psi_n|^2\,\mathrm{d}x$
-for de tre første nivåene og bekrefter resultatet $\langle x \rangle = L/2$.
+Skriptet nedenfor evaluerer sannsynlighetstettheten $|\psi_n(x)|^2$ numerisk, og integrerer $\langle x \rangle = \int_0^L x\,|\psi_n|^2\,\mathrm{d}x$ for de tre første nivåene og bekrefter resultatet $\langle x \rangle = L/2$.
 
 \begin{python}
 import numpy as np
@@ -307,9 +274,7 @@ for n in range(1, 4):
     print(f"n={n}  E_n={energi(n):.4f}  <x>={middelx:.4f}")
 \end{python}
 
-Kjøring av dette gir $\langle x \rangle \approx 0{,}5000$ for
-alle~$n$, i samsvar med symmetrien til hver egentilstand om
-midtpunktet av brønnen.
+Kjøring av dette gir $\langle x \rangle \approx 0{,}5000$ for alle~$n$, i samsvar med symmetrien til hver egentilstand om midtpunktet av brønnen.
 
 
 % ============================================================
@@ -317,36 +282,29 @@ midtpunktet av brønnen.
 
 Notater kan bære oppgaver ved siden av framstillingen.
 \verb|oppgave|-omgivelsen nummereres per seksjon og settes i
-full bredde, skilt fra teksten rundt av luft alene — mindre
-før enn etter, så oppgaven bindes til innledningen sin.
+full bredde, skilt fra teksten rundt av luft alene — mindre før enn etter, så oppgaven bindes til innledningen sin.
 \verb|\separator| kan i tillegg markere et temaskifte, som
-under. Deloppgaver bruker \verb|deloppgaver|-omgivelsen, som
-merker delene a), b), c) uten å påvirke vanlige
+under. Deloppgaver bruker \verb|deloppgaver|-omgivelsen, som merker delene a), b), c) uten å påvirke vanlige
 \verb|enumerate|-lister.
 
 \separator
 
 \begin{oppgave}[Egenverdier og ortogonalitet]
-  Vis at egenverdiene til en selvadjungert operator $\hat{A}$
-  er reelle, og at egenvektorer som hører til forskjellige
-  egenverdier er ortogonale.
+  Vis at egenverdiene til en selvadjungert operator $\hat{A}$ er reelle, og at egenvektorer som hører til forskjellige egenverdier er ortogonale.
 \end{oppgave}
 
 \begin{oppgave}[Uendelig dyp brønn]
-  Betrakt en partikkel i en endimensjonal uendelig dyp
-  brønn med bredde $L$.
+  Betrakt en partikkel i en endimensjonal uendelig dyp brønn med bredde $L$.
   \begin{deloppgaver}
     \item Skriv opp de normerte energiegenfunksjonene.
     \item Regn ut energinivåene $E_n$.
   \end{deloppgaver}
 
-  De resterende delene bygger på spekteret funnet ovenfor; bruk
-  resultatet fra deloppgave~(b) når du skisserer tetthetene.
+  De resterende delene bygger på spekteret funnet ovenfor; bruk resultatet fra deloppgave~(b) når du skisserer tetthetene.
 
   \begin{deloppgaver}[resume]
     \item Skisser sannsynlighetstettheten for $n = 1, 2, 3$.
-    \item Regn ut forventningsverdien $\langle x \rangle$ i
-          grunntilstanden.
+    \item Regn ut forventningsverdien $\langle x \rangle$ i grunntilstanden.
   \end{deloppgaver}
 \end{oppgave}
 
@@ -354,9 +312,7 @@ merker delene a), b), c) uten å påvirke vanlige
 % ============================================================
 \section{Avslutning}
 
-Disse notatene er en mal; innholdet over finnes kun for å
-demonstrere typografi. Bytt det ut med ditt eget materiale
-etter hvert som notatene utvikler seg.
+Disse notatene er en mal; innholdet over finnes kun for å demonstrere typografi. Bytt det ut med ditt eget materiale etter hvert som notatene utvikler seg.
 
 
 % ============================================================

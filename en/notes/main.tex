@@ -109,11 +109,7 @@
 \maketitle
 
 \begin{abstract}
-These notes develop a small piece of theoretical machinery and
-work through its consequences in detail. The exposition is kept
-self-contained, with definitions, statements, short proofs, and
-worked examples interleaved with prose. The closing sections
-collect a few exercises for practice.
+These notes develop a small piece of theoretical machinery and work through its consequences in detail. The exposition is kept self-contained, with definitions, statements, short proofs, and worked examples interleaved with prose. The closing sections collect a few exercises for practice.
 \end{abstract}
 
 \clearpage
@@ -124,15 +120,9 @@ collect a few exercises for practice.
 % ============================================================
 \section{Setting}
 
-These notes develop a small piece of theoretical machinery to
-illustrate the structure of the template. The exposition follows
-the typical pattern of mathematical and physics notes: definitions,
-statements of results, short proofs, and worked examples interleaved
-with prose.
+These notes develop a small piece of theoretical machinery to illustrate the structure of the template. The exposition follows the typical pattern of mathematical and physics notes: definitions, statements of results, short proofs, and worked examples interleaved with prose.
 
-Citations are rendered in brackets, e.g.\ \cite{example-article}, and
-multiple sources combine and compress to ranges
-automatically~\cite{example-article,example-book}.
+Citations are rendered in brackets, e.g.\ \cite{example-article}, and multiple sources combine and compress to ranges automatically~\cite{example-article,example-book}.
 
 
 % ============================================================
@@ -142,15 +132,12 @@ automatically~\cite{example-article,example-book}.
 % prose; numbering continues in the same sequence as outside.
 \begin{important}
 \begin{definition}
-  Let $\mathcal{H}$ be a complex separable Hilbert space. A
-  \emph{state} is a unit vector $\psi \in \mathcal{H}$, considered
-  up to a phase factor $e^{i\theta}$.
+  Let $\mathcal{H}$ be a complex separable Hilbert space. A \emph{state} is a unit vector $\psi \in \mathcal{H}$, considered up to a phase factor $e^{i\theta}$.
 \end{definition}
 \end{important}
 
 \begin{definition}
-  An \emph{observable} is a self-adjoint linear operator $\hat{A}$
-  acting on $\mathcal{H}$.
+  An \emph{observable} is a self-adjoint linear operator $\hat{A}$ acting on $\mathcal{H}$.
 \end{definition}
 
 The expectation value of an observable in a given state is defined by
@@ -169,41 +156,32 @@ The expectation value of an observable in a given state is defined by
 \end{mainresult}
 
 \begin{proof}
-  By definition,
-  $\overline{\langle A \rangle_\psi}
+  By definition, $\overline{\langle A \rangle_\psi}
   = \overline{\langle \psi | \hat{A} | \psi \rangle}
   = \langle \psi | \hat{A}^\dagger | \psi \rangle
   = \langle \psi | \hat{A} | \psi \rangle
-  = \langle A \rangle_\psi$,
-  where we used $\hat{A}^\dagger = \hat{A}$.
+  = \langle A \rangle_\psi$, where we used $\hat{A}^\dagger = \hat{A}$.
 \end{proof}
 
 \begin{remark}
-  The reality of expectation values is what makes self-adjoint
-  operators the natural mathematical model of observable quantities
-  in quantum mechanics.
+  The reality of expectation values is what makes self-adjoint operators the natural mathematical model of observable quantities in quantum mechanics.
 \end{remark}
 
 \subsection{Time Evolution}
 
-Time evolution in quantum mechanics is governed by the
-Schr\"odinger equation:
+Time evolution in quantum mechanics is governed by the Schr\"odinger equation:
 \begin{equation}
   i\hbar \frac{\partial \psi}{\partial t}
   = \hat{H}\psi ,
   \label{eq:schrodinger}
 \end{equation}
-where $\hat{H}$ is the Hamiltonian. For time-independent
-$\hat{H}$, equation~\eqref{eq:schrodinger} integrates to
+where $\hat{H}$ is the Hamiltonian. For time-independent $\hat{H}$, equation~\eqref{eq:schrodinger} integrates to
 \begin{equation}
   \psi(t) = e^{-i\hat{H}t/\hbar}\,\psi(0).
 \end{equation}
 
 \subsubsection{Stationary states}
-A \emph{stationary state} is an eigenstate of $\hat{H}$; its time
-dependence is a pure phase, so every expectation value is constant
-in time. Run-in headings like this one mark the lowest structural
-level and are kept out of the table of contents.
+A \emph{stationary state} is an eigenstate of $\hat{H}$; its time dependence is a pure phase, so every expectation value is constant in time. Run-in headings like this one mark the lowest structural level and are kept out of the table of contents.
 
 
 % ============================================================
@@ -216,9 +194,7 @@ level and are kept out of the table of contents.
   \label{fig:levels}
 \end{figure}
 
-Figure~\ref{fig:levels} shows a typical structure that recurs
-throughout the rest of these notes. A few fundamental constants
-are collected in Table~\ref{tab:constants} for reference.
+Figure~\ref{fig:levels} shows a typical structure that recurs throughout the rest of these notes. A few fundamental constants are collected in Table~\ref{tab:constants} for reference.
 
 \begin{table}[ht]
   \centering
@@ -272,23 +248,13 @@ are collected in Table~\ref{tab:constants} for reference.
     \node[below,font=\small,gray] at (4,-0.1) {$L$};
   \end{tikzpicture}
   \caption{Infinite square well: energy levels $E_n \propto n^2$
-           (\textcolor{darkorange}{orange}) and corresponding
-           eigenfunctions $\psi_1$, $\psi_2$ and $\psi_3$
-           (\textcolor{darkolive}{olive}, \textcolor{darkblue}{blue}
-           and \textcolor{darkplum}{plum}).}
+           (\textcolor{darkorange}{orange}) and corresponding eigenfunctions $\psi_1$, $\psi_2$ and $\psi_3$ (\textcolor{darkolive}{olive}, \textcolor{darkblue}{blue} and \textcolor{darkplum}{plum}).}
   \label{fig:well}
 \end{figure}
 
-The \verb|python| environment typesets code with Gruvbox Light
-syntax highlighting directly in the notes — well suited for short
-scripts that accompany an analytical derivation. The running example
-is the infinite square well, shown in Figure~\ref{fig:well} with its
-first three energy levels and eigenfunctions.
+The \verb|python| environment typesets code with Gruvbox Light syntax highlighting directly in the notes — well suited for short scripts that accompany an analytical derivation. The running example is the infinite square well, shown in Figure~\ref{fig:well} with its first three energy levels and eigenfunctions.
 
-The script below evaluates the probability density
-$|\psi_n(x)|^2$ numerically,
-then integrates $\langle x \rangle = \int_0^L x\,|\psi_n|^2\,\mathrm{d}x$
-for the first three levels and confirms the result $\langle x \rangle = L/2$.
+The script below evaluates the probability density $|\psi_n(x)|^2$ numerically, then integrates $\langle x \rangle = \int_0^L x\,|\psi_n|^2\,\mathrm{d}x$ for the first three levels and confirms the result $\langle x \rangle = L/2$.
 
 \begin{python}
 import numpy as np
@@ -308,9 +274,7 @@ for n in range(1, 4):
     print(f"n={n}  E_n={energy(n):.4f}  <x>={mean_x:.4f}")
 \end{python}
 
-Running this prints $\langle x \rangle \approx 0.5000$ for all~$n$,
-consistent with the symmetry of each eigenstate about the midpoint
-of the well.
+Running this prints $\langle x \rangle \approx 0.5000$ for all~$n$, consistent with the symmetry of each eigenstate about the midpoint of the well.
 
 
 % ============================================================
@@ -318,36 +282,26 @@ of the well.
 
 Notes can carry problems alongside the exposition. The
 \verb|exercise| environment is numbered per section and set
-at full width, separated from the surrounding text by space
-alone — less before than after, tying the exercise to its
-lead-in. \verb|\separator| can additionally mark a change of
-topic, as below. Subproblems use the \verb|subproblems|
-environment, which labels parts a), b), c) without affecting
-ordinary \verb|enumerate| lists.
+at full width, separated from the surrounding text by space alone — less before than after, tying the exercise to its lead-in. \verb|\separator| can additionally mark a change of topic, as below. Subproblems use the \verb|subproblems| environment, which labels parts a), b), c) without affecting ordinary \verb|enumerate| lists.
 
 \separator
 
 \begin{exercise}[Eigenvalues and orthogonality]
-  Show that the eigenvalues of a self-adjoint operator
-  $\hat{A}$ are real, and that eigenvectors belonging to
-  distinct eigenvalues are orthogonal.
+  Show that the eigenvalues of a self-adjoint operator $\hat{A}$ are real, and that eigenvectors belonging to distinct eigenvalues are orthogonal.
 \end{exercise}
 
 \begin{exercise}[Infinite square well]
-  Consider a particle in a one-dimensional infinite square
-  well of width $L$.
+  Consider a particle in a one-dimensional infinite square well of width $L$.
   \begin{subproblems}
     \item Write down the normalized energy eigenfunctions.
     \item Compute the energy levels $E_n$.
   \end{subproblems}
 
-  The remaining parts build on the spectrum found above; use
-  the result from part~(b) when sketching the densities.
+  The remaining parts build on the spectrum found above; use the result from part~(b) when sketching the densities.
 
   \begin{subproblems}[resume]
     \item Sketch the probability density for $n = 1, 2, 3$.
-    \item Compute the expectation value $\langle x \rangle$ in
-          the ground state.
+    \item Compute the expectation value $\langle x \rangle$ in the ground state.
   \end{subproblems}
 \end{exercise}
 
@@ -355,9 +309,7 @@ ordinary \verb|enumerate| lists.
 % ============================================================
 \section{Closing}
 
-These notes are a template; the content above exists only to
-demonstrate typography. Replace it with your own material as the
-notes develop.
+These notes are a template; the content above exists only to demonstrate typography. Replace it with your own material as the notes develop.
 
 
 % ============================================================
