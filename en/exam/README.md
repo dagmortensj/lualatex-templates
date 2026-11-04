@@ -179,7 +179,9 @@ for i in range(3):
 
 For programming exercises. Line numbers make it possible to ask
 about "line 7". Keep comments short enough that no line wraps —
-if one does, the numbering shifts.
+if one does, the numbering shifts. The colours are the same as in
+the handout; name your own functions and classes in the optional
+argument to colour them: `\begin{python}[emph={f}, emph={[2]Planet}]`.
 
 ## Other
 

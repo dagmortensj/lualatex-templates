@@ -681,38 +681,69 @@
 %       return x**2
 %   \end{python}
 %
-% Python med Gruvbox Light-utheving, linjenummer og en linje
-% over og under. listings gjør parsingen selv, så det trengs
-% ingen shell-escape og ingen eksterne verktøy — dokumentet
-% kompilerer hvor som helst.
+%   \begin{python}[emph={f}, emph={[2]Planet}]
 %
-% æ, ø og å er kartlagt eksplisitt nederst i stilen:
-% listings leser inndata byte for byte og ville ellers
-% mistet dem i kodekommentarer.
+% Python med linjenummer og en linje over og under. listings
+% gjør parsingen selv, så det trengs ingen shell-escape og
+% ingen eksterne verktøy — dokumentet kompilerer hvor som
+% helst.
 %
-% Gruvbox Light Hard (gruvbox.dayle.io):
-%   bakgrunn    #fdfcf2   forgrunn    #3c3836
-%   nøkkelord   #9d0006   strenger    #79740e
-%   kommentarer #928374   tall        #b57614
+% Fargene er rollene fra Høstlys-temaet
+% (github.com/dagmortensj/hoest-theme), så langt listings
+% klarer å skille dem:
+%   rust     nøkkelord, fet for definisjoner og kontrollflyt;
+%            regnetegn som beregner noe (ikke =)
+%   grønn    innebygde funksjoner (print, range, len ...);
+%            egne funksjoner med emph
+%   blå      strenger
+%   oransje  True, False og None
+%   plomme   self og cls i kursiv; egne klasser med emph=[2]
+%   grå      kommentarer og docstrings, i kursiv
+% Bare det listings kjenner igjen fullt ut, får farge.
+% Funksjoner, metoder og klasser fra bibliotekene (np.sqrt,
+% append, Circle) beholder tekstfargen: listings kjenner navn
+% bare fra en liste, og en slik liste blir aldri komplett.
+% Tall beholder også tekstfargen, siden listings ikke har noe
+% eget tegn for dem. Regnetegn farges bare i kode, ikke inne
+% i strenger og kommentarer. Bakgrunnen er Høstlys-bakgrunnen
+% blandet med hvitt til lyshet 0,989 i OKLCH.
+%
+% æ, ø og å er kartlagt eksplisitt i literate: listings leser
+% inndata byte for byte og ville ellers mistet dem i
+% kodekommentarer.
 % ============================================================
 \RequirePackage{listings}
 
-\definecolor{gruvbg}    {HTML}{fdfcf2}
-\definecolor{gruvfg}    {HTML}{3c3836}
-\definecolor{gruvkw}    {HTML}{9d0006}
-\definecolor{gruvstr}   {HTML}{79740e}
-\definecolor{gruvcom}   {HTML}{928374}
-\definecolor{gruvnum}   {HTML}{b57614}
-\definecolor{gruvbi}    {HTML}{076678}
+\definecolor{codebg}        {HTML}{fefbf4}
+\definecolor{codetext}      {HTML}{2b2820}
+\definecolor{coderust}      {HTML}{96370d}
+\definecolor{codecomment}   {HTML}{8c7e6d}
+\definecolor{codelinenumber}{HTML}{c9a77a}
 
-\lstdefinestyle{gruvboxlight}{
-  backgroundcolor   = \color{gruvbg},
-  basicstyle        = \small\ttfamily\color{gruvfg},
-  keywordstyle      = \color{gruvkw}\bfseries,
-  stringstyle       = \color{gruvstr},
-  commentstyle      = \color{gruvcom}\itshape,
-  numberstyle       = \color{gruvnum},
-  identifierstyle   = \color{gruvfg},
+% Regnetegn får strukturfargen bare i kode, ikke inne i
+% strenger og kommentarer (prosesseringsmodusen i listings).
+% I literate står de korte regnetegnene først: listings prøver
+% oppføringene for et tegn fra den sist definerte, så **= må
+% stå etter * for å bli funnet.
+\makeatletter
+\newcommand*\codeop[1]{%
+  \ifnum\lst@mode=\lst@Pmode\textcolor{coderust}{#1}\else#1\fi}
+\makeatother
+
+\lstdefinestyle{hoestlys}{
+  backgroundcolor   = \color{codebg},
+  basicstyle        = \small\ttfamily\color{codetext},
+  identifierstyle   = \color{codetext},
+  keywordstyle      = [1]\color{coderust}\bfseries,
+  keywordstyle      = [2]\color{darkolive},
+  keywordstyle      = [4]\color{coderust},
+  keywordstyle      = [5]\color{darkorange},
+  keywordstyle      = [6]\color{darkplum}\itshape,
+  emphstyle         = [1]\color{darkolive},
+  emphstyle         = [2]\color{darkplum},
+  stringstyle       = \color{darkblue},
+  commentstyle      = \color{codecomment}\itshape,
+  numberstyle       = \color{codelinenumber},
   breaklines        = true,
   showstringspaces  = false,
   numbers           = left,
@@ -726,14 +757,34 @@
   belowskip         = 2.4ex,
   extendedchars     = true,
   inputencoding     = utf8,
+  deletekeywords    = {access,exec,print,import,from,as,lambda,global,del,pass},
+  morekeywords      = {with,yield,async,await,nonlocal},
+  morekeywords      = [2]{print,exec,bytes,ascii,breakpoint},
+  morekeywords      = [4]{import,from,as,lambda,global,nonlocal,del,pass,assert},
+  morekeywords      = [5]{True,False,None},
+  morekeywords      = [6]{self,cls},
+  % docstrings er kommentarer, som i Høst; nyere listings setter dem som strenger
+  deletestring      = [s]{"""}{"""},
+  deletestring      = [s]{'''}{'''},
+  morecomment       = [s]{"""}{"""},
+  morecomment       = [s]{'''}{'''},
   literate          =
     {æ}{{\ae}}1 {ø}{{\o}}1 {å}{{\aa}}1
     {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
+    {+}{{\codeop{+}}}1 {-}{{\codeop{-}}}1 {*}{{\codeop{*}}}1
+    {/}{{\codeop{/}}}1 {\%}{{\codeop{\%}}}1
+    {<}{{\codeop{<}}}1 {>}{{\codeop{>}}}1
+    {&}{{\codeop{\&}}}1 {|}{{\codeop{|}}}1
+    {~}{{\codeop{\textasciitilde}}}1 {^}{{\codeop{\textasciicircum}}}1
+    {+=}{{\codeop{+=}}}2 {-=}{{\codeop{-=}}}2 {->}{{\codeop{->}}}2
+    {*=}{{\codeop{*=}}}2 {/=}{{\codeop{/=}}}2 {\%=}{{\codeop{\%=}}}2
+    {==}{{\codeop{==}}}2 {!=}{{\codeop{!=}}}2
+    {<=}{{\codeop{<=}}}2 {>=}{{\codeop{>=}}}2
+    {**=}{{\codeop{**=}}}3 {//=}{{\codeop{//=}}}3
 }
 
-\lstnewenvironment{python}
-  {\lstset{language=Python, style=gruvboxlight,
-           morekeywords={True,False,None,self}}}
+\lstnewenvironment{python}[1][]
+  {\lstset{language=Python, style=hoestlys, #1}}
   {}
 
 

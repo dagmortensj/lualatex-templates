@@ -147,9 +147,17 @@ print(f(np.pi / 2))
 \end{python}
 ```
 
-Setter Python-kode med Gruvbox Light syntaksutheving: fargede
-nøkkelord, strenger, kommentarer og linjenummer på en varm kremfarget
-bakgrunn, rammet opp og ned. UTF-8 er aktivert, så norske tegn
+Setter Python-kode med syntaksutheving i fargene fra
+[Høstlys](https://github.com/dagmortensj/hoest-theme)-temaet: nøkkelord
+og regnetegn i rust (definisjoner og kontrollflyt i fet), innebygde
+funksjoner som `print` og `range` i grønt, strenger i blått, `True`,
+`False` og `None` i oransje, `self` i plomme kursiv og kommentarer i
+grå kursiv, med linjenummer på en lys kremfarget bakgrunn, rammet opp
+og ned. Bare det listings kjenner igjen fullt ut, får farge, så
+funksjoner, metoder og klasser fra bibliotekene beholder tekstfargen,
+og det gjør tall også. Egne funksjoner og klasser kan få farge hvis du
+navngir dem i det valgfrie argumentet:
+`\begin{python}[emph={f}, emph={[2]Planet}]`. UTF-8 er aktivert, så norske tegn
 (æ, ø, å) fungerer i den omgivende teksten og i kodekommentarer.
 
 ### Separator

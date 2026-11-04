@@ -170,7 +170,10 @@ for i in range(3):
 
 Til programmeringsoppgaver i R2. Linjenummer gjør det mulig å
 spørre om «linje 7». Hold kommentarene korte nok til at ingen
-linje brekkes — brekker den, forskyves nummereringen.
+linje brekkes — brekker den, forskyves nummereringen. Fargene er de
+samme som i handout-en; navngi egne funksjoner og klasser i det
+valgfrie argumentet for å gi dem farge:
+`\begin{python}[emph={f}, emph={[2]Planet}]`.
 
 ## Annet
 

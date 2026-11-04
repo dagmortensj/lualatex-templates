@@ -826,28 +826,45 @@
 %       return x**2
 %   \end{python}
 %
-% For programming exercises. Gruvbox Light, line numbers, a
-% rule above and below — as in the handout. æ, ø, å are mapped
-% explicitly so listings does not lose them in comments.
+%   \begin{python}[emph={f}, emph={[2]Planet}]
+%
+% For programming exercises. Høstlys colours, line numbers, a
+% rule above and below — as in the handout, where the colours
+% are explained in full. æ, ø, å are mapped explicitly so
+% listings does not lose them in comments.
 % ============================================================
 \RequirePackage{listings}
 
-\definecolor{gruvbg}    {HTML}{fdfcf2}
-\definecolor{gruvfg}    {HTML}{3c3836}
-\definecolor{gruvkw}    {HTML}{9d0006}
-\definecolor{gruvstr}   {HTML}{79740e}
-\definecolor{gruvcom}   {HTML}{928374}
-\definecolor{gruvnum}   {HTML}{b57614}
-\definecolor{gruvbi}    {HTML}{076678}
+\definecolor{codebg}        {HTML}{fefbf4}
+\definecolor{codetext}      {HTML}{2b2820}
+\definecolor{coderust}      {HTML}{96370d}
+\definecolor{codecomment}   {HTML}{8c7e6d}
+\definecolor{codelinenumber}{HTML}{c9a77a}
 
-\lstdefinestyle{gruvboxlight}{
-  backgroundcolor   = \color{gruvbg},
-  basicstyle        = \small\ttfamily\color{gruvfg},
-  keywordstyle      = \color{gruvkw}\bfseries,
-  stringstyle       = \color{gruvstr},
-  commentstyle      = \color{gruvcom}\itshape,
-  numberstyle       = \color{gruvnum},
-  identifierstyle   = \color{gruvfg},
+% Operators take the structure colour in code only, not inside
+% strings and comments (listings' processing mode). In literate
+% the shorter operators come first: listings tries the entries
+% for a character from the last one defined, so **= must come
+% after * to be found.
+\makeatletter
+\newcommand*\codeop[1]{%
+  \ifnum\lst@mode=\lst@Pmode\textcolor{coderust}{#1}\else#1\fi}
+\makeatother
+
+\lstdefinestyle{hoestlys}{
+  backgroundcolor   = \color{codebg},
+  basicstyle        = \small\ttfamily\color{codetext},
+  identifierstyle   = \color{codetext},
+  keywordstyle      = [1]\color{coderust}\bfseries,
+  keywordstyle      = [2]\color{darkolive},
+  keywordstyle      = [4]\color{coderust},
+  keywordstyle      = [5]\color{darkorange},
+  keywordstyle      = [6]\color{darkplum}\itshape,
+  emphstyle         = [1]\color{darkolive},
+  emphstyle         = [2]\color{darkplum},
+  stringstyle       = \color{darkblue},
+  commentstyle      = \color{codecomment}\itshape,
+  numberstyle       = \color{codelinenumber},
   breaklines        = true,
   showstringspaces  = false,
   numbers           = left,
@@ -861,18 +878,38 @@
   belowskip         = 2.4ex,
   extendedchars     = true,
   inputencoding     = utf8,
+  deletekeywords    = {access,exec,print,import,from,as,lambda,global,del,pass},
+  morekeywords      = {with,yield,async,await,nonlocal},
+  morekeywords      = [2]{print,exec,bytes,ascii,breakpoint},
+  morekeywords      = [4]{import,from,as,lambda,global,nonlocal,del,pass,assert},
+  morekeywords      = [5]{True,False,None},
+  morekeywords      = [6]{self,cls},
+  % docstrings are comments, as in Høst; newer listings sets them as strings
+  deletestring      = [s]{"""}{"""},
+  deletestring      = [s]{'''}{'''},
+  morecomment       = [s]{"""}{"""},
+  morecomment       = [s]{'''}{'''},
   literate          =
     {æ}{{\ae}}1 {ø}{{\o}}1 {å}{{\aa}}1
     {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
+    {+}{{\codeop{+}}}1 {-}{{\codeop{-}}}1 {*}{{\codeop{*}}}1
+    {/}{{\codeop{/}}}1 {\%}{{\codeop{\%}}}1
+    {<}{{\codeop{<}}}1 {>}{{\codeop{>}}}1
+    {&}{{\codeop{\&}}}1 {|}{{\codeop{|}}}1
+    {~}{{\codeop{\textasciitilde}}}1 {^}{{\codeop{\textasciicircum}}}1
+    {+=}{{\codeop{+=}}}2 {-=}{{\codeop{-=}}}2 {->}{{\codeop{->}}}2
+    {*=}{{\codeop{*=}}}2 {/=}{{\codeop{/=}}}2 {\%=}{{\codeop{\%=}}}2
+    {==}{{\codeop{==}}}2 {!=}{{\codeop{!=}}}2
+    {<=}{{\codeop{<=}}}2 {>=}{{\codeop{>=}}}2
+    {**=}{{\codeop{**=}}}3 {//=}{{\codeop{//=}}}3
 }
 
 % The code keeps the tight leading (1.04): the lines are
 % read as a block, not as prose, and a short program should
 % preferably fit without a page break.
-\lstnewenvironment{python}
+\lstnewenvironment{python}[1][]
   {\setstretch{1.04}%
-   \lstset{language=Python, style=gruvboxlight,
-           morekeywords={True,False,None,self}}}
+   \lstset{language=Python, style=hoestlys, #1}}
   {}
 
 

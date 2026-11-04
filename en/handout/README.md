@@ -149,9 +149,17 @@ print(f(np.pi / 2))
 \end{python}
 ```
 
-Typesets Python with Gruvbox Light syntax highlighting: coloured
-keywords, strings, comments, and line numbers on a warm cream background,
-framed top and bottom. UTF-8 input is enabled, so Norwegian characters
+Typesets Python with syntax highlighting in the colours of the
+[Høstlys](https://github.com/dagmortensj/hoest-theme) theme: keywords
+and operators in rust (definitions and control flow in bold), built-in
+functions such as `print` and `range` in green, strings in blue,
+`True`, `False` and `None` in orange, `self` in plum italic, and
+comments in grey italic, with line numbers on a light cream background,
+framed top and bottom. Only what listings can recognise in full is
+coloured, so functions, methods and classes from libraries keep the
+text colour, and so do numbers. Your own functions and classes can be
+coloured by naming them in the optional argument:
+`\begin{python}[emph={f}, emph={[2]Planet}]`. UTF-8 input is enabled, so Norwegian characters
 (æ, ø, å) work in surrounding text and in code comments.
 
 ### Separator

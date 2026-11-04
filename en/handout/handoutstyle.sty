@@ -680,38 +680,69 @@
 %       return x**2
 %   \end{python}
 %
-% Python with Gruvbox Light highlighting, line numbers, and
-% a rule above and below. listings does the parsing, so
-% there is no shell-escape and no external tool — the
-% document compiles anywhere.
+%   \begin{python}[emph={f}, emph={[2]Planet}]
 %
-% æ, ø and å are mapped explicitly at the bottom of the
-% style: listings reads its input bytewise and would
-% otherwise drop them from code comments.
+% Python with line numbers and a rule above and below.
+% listings does the parsing, so there is no shell-escape and
+% no external tool — the document compiles anywhere.
 %
-% Gruvbox Light Hard (gruvbox.dayle.io):
-%   background  #fdfcf2   foreground  #3c3836
-%   keywords    #9d0006   strings     #79740e
-%   comments    #928374   numbers     #b57614
+% The colours are the roles of the Høstlys theme
+% (github.com/dagmortensj/hoest-theme), as far as listings
+% can tell them apart:
+%   rust    keywords, bold for definitions and control flow;
+%           operators that compute (not =)
+%   green   built-in functions (print, range, len ...);
+%           your own through emph
+%   blue    strings
+%   orange  True, False and None
+%   plum    self and cls in italic; your own classes
+%           through emph=[2]
+%   grey    comments and docstrings, in italic
+% Only what listings can recognise in full gets a colour.
+% Library functions, methods and classes (np.sqrt, append,
+% Circle) keep the text colour: listings knows names only
+% from a list, and such a list is never complete. Numbers
+% keep the text colour too, since listings has no token for
+% them. Operators are coloured in code only, not inside
+% strings and comments. The background is the Høstlys
+% background mixed with white to lightness 0.989 in OKLCH.
+%
+% æ, ø and å are mapped explicitly in literate: listings
+% reads its input bytewise and would otherwise drop them
+% from code comments.
 % ============================================================
 \RequirePackage{listings}
 
-\definecolor{gruvbg}    {HTML}{fdfcf2}
-\definecolor{gruvfg}    {HTML}{3c3836}
-\definecolor{gruvkw}    {HTML}{9d0006}
-\definecolor{gruvstr}   {HTML}{79740e}
-\definecolor{gruvcom}   {HTML}{928374}
-\definecolor{gruvnum}   {HTML}{b57614}
-\definecolor{gruvbi}    {HTML}{076678}
+\definecolor{codebg}        {HTML}{fefbf4}
+\definecolor{codetext}      {HTML}{2b2820}
+\definecolor{coderust}      {HTML}{96370d}
+\definecolor{codecomment}   {HTML}{8c7e6d}
+\definecolor{codelinenumber}{HTML}{c9a77a}
 
-\lstdefinestyle{gruvboxlight}{
-  backgroundcolor   = \color{gruvbg},
-  basicstyle        = \small\ttfamily\color{gruvfg},
-  keywordstyle      = \color{gruvkw}\bfseries,
-  stringstyle       = \color{gruvstr},
-  commentstyle      = \color{gruvcom}\itshape,
-  numberstyle       = \color{gruvnum},
-  identifierstyle   = \color{gruvfg},
+% Operators take the structure colour in code only, not inside
+% strings and comments (listings' processing mode). In literate
+% the shorter operators come first: listings tries the entries
+% for a character from the last one defined, so **= must come
+% after * to be found.
+\makeatletter
+\newcommand*\codeop[1]{%
+  \ifnum\lst@mode=\lst@Pmode\textcolor{coderust}{#1}\else#1\fi}
+\makeatother
+
+\lstdefinestyle{hoestlys}{
+  backgroundcolor   = \color{codebg},
+  basicstyle        = \small\ttfamily\color{codetext},
+  identifierstyle   = \color{codetext},
+  keywordstyle      = [1]\color{coderust}\bfseries,
+  keywordstyle      = [2]\color{darkolive},
+  keywordstyle      = [4]\color{coderust},
+  keywordstyle      = [5]\color{darkorange},
+  keywordstyle      = [6]\color{darkplum}\itshape,
+  emphstyle         = [1]\color{darkolive},
+  emphstyle         = [2]\color{darkplum},
+  stringstyle       = \color{darkblue},
+  commentstyle      = \color{codecomment}\itshape,
+  numberstyle       = \color{codelinenumber},
   breaklines        = true,
   showstringspaces  = false,
   numbers           = left,
@@ -725,14 +756,34 @@
   belowskip         = 2.4ex,
   extendedchars     = true,
   inputencoding     = utf8,
+  deletekeywords    = {access,exec,print,import,from,as,lambda,global,del,pass},
+  morekeywords      = {with,yield,async,await,nonlocal},
+  morekeywords      = [2]{print,exec,bytes,ascii,breakpoint},
+  morekeywords      = [4]{import,from,as,lambda,global,nonlocal,del,pass,assert},
+  morekeywords      = [5]{True,False,None},
+  morekeywords      = [6]{self,cls},
+  % docstrings are comments, as in Høst; newer listings sets them as strings
+  deletestring      = [s]{"""}{"""},
+  deletestring      = [s]{'''}{'''},
+  morecomment       = [s]{"""}{"""},
+  morecomment       = [s]{'''}{'''},
   literate          =
     {æ}{{\ae}}1 {ø}{{\o}}1 {å}{{\aa}}1
     {Æ}{{\AE}}1 {Ø}{{\O}}1 {Å}{{\AA}}1
+    {+}{{\codeop{+}}}1 {-}{{\codeop{-}}}1 {*}{{\codeop{*}}}1
+    {/}{{\codeop{/}}}1 {\%}{{\codeop{\%}}}1
+    {<}{{\codeop{<}}}1 {>}{{\codeop{>}}}1
+    {&}{{\codeop{\&}}}1 {|}{{\codeop{|}}}1
+    {~}{{\codeop{\textasciitilde}}}1 {^}{{\codeop{\textasciicircum}}}1
+    {+=}{{\codeop{+=}}}2 {-=}{{\codeop{-=}}}2 {->}{{\codeop{->}}}2
+    {*=}{{\codeop{*=}}}2 {/=}{{\codeop{/=}}}2 {\%=}{{\codeop{\%=}}}2
+    {==}{{\codeop{==}}}2 {!=}{{\codeop{!=}}}2
+    {<=}{{\codeop{<=}}}2 {>=}{{\codeop{>=}}}2
+    {**=}{{\codeop{**=}}}3 {//=}{{\codeop{//=}}}3
 }
 
-\lstnewenvironment{python}
-  {\lstset{language=Python, style=gruvboxlight,
-           morekeywords={True,False,None,self}}}
+\lstnewenvironment{python}[1][]
+  {\lstset{language=Python, style=hoestlys, #1}}
   {}
 
 
