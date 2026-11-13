@@ -1,13 +1,15 @@
 # lualatex-templates
 
-Six LaTeX templates for academic and teaching work — a monograph, a
-two-column article, lecture notes, problem sheets, classroom tests,
-and a folded formula sheet — each in English and Norwegian. Copy a folder, edit `main.tex`,
+Seven LaTeX templates — six for academic and teaching work (a monograph,
+a two-column article, lecture notes, problem sheets, classroom tests,
+and a folded formula sheet) and one for a poetry collection — each in
+English and Norwegian. Copy a folder, edit `main.tex`,
 compile.
 
 Typeset with **LuaLaTeX** and `unicode-math`, OpenType fonts throughout.
 A pdflatex edition lives in
-[pdflatex-templates](https://github.com/dagmortensj/pdflatex-templates).
+[pdflatex-templates](https://github.com/dagmortensj/pdflatex-templates);
+the poetry template exists only here.
 
 ## Templates
 
@@ -21,6 +23,7 @@ English in `en/`, Norwegian in `no/`.
 | **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, emphasis boxes, Python listings; optional unnumbered mode |
 | **exam** / **prove** | A4, 12 pt | Classroom tests: title block with name, date, time and aids; Part 1 / Part 2 or Level 1–3; multiple-choice lists; "Page 2 of 5" on every page; optional cover page and booklet padding for duplex printing |
 | **formulasheet** / **formelark** | A4, folded to A5 | A formula sheet: two landscape A5 pages stacked on one sheet — constants above the fold, formulas below, two columns each; fold marks; optional tight mode |
+| **poetry** / **dikt** | 140 × 216 mm or A5 | A poetry collection: one poem per page with an optional title, line breaks and indentation taken from the source, parts, half-title, title page, colophon, and contents by title or first line |
 
 `notes`, `handout` and `exam` share their exercise environments, so a
 problem set moves between them unchanged; `book` and `notes` share their
@@ -30,7 +33,10 @@ is the only one that loads neither `hyperref` nor a bibliography
 package, since a test is printed. `formulasheet` is the odd one out:
 no prose, no exercises — two landscape A5 pages that `pgfpages` stacks
 on one A4 sheet, tables in each, and the same fonts and dark red as
-`exam`.
+`exam`. `poetry` stands on its own. It uses the same face
+as `book` and the same names for its front-matter commands, but shares
+no code with it: no mathematics, no citations, its own page size, and
+an environment that reads a poem as it is written.
 
 ## Fonts and engine
 
@@ -55,8 +61,10 @@ compiler to LuaLaTeX in the project menu.
 | **handout** | NewComputerModern Book, 11 pt | NewCM Math Book |
 | **exam** | NewComputerModern Book, 12 pt; NewCM Sans for headings | NewCM Math Book |
 | **formulasheet** | NewComputerModern Book, 10 pt; NewCM Sans for headings | NewCM Math Book |
+| **poetry** | Garamond Libre, 12 pt | none — loads `fontspec`, not `unicode-math` |
 
-Three rules follow from `unicode-math` and hold for all six:
+Three rules follow from `unicode-math` and hold for the six templates
+that load it, which is all but `poetry`:
 
 - **Bold maths is `\symbf` / `\symbfit` / `\symbfup`**, never `\bm`, which
   is incompatible and hard-errors on Greek. `\boldmath` does not work
@@ -75,12 +83,12 @@ table of what was checked.
 
 `notes` and `handout` also load `siunitx`, `tensor` and `physics2`
 ready to use, for units, tensor indices and bra-ket; `exam` and
-`formulasheet` load `siunitx`. Every style file gives vector arrows
-with `\vv{F}` and `\vv{AB}` without an extra package (do not load
-`esvect`), and switches on `\mathitalicsmode=1` so italic correction
-works as in pdflatex.
+`formulasheet` load `siunitx`. Every style file except `poetry`'s gives
+vector arrows with `\vv{F}` and `\vv{AB}` without an extra package (do
+not load `esvect`), and switches on `\mathitalicsmode=1` so italic
+correction works as in pdflatex.
 
-All twelve build with no warnings.
+All fourteen build with no warnings.
 
 ## Quick start
 
@@ -92,8 +100,8 @@ All twelve build with no warnings.
 Every folder holds `main.tex`, a style file where all the formatting
 lives, and its own `README.md`. `book`, `ffv` and `notes` add a `.bib`
 with example entries; `book`, `notes` and `handout` add a `figures/`
-folder with a stock figure; `formulasheet` ships only `main.tex`, its
-style file and `README.md`. The bundled `main.pdf` shows what each one
+folder with a stock figure; `formulasheet` and `poetry` ship only
+`main.tex`, the style file and `README.md`. The bundled `main.pdf` shows what each one
 produces before you compile anything.
 
 `exam` has four package options — none, `[coverpage]`, `[booklet]` and
@@ -105,6 +113,13 @@ check. Its `README.md` shows each.
 10 pt has room for; the half that is full takes `\small` as an
 argument. Too much content shows up the way it always does in LaTeX: as
 an extra page, here a second A4 sheet.
+
+`poetry` has four: `[a5]` for printing at home on A5 with the same
+text block, so line and page breaks match the 140 × 216 mm print
+edition; `[booklet]` to pad the page count to a multiple of four, so a
+folded booklet closes on a blank back; `[centered]` to centre each poem
+on its longest line; and `[proof]` for the page on A4 with crop marks,
+as in `book`.
 
 ## Languages
 
@@ -125,7 +140,10 @@ The two versions are functionally equivalent. What differs:
   `formlerto`, `\formelrad`, `\formelstrekk` and the option `tett`;
   the English one `half`, `\topic`, `constants`, `twocol`,
   `formulas`, `formulastwo`, `\formularow`, `\formulastretch` and
-  `tight`. `parity-diff.sh` maps one onto the other.
+  `tight`. The Norwegian `poetry` (`dikt`) uses the environment `dikt`,
+  `\del` and the options `sentrert` and `hefte`; the English one `poem`,
+  `\part`, `centered` and `booklet`. `parity-diff.sh` maps one onto the
+  other.
 - **Comments and placeholder text** — in the matching language
 - **Numbers** — the Norwegian style files set `siunitx` to a decimal
   comma, a half-high dot in scientific notation, «til» in `\qtyrange` and

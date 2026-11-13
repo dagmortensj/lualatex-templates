@@ -1,0 +1,169 @@
+% !TEX program = lualatex
+% ============================================================
+% main.tex — the collection itself
+%
+% This file is structure and poems. All typographic choices
+% live in poetrystyle.sty, which also loads babel and sets
+% the paper size.
+%
+% Compile with LuaLaTeX, not pdflatex:
+%   latexmk -lualatex main
+% ============================================================
+\documentclass[12pt,twoside]{book}
+
+
+% ============================================================
+% LOAD POETRY STYLE
+% ============================================================
+
+% booklet is on in every variant: the collection is padded
+% with blank pages to a page count divisible by four, so a
+% folded booklet has a back. Remove the option for loose sheets.
+
+% ------------------ Print, 140 x 216 mm -----------
+\usepackage[booklet]{poetrystyle}
+
+% ------------------ Printing at home, A5 ----------
+% Same text block, so line and page breaks are as above.
+% \usepackage[a5,booklet]{poetrystyle}
+
+% ------------------ Centred poems -----------------
+% Each poem centred on its longest line.
+% \usepackage[centered,booklet]{poetrystyle}
+
+% ------------------ Page proofs -------------------
+% The page untouched, centred on A4 with crop marks.
+% \usepackage[proof,booklet]{poetrystyle}
+
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+\begin{document}
+
+\title{Title of the Collection}
+\subtitle{Poems}
+\author{Author Name}
+\date{\the\year}
+
+
+% ============================================================
+% FRONT MATTER
+% ============================================================
+
+% ------------------ Half-title --------------------
+% Optional: the title alone on a page before the title page.
+% \halftitlepage
+
+% ------------------ Title page --------------------
+\booktitlepage
+
+% ------------------ Colophon ----------------------
+\colophonpage{%
+  © \the\year\ Author Name\\
+  Set in Garamond Libre with \LaTeX\\
+  ISBN 978-0-000-00000-0}
+
+% ------------------ Dedication --------------------
+\dedicationpage{To someone.}
+
+% ------------------ Contents ----------------------
+\poemtoc
+
+
+% ============================================================
+% THE POEMS
+%
+% One poem environment per poem. Every poem begins on a new
+% page. Replace the placeholders below with your own.
+% ============================================================
+
+\part{I}
+
+\begin{poem}[A poem with a title]
+The title goes in the brackets
+after begin.
+
+Each line in the source
+is a line on the page,
+and a blank line
+gives a new stanza.
+\end{poem}
+
+\begin{poem}
+A poem without a title
+begins where the title would have stood
+
+and is listed in the contents
+by its first line.
+\end{poem}
+
+\begin{poem}[Indentation]
+Spaces at the start of a line
+    indent the line,
+        half an em for each,
+
+and spaces   inside the line   are kept.
+\end{poem}
+
+\begin{poem}[A long line]
+A line can be short.
+
+A line that is longer than the text block is wide is broken by itself, and the continuation is indented so it cannot be mistaken for a new line.
+
+The next line begins at the left edge again.
+\end{poem}
+
+
+\part{II}
+
+\begin{poem}[A long poem]
+This poem is longer than the page.
+It is therefore divided in two,
+but never in the middle of a stanza:
+the break falls in the space between two of them.
+
+The stanza that does not fit
+is moved whole to the next page,
+and then the bottom of the page
+may be left open.
+
+This is what the third stanza looks like.
+It has four lines like the others,
+and does not say much,
+but it takes the room it should.
+
+The fourth stanza follows.
+The lines stand sixteen points apart,
+and between the stanzas
+there is one line of space.
+
+The fifth stanza is the last on this page.
+The text block holds twenty-nine lines,
+and the poem begins on the sixth,
+with the title on the fourth.
+
+The sixth stanza stands at the top of the next page.
+The continuation begins at the top of the text block,
+without the space that stands above the title,
+since it is not a new poem.
+
+The page number is centred at the bottom,
+one step smaller than the text,
+and there is no running head
+above the poems.
+
+The eighth stanza is the last.
+The next poem begins on a new page,
+at the same height as this one began,
+and so the collection goes on.
+\end{poem}
+
+\begin{poem}
+Replace these poems with your own.
+
+That is all it takes.
+\end{poem}
+
+
+\end{document}

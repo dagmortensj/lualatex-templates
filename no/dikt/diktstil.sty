@@ -1,0 +1,663 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{diktstil}[2026/11/13 v1.0 — diktsamling]
+
+% ============================================================
+% PAKKEOPSJONER
+%
+%   \usepackage{diktstil}              140 x 216 mm, trykk
+%   \usepackage[a5]{diktstil}          A5, til egen utskrift
+%   \usepackage[sentrert]{diktstil}    hvert dikt midtstilt
+%                                      etter sin lengste linje
+%   \usepackage[hefte]{diktstil}       blanke sider til slutt,
+%                                      så heftet får bakside
+%   \usepackage[korrektur]{diktstil}   sidekorrektur: siden
+%                                      uendret, sentrert på A4
+%                                      med skjæremerker
+%
+% a5 — bytter papiret, ikke satsen. Satsflata er den samme
+% 98 x 162 mm i begge formater, så linje- og sidebrudd er
+% identiske: det du skriver ut på A5 hjemme, er side for
+% side det som trykkes på 140 x 216 mm.
+%
+% sentrert — venstrekanten i hvert dikt flyttes inn så
+% diktets lengste linje står midt på satsflata. Linjene er
+% fortsatt venstrestilte seg imellom. Bredden måles i ett
+% bygg og brukes i neste, så latexmk kjører en gang til av
+% seg selv. Uten opsjonen har alle dikt samme venstrekant.
+%
+% hefte — for utskrift som falset hefte, gjerne sammen med
+% a5: sidetallet fylles opp til et multiplum av fire med
+% blanke sider til slutt, og den siste er baksiden.
+%
+% korrektur — kan kombineres med a5. 'proof' godtas som
+% synonym.
+% ============================================================
+\newif\ifdikt@korrektur
+\newif\ifdikt@afem
+\newif\ifdikt@sentrert
+\newif\ifdikt@hefte
+\DeclareOption{korrektur}{\dikt@korrekturtrue}
+\DeclareOption{proof}{\dikt@korrekturtrue}
+\DeclareOption{a5}{\dikt@afemtrue}
+\DeclareOption{sentrert}{\dikt@sentrerttrue}
+\DeclareOption{hefte}{\dikt@heftetrue}
+\ProcessOptions\relax
+
+
+% ============================================================
+% diktstil.sty — en diktsamling
+%
+% Alle typografiske valg bor i denne fila. Du skal ikke
+% trenge å endre noe her for å sette en samling: skriv
+% diktene i main.tex, ett dikt-miljø per dikt.
+%
+%   \documentclass[12pt,twoside]{book}
+%
+% Papirformatet settes her og ikke i \documentclass, siden
+% 140 x 216 mm ikke er et klassevalg.
+%
+% Motor: LuaLaTeX. Fonten er OpenType, og opsjonen sentrert
+% måler linjene med Lua.
+%
+% Rekkefølgen nedenfor: språk, font, mikrotypografi,
+% geometri, kjegle, sidestil, hyperref, diktmiljøet,
+% deler, forstoffet, innholdet og heftet sist.
+% ============================================================
+
+
+% ============================================================
+% SPRÅK
+%
+% babel lastes her og ikke i main.tex. Orddeling er slått av
+% inne i diktene, men forstoffet og innholdssiden bruker
+% språkets strenger («Innhold»).
+% ============================================================
+\RequirePackage[norsk]{babel}
+
+
+% ============================================================
+% FONT
+%
+% Garamond Libre, samme skrift som bokmalen. Ingen
+% matematikkfont: stilen laster fontspec og ikke
+% unicode-math.
+% ============================================================
+\RequirePackage{fontspec}
+
+\setmainfont{GaramondLibre}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic ]
+
+
+% ============================================================
+% MIKROTYPOGRAFI
+%
+% protrusion henger anførselstegn og tankestreker i starten
+% av en linje ut i margen, så bokstavene står på linje
+% nedover venstrekanten. tracking sperrer kapitelene.
+% expansion er av: den finnes for å jevne ut justerte
+% linjer, og dikt er ikke justert.
+% ============================================================
+\RequirePackage[
+  expansion=false,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% SIDEGEOMETRI
+%
+% FORMAT. 140 x 216 mm (5,5 x 8,5 tommer) er det vanlige
+% formatet for diktsamlinger. A5 er 8 mm bredere og 6 mm
+% lavere.
+%
+% SATSFLATE. 98 x 162 mm i begge formater. Bredden er valgt
+% for den lengste linja, ikke for lesbarhet i løpende tekst:
+% ved 12 pt rommer den omtrent 60 tegn før en linje brytes.
+% Høyden er 29 linjer.
+%
+% MARGER. Innside litt bredere enn utside. Diktene står
+% venstrestilt, så høyre del av satsflata er som regel luft
+% og legger seg til yttermargen på en høyreside; innsida
+% trenger sitt for limfresing. Bunnmargen er størst, og
+% sidetallet står i den.
+%
+%                innside  utside  topp  bunn
+%   140 x 216      22      20      24    30   mm
+%   A5             26      24      21    27   mm
+% ============================================================
+\ifdikt@afem
+  \setlength{\paperwidth}{148mm}
+  \setlength{\paperheight}{210mm}
+\else
+  \setlength{\paperwidth}{140mm}
+  \setlength{\paperheight}{216mm}
+\fi
+
+\RequirePackage{geometry}
+\ifdikt@afem
+  \geometry{papersize={148mm,210mm},
+    inner=26mm, outer=24mm, top=21mm, bottom=27mm, footskip=12mm}
+\else
+  \geometry{papersize={140mm,216mm},
+    inner=22mm, outer=20mm, top=24mm, bottom=30mm, footskip=12mm}
+\fi
+
+% Sidekorrektur: siden sentrert på A4 med skjæremerker (cam)
+% og crops informasjonslinje øverst — legg til noinfo i
+% opsjonene under om du vil ha arket uten den.
+\ifdikt@korrektur
+  \RequirePackage[cam,a4,center]{crop}
+\fi
+
+
+% ============================================================
+% KJEGLE OG SIDEFALL
+%
+% 12/16 pt. Garamond Libre har lite øye (x-høyde 0,407 em),
+% så 12 pt leser som Times i omtrent 10,3 pt; 11 pt
+% tilsvarer 9,5 pt og blir for smått. 16 pt
+% linjeavstand er romsligere enn bokmalens 14,79: dikt
+% leses linje for linje, og linjene skal stå hver for seg.
+%
+% Sidene er ikke strukket til full høyde. Et dikt slutter
+% der det slutter. Bunnen av hver side får strekk av orden
+% fill, én orden over det \raggedbottom gir, så den lille
+% strekken i strofelufta aldri slår ut. Sidene i forstoffet
+% som skyver tekst til bunnen, bruker derfor filll og ikke
+% \vfill.
+% ============================================================
+\linespread{1.1035}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\raggedbottom
+\def\@textbottom{\vskip\z@\@plus 1fill}
+
+
+% ============================================================
+% SIDESTIL
+%
+% Sidetallet midtstilt nederst, ett steg under
+% kroppsteksten. Ingen topptekst. Forstoffet, innholdet og
+% delsidene er uten sidetall, men telles med, så
+% første dikt står på side 7 eller deromkring, slik det er
+% vanlig i en diktsamling.
+%
+% emptypage holder de innskutte blanksidene helt tomme.
+% ============================================================
+\def\ps@dikt{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \def\@oddfoot{\hfil\small\thepage\hfil}%
+  \let\@evenfoot\@oddfoot
+}
+\pagestyle{dikt}
+
+\RequirePackage{emptypage}
+
+
+% ============================================================
+% HYPERLENKER
+%
+% Lenkene er svarte, så siden trykkes som uten dem, men
+% innholdet er klikkbart i en PDF-leser og diktene står som
+% bokmerker.
+% ============================================================
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  allcolors=black,
+  linktoc=all
+}
+
+
+% ============================================================
+% DIKT
+%
+%   \begin{dikt}[Tittel]
+%   Hver linje i kilden er en linje i diktet.
+%   En lang linje brytes av seg selv og får hengende innrykk.
+%
+%   En blank linje gir ny strofe.
+%       Mellomrom først på linja rykker den inn.
+%   \end{dikt}
+%
+% Tittelen er valgfri. Hvert dikt begynner på en ny side, i
+% samme høyde: tittelen står på fjerde linje i satsflata,
+% med tre tomme over, og diktet begynner på sjette. Et dikt
+% uten tittel begynner der tittelen ellers ville stått.
+%
+% LINJER. Linjeskift i kilden er linjeskift i diktet; \\
+% trengs ikke. En linje som er for lang for satsflata,
+% brytes, og fortsettelsen rykkes inn 3 em så den ikke kan
+% forveksles med en ny linje.
+%
+% STROFER. En eller flere blanke linjer gir én linjes luft.
+% Et dikt som er lengre enn siden, deles mellom to strofer,
+% ikke inne i en. Bare en strofe som ikke får plass på en
+% side alene, deles.
+%
+% INNRYKK. Hvert mellomrom først på en linje rykker linja
+% inn et halvt gefirt (0,5 em), så fire mellomrom er 2 em.
+% Et tabulatortegn teller som fire mellomrom. Mellomrom inne
+% i en linje beholdes også: tre mellomrom i kilden gir tre
+% ordmellomrom på siden.
+%
+% Slik virker det: inne i miljøet er linjeslutt, mellomrom
+% og tabulator aktive tegn. Linjeslutt avslutter avsnittet,
+% eller legger inn strofeluft om linja var tom. Hver linje
+% er altså et eget avsnitt. Følgen er at et %-tegn sist på
+% en linje spiser linjeskiftet, som ellers i LaTeX, og at
+% lengder med mellomrom i («1em plus 2pt») ikke kan skrives
+% inne i et dikt.
+%
+% Tallene samlet, om noe skal justeres:
+% ============================================================
+\newcommand{\dikt@sink}{2\baselineskip}      % luft over diktet
+\newcommand{\dikt@titleskip}{\baselineskip}  % luft under tittelen
+\newcommand{\dikt@stanzaskip}{\baselineskip} % luft mellom strofer
+\newcommand{\dikt@hang}{3em}                 % innrykk på brutt linje
+\newcommand{\dikt@leadunit}{0.5em}           % innrykk per mellomrom
+\newcommand{\dikt@titlefont}{\normalfont\large\itshape}
+
+\newdimen\dikt@lead
+\newdimen\dikt@offset
+\newdimen\dikt@bsk
+\newcount\dikt@nr
+\newif\ifdikt@hasline
+\newif\ifdikt@needfirst
+
+% Linjeslutt. I horisontal modus avsluttes linja. I vertikal
+% modus var linja tom: da legges strofeluft inn, men bare
+% etter en linje, så blanke linjer før diktet og flere
+% blanke linjer på rad ikke gir ekstra luft. Straffene
+% styrer sidebruddet: 5000 mellom linjer, -100 mellom
+% strofer. Strofelufta har en forsvinnende liten strekk
+% (fil) for at straffene skal telle: uten strekk på siden
+% regner TeX alle brudd som like dårlige og tar det siste
+% som får plass, midt i en strofe eller ikke. Lufta
+% strekkes likevel aldri, fordi bunnen av siden har strekk
+% av høyere orden (se KJEGLE OG SIDEFALL).
+\protected\def\dikt@eol{%
+  \ifvmode
+    \ifdikt@hasline
+      \dikt@haslinefalse
+      \penalty-100
+      \vskip\dimexpr\dikt@stanzaskip\relax\@plus.0001fil
+    \fi
+  \else
+    \par
+    \penalty5000
+    \dikt@haslinetrue
+  \fi
+  \global\dikt@lead\z@
+}
+
+% Mellomrom. Først på linja samles det opp til innrykk; inne
+% i linja er det et vanlig ordmellomrom.
+\protected\def\dikt@sp{%
+  \ifvmode
+    \global\advance\dikt@lead\dikt@leadunit\relax
+  \else
+    \space
+  \fi
+}
+
+% De tre aktive tegnene. \lowercase-knepet gjør ~ om til
+% tegnet som skal defineres, så definisjonene kan skrives
+% med vanlige mellomrom og linjeskift.
+\begingroup\lccode`\~=13 \lowercase{\endgroup
+  \def\dikt@activate@eol{\catcode`\^^M=\active \let~\dikt@eol}%
+  \def\dikt@grabfirst#1~{\dikt@firstline{#1}#1~}%
+}
+\begingroup\lccode`\~=32 \lowercase{\endgroup
+  \def\dikt@activate@sp{\catcode`\ =\active \let~\dikt@sp}%
+  \def\dikt@plainsp{\def~{ }\def\dikt@sp{ }}%
+}
+\begingroup\lccode`\~=9 \lowercase{\endgroup
+  \def\dikt@activate@tab{%
+    \catcode`\^^I=\active
+    \def~{\dikt@sp\dikt@sp\dikt@sp\dikt@sp}}%
+}
+
+% Tittel eller første linje til innholdet og bokmerkene: de
+% aktive mellomrommene gjøres om til vanlige før teksten
+% skrives til .toc.
+\newcommand{\dikt@sanitize}[1]{%
+  \begingroup
+    \dikt@plainsp
+    \protected@xdef\dikt@entry{#1}%
+  \endgroup
+}
+
+% Første linje i et dikt uten tittel. \everypar kaller
+% \dikt@grabfirst, som leser resten av linja, sender den hit
+% og setter den tilbake uendret.
+\newcommand{\dikt@firstline}[1]{%
+  \dikt@needfirstfalse
+  \dikt@sanitize{#1}%
+  \phantomsection
+  \addcontentsline{toc}{dikt}{\textit{\dikt@entry}}%
+}
+
+% Hodet på en side: luft ned til fast høyde, og tittelen om
+% den finnes. Den tomme boksen gir neste linje noe å måle
+% linjeavstand fra, så første linje står like høyt uansett
+% hvilke bokstaver den inneholder. Tittelen settes på
+% kroppstekstens linjeavstand, så linjene under holder
+% registeret. Brukes også av innholdssiden.
+\newcommand{\dikt@head}[1]{%
+  \dikt@bsk\baselineskip
+  \null
+  \vskip\dimexpr\dikt@sink\relax\@plus.0001fil
+  \def\dikt@arg{#1}%
+  \ifx\dikt@arg\@empty\else
+    {\dikt@titlefont\baselineskip\dikt@bsk
+     \leftskip\dikt@offset \rightskip\@flushglue
+     \hyphenpenalty\@M #1\par}%
+    \nobreak
+    \vskip\dikt@titleskip
+  \fi
+}
+
+\newenvironment{dikt}{%
+  \clearpage
+  \global\advance\dikt@nr\@ne
+  \dikt@setoffset
+  \leftskip\dikt@offset
+  \rightskip\@flushglue
+  \hyphenpenalty\@M
+  \exhyphenpenalty\@M
+  \interlinepenalty\@M
+  \dikt@haslinefalse
+  \global\dikt@lead\z@
+  \dikt@activate@eol
+  \dikt@activate@sp
+  \dikt@activate@tab
+  \dikt@begin
+}{%
+  \par
+  \dikt@finish
+  \clearpage
+}
+
+% De aktive tegnene slås på før den valgfrie tittelen leses,
+% så linjeskiftet etter \begin{dikt} ikke blir lest som et
+% vanlig mellomrom og første linje beholder innrykket sitt.
+\newcommand{\dikt@begin}[1][]{%
+  \def\dikt@arg{#1}%
+  \ifx\dikt@arg\@empty
+    \dikt@needfirsttrue
+  \else
+    \dikt@needfirstfalse
+    \dikt@sanitize{#1}%
+    \phantomsection
+    \addcontentsline{toc}{dikt}{\dikt@entry}%
+  \fi
+  \dikt@head{#1}%
+  \everypar{%
+    \hangindent\dimexpr\dikt@lead+\dikt@hang\relax
+    \hangafter\@ne
+    \ifdim\dikt@lead>\z@ \hskip\dikt@lead\relax \fi
+    \ifdikt@needfirst \expandafter\dikt@grabfirst \fi
+  }%
+  \dikt@measureon
+}
+
+
+% ============================================================
+% SENTRERTE DIKT
+%
+% Med opsjonen sentrert måler en Lua-funksjon den naturlige
+% bredden av hver linje idet avsnittet brytes, og den
+% største skrives til .aux når diktet er slutt. I neste bygg
+% settes venstremargen i diktet til halvparten av det som
+% er til overs. Tittelen følger diktets venstrekant.
+% ============================================================
+\newcommand{\dikt@savewidth}[2]{%
+  \expandafter\gdef\csname dikt@w@#1\endcsname{#2}}
+
+\ifdikt@sentrert
+  \directlua{
+    dikt = dikt or { on = false, max = 0 }
+    function dikt.measure(head)
+      if dikt.on then
+        local ls = tex.leftskip.width
+        for line in node.traverse_id(node.id("hlist"), head) do
+          local w = node.dimensions(line.head)
+          w = w - ls + line.shift
+          if w > dikt.max then dikt.max = w end
+        end
+      end
+      return head
+    end
+    luatexbase.add_to_callback("post_linebreak_filter",
+      dikt.measure, "dikt.measure")
+  }
+  \newcommand{\dikt@measureon}{\directlua{dikt.max = 0 dikt.on = true}}
+  \newcommand{\dikt@finish}{%
+    \directlua{dikt.on = false}%
+    \immediate\write\@auxout{%
+      \string\dikt@savewidth{\the\dikt@nr}%
+        {\directlua{tex.sprint(dikt.max)}sp}}%
+  }
+  \newcommand{\dikt@setoffset}{%
+    \dikt@offset\z@
+    \ifcsname dikt@w@\the\dikt@nr\endcsname
+      \dikt@offset\dimexpr
+        (\linewidth-\csname dikt@w@\the\dikt@nr\endcsname)/2\relax
+      \ifdim\dikt@offset<\z@ \dikt@offset\z@ \fi
+    \fi
+  }
+\else
+  \let\dikt@measureon\relax
+  \let\dikt@finish\relax
+  \newcommand{\dikt@setoffset}{\dikt@offset\z@}
+\fi
+
+
+% ============================================================
+% DELER
+%
+%   \del{I}
+%   \del{Vinter}
+%
+% Deler samlingen i deler. Tittelen står alene i
+% kapiteler på en høyreside uten sidetall, en tredjedel ned,
+% og baksiden er blank, så første dikt i delen begynner
+% på en høyreside.
+%
+% Definert med \DeclareRobustCommand fordi den engelske
+% utgaven heter \part og erstatter klassens kommando; de to
+% stilfilene skal være like.
+% ============================================================
+\DeclareRobustCommand{\del}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \phantomsection
+  \addcontentsline{toc}{diktdel}{#1}%
+  \null
+  \vskip 0.3\textheight
+  \begin{center}
+    \large\scshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% SMUSSTITTEL
+%
+%   \halftitlepage
+%
+% Bokas første side: bare tittelen, liten, på en høyreside
+% med blank bakside. Valgfri, og kommentert ut i main.tex:
+% uten den begynner boka på tittelsiden.
+% ============================================================
+\def\@subtitle{}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+
+\newcommand{\halftitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    \large\scshape \@title
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% TITTELSIDE
+%
+%   \title{...}  \author{...}  \date{...}
+%   \subtitle{...}                 % valgfritt, f.eks. «Dikt»
+%   \booktitlepage
+%
+% Samme oppbygning som i bokmalen: tittel i store kapiteler,
+% kursiv undertittel om den er satt, forfatter under, og
+% dato nederst. I \date kan det like gjerne stå et forlag
+% eller et sted.
+% ============================================================
+\newcommand{\booktitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    {\huge\scshape \@title \par}
+    \ifx\@subtitle\@empty\else
+      \vspace{1.4em}
+      {\large\itshape \@subtitle \par}
+    \fi
+    \vspace{3em}
+    {\large \@author \par}
+  \end{center}
+  \vskip\z@\@plus 1filll
+  \begin{center}
+    {\normalsize\itshape \@date \par}
+  \end{center}
+  \clearpage
+}
+
+
+% ============================================================
+% KOLOFON
+%
+%   \colophonpage{%
+%     © 2026 Forfatternavn\\
+%     Satt med Garamond Libre\\
+%     ISBN 978-82-000-0000-0}
+%
+% Baksiden av tittelsiden: rettigheter, trykk og ISBN, liten
+% skrift nederst på siden. Skill linjene med \\.
+% ============================================================
+\newcommand{\colophonpage}[1]{%
+  \clearpage
+  \thispagestyle{empty}%
+  \null
+  \vskip\z@\@plus 1filll
+  {\small\raggedright #1\par}
+  \clearpage
+}
+
+
+% ============================================================
+% DEDIKASJONSSIDE
+%
+%   \dedicationpage{Til noen.}
+%
+% Én kort kursiv linje, sentrert en fjerdedel ned på en
+% høyreside, fulgt av en blank bakside.
+% ============================================================
+\newcommand{\dedicationpage}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.25\textheight
+  \begin{center}
+    \itshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% INNHOLD
+%
+%   \poemtoc
+%
+% Står sist i forstoffet i main.tex, på en høyreside uten
+% sidetall, og det som følger begynner på neste høyreside.
+% Kommandoen kan også stå bakerst i samlingen. Overskriften
+% står som en dikttittel, i samme høyde. Dikt med tittel står med tittelen, dikt uten
+% står med første linje i kursiv, og deler i kapiteler
+% med luft over. Ingen punktledere; sidetallene står mot
+% høyre kant.
+% ============================================================
+\newcommand*{\l@dikt}[2]{%
+  {\leftskip\z@
+   \rightskip 2.5em
+   \parfillskip -2.5em
+   \hangindent 1.5em
+   \hangafter\@ne
+   \hyphenpenalty\@M
+   \noindent #1\nobreak\hfill\nobreak
+   \hb@xt@ 2.5em{\hss #2}\par}%
+}
+\newcommand*{\l@diktdel}[2]{%
+  \addvspace{\baselineskip}%
+  {\noindent\scshape #1\par}%
+  \nobreak
+}
+\newcommand*{\toclevel@diktdel}{0}
+\newcommand*{\toclevel@dikt}{1}
+
+\newcommand{\poemtoc}{%
+  \cleardoublepage
+  \pagestyle{empty}%
+  \dikt@offset\z@
+  \dikt@head{\contentsname}%
+  \@starttoc{toc}%
+  \cleardoublepage
+  \pagestyle{dikt}%
+}
+
+
+% ============================================================
+% HEFTE
+%
+% Med opsjonen hefte fylles samlingen opp med blanke sider
+% til sidetallet er delelig med fire, som et falset og
+% stiftet hefte krever. Den siste av dem er heftets bakside,
+% så heftet lukkes med en blank side og ikke med det siste
+% diktet. \numexpr runder ved divisjon, så resten regnes med
+% \divide, som trunkerer.
+% ============================================================
+\newcommand{\dikt@fyllopp}{%
+  \@tempcnta=\numexpr\value{page}-1\relax
+  \@tempcntb=\@tempcnta
+  \divide\@tempcntb by 4
+  \multiply\@tempcntb by 4
+  \ifnum\@tempcnta>\@tempcntb
+    \thispagestyle{empty}\null\clearpage
+    \expandafter\dikt@fyllopp
+  \fi}
+
+\ifdikt@hefte
+  \AtEndDocument{\clearpage\dikt@fyllopp}
+\fi
+
+
+% ============================================================
+% SLUTT PÅ FIL
+% ============================================================
+\endinput

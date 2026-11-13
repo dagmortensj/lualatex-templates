@@ -25,6 +25,7 @@
 #     Oppgave/Exercise, poeng/points, «Side … av»/"Page … of",
 #     «Lykke til!»/"Good luck!", and the option-warning text
 #   - the formula-sheet style's page-count warning text
+#   - the poetry style's \ProvidesPackage description
 # Anything else is drift.
 # ============================================================
 set -u
@@ -34,7 +35,11 @@ cd "$(dirname "$0")/.." || exit 1
 # names first, so e.g. 'deloppgaver' is mapped before
 # 'oppgave' can eat its middle.
 map() {
-  sed -e 's/formelarkstil/formulasheetstyle/g' \
+  sed -e 's/diktstil/poetrystyle/g' \
+      -e 's/sentrert/centered/g' \
+      -e 's/diktdel/poempart/g' \
+      -e 's/dikt/poem/g' \
+      -e 's/formelarkstil/formulasheetstyle/g' \
       -e 's/formelarktett/formulasheettight/g' \
       -e 's/formelark/formulasheet/g' \
       -e 's/formelstrekk/formulastretch/g' \
@@ -112,9 +117,9 @@ strip() {
 }
 
 fail=0
-compare() {  # compare <no-file> <en-file>
-  local no_f="$1" en_f="$2" out
-  out=$(diff <(strip "$no_f" | map) <(strip "$en_f") 2>&1)
+compare() {  # compare <no-file> <en-file> [sed expression run before map]
+  local no_f="$1" en_f="$2" pre="${3:-s/^//}" out
+  out=$(diff <(strip "$no_f" | sed -e "$pre" | map) <(strip "$en_f") 2>&1)
   if [ -n "$out" ]; then
     fail=1
     printf '\n=== %s <-> %s ===\n%s\n' "$no_f" "$en_f" "$out"
@@ -136,6 +141,11 @@ compare no/prove/provestil.sty    en/exam/examstyle.sty
 compare no/prove/main.tex         en/exam/main.tex
 compare no/formelark/formelarkstil.sty en/formulasheet/formulasheetstyle.sty
 compare no/formelark/main.tex     en/formulasheet/main.tex
+# \del is \exampart in exam but \part in poetry, so the
+# poetry pair maps it itself before the shared map runs.
+poetry_del='s/\\del\([^a-zA-Z]\)/\\part\1/g'
+compare no/dikt/diktstil.sty      en/poetry/poetrystyle.sty "$poetry_del"
+compare no/dikt/main.tex          en/poetry/main.tex "$poetry_del"
 
 if [ "$fail" -eq 0 ]; then
   printf '\nAll pairs structurally identical.\n'

@@ -1,0 +1,169 @@
+% !TEX program = lualatex
+% ============================================================
+% main.tex — selve samlingen
+%
+% Denne fila er struktur og dikt. Alle typografiske valg bor
+% i diktstil.sty, som også laster babel og setter
+% papirformatet.
+%
+% Kompiler med LuaLaTeX, ikke pdflatex:
+%   latexmk -lualatex main
+% ============================================================
+\documentclass[12pt,twoside]{book}
+
+
+% ============================================================
+% LAST INN DIKTSTIL
+% ============================================================
+
+% hefte står på i alle variantene: samlingen fylles opp med
+% blanke sider til et sidetall delelig med fire, så et falset
+% hefte får bakside. Ta opsjonen bort for løse ark.
+
+% ------------------ Trykk, 140 x 216 mm -----------
+\usepackage[hefte]{diktstil}
+
+% ------------------ Egen utskrift, A5 -------------
+% Samme satsflate, så linje- og sidebrudd er som over.
+% \usepackage[a5,hefte]{diktstil}
+
+% ------------------ Sentrerte dikt ----------------
+% Hvert dikt midtstilt etter sin lengste linje.
+% \usepackage[sentrert,hefte]{diktstil}
+
+% ------------------ Sidekorrektur -----------------
+% Siden uendret, sentrert på A4 med skjæremerker.
+% \usepackage[korrektur,hefte]{diktstil}
+
+
+% ============================================================
+% DOKUMENT
+% ============================================================
+\begin{document}
+
+\title{Samlingens tittel}
+\subtitle{Dikt}
+\author{Forfatternavn}
+\date{\the\year}
+
+
+% ============================================================
+% FORSTOFF
+% ============================================================
+
+% ------------------ Smusstittel -------------------
+% Valgfri: bare tittelen på en egen side foran tittelsiden.
+% \halftitlepage
+
+% ------------------ Tittelside --------------------
+\booktitlepage
+
+% ------------------ Kolofon -----------------------
+\colophonpage{%
+  © \the\year\ Forfatternavn\\
+  Satt med Garamond Libre i \LaTeX\\
+  ISBN 978-82-000-0000-0}
+
+% ------------------ Dedikasjon --------------------
+\dedicationpage{Til noen.}
+
+% ------------------ Innhold -----------------------
+\poemtoc
+
+
+% ============================================================
+% DIKTENE
+%
+% Ett dikt-miljø per dikt. Hvert dikt begynner på en ny side.
+% Bytt ut plassholderne under med dine egne.
+% ============================================================
+
+\del{I}
+
+\begin{dikt}[Et dikt med tittel]
+Tittelen står i klammene
+etter begin.
+
+Hver linje i kilden
+er en linje på siden,
+og en blank linje
+gir en ny strofe.
+\end{dikt}
+
+\begin{dikt}
+Et dikt uten tittel
+begynner der tittelen ellers ville stått
+
+og står i innholdet
+med sin første linje.
+\end{dikt}
+
+\begin{dikt}[Innrykk]
+Mellomrom først på linja
+    rykker linja inn,
+        et halvt gefirt for hvert,
+
+og mellomrom   inne i linja   blir stående.
+\end{dikt}
+
+\begin{dikt}[En lang linje]
+En linje kan være kort.
+
+En linje som er lengre enn satsflata er bred, brytes av seg selv, og fortsettelsen rykkes inn så den ikke kan forveksles med en ny linje.
+
+Neste linje begynner ved venstrekanten igjen.
+\end{dikt}
+
+
+\del{II}
+
+\begin{dikt}[Et langt dikt]
+Dette diktet er lengre enn siden.
+Det deles derfor i to,
+men aldri midt i en strofe:
+bruddet legges i lufta mellom to av dem.
+
+Strofa som ikke får plass,
+flyttes hel til neste side,
+og da kan bunnen av siden
+bli stående åpen.
+
+Slik ser tredje strofe ut.
+Den har fire linjer som de andre,
+og sier ikke stort,
+men den tar den plassen den skal.
+
+Fjerde strofe følger etter.
+Linjene står med seksten punkts avstand,
+og mellom strofene
+er det én linjes luft.
+
+Femte strofe er den siste på denne siden.
+Satsflata rommer tjueni linjer,
+og diktet begynner på den sjette,
+med tittelen på den fjerde.
+
+Sjette strofe står øverst på neste side.
+Fortsettelsen begynner øverst i satsflata,
+uten lufta som står over tittelen,
+siden det ikke er et nytt dikt.
+
+Sidetallet står midtstilt nederst,
+ett steg mindre enn teksten,
+og det er ingen topptekst
+over diktene.
+
+Åttende strofe er den siste.
+Neste dikt begynner på en ny side,
+i samme høyde som dette begynte,
+og slik fortsetter samlingen.
+\end{dikt}
+
+\begin{dikt}
+Bytt ut disse diktene med dine egne.
+
+Det er alt som skal til.
+\end{dikt}
+
+
+\end{document}

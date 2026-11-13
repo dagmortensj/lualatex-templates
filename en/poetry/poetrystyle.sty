@@ -1,0 +1,670 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{poetrystyle}[2026/11/13 v1.0 — poetry collection]
+
+% ============================================================
+% PACKAGE OPTIONS
+%
+%   \usepackage{poetrystyle}             140 x 216 mm, print
+%   \usepackage[a5]{poetrystyle}         A5, for printing at home
+%   \usepackage[centered]{poetrystyle}   each poem centred on
+%                                        its longest line
+%   \usepackage[booklet]{poetrystyle}    blank pages at the end,
+%                                        so the booklet has a back
+%   \usepackage[proof]{poetrystyle}      page proofs: the page
+%                                        untouched, centred on A4
+%                                        with crop marks
+%
+% a5 — changes the paper, not the typesetting. The text block
+% is the same 98 x 162 mm in both formats, so line and page
+% breaks are identical: what you print on A5 at home is, page
+% for page, what is printed at 140 x 216 mm.
+%
+% centered — the left edge of each poem moves in until the
+% poem's longest line sits in the middle of the text block.
+% The lines stay flush left against one another. The width is
+% measured in one run and used in the next, so latexmk runs
+% once more by itself. Without the option every poem has the
+% same left edge.
+%
+% booklet — for printing as a folded booklet, typically with
+% a5: the page count is padded to a multiple of four with
+% blank pages at the end, and the last one is the back.
+%
+% proof — can be combined with a5. 'korrektur' is accepted as
+% a synonym.
+% ============================================================
+\newif\ifpoem@korrektur
+\newif\ifpoem@afem
+\newif\ifpoem@centered
+\newif\ifpoem@booklet
+\DeclareOption{korrektur}{\poem@korrekturtrue}
+\DeclareOption{proof}{\poem@korrekturtrue}
+\DeclareOption{a5}{\poem@afemtrue}
+\DeclareOption{centered}{\poem@centeredtrue}
+\DeclareOption{booklet}{\poem@booklettrue}
+\ProcessOptions\relax
+
+
+% ============================================================
+% poetrystyle.sty — a poetry collection
+%
+% All typographic choices live in this file. You should not
+% need to change anything here to set a collection: write the
+% poems in main.tex, one poem environment per poem.
+%
+%   \documentclass[12pt,twoside]{book}
+%
+% The paper size is set here and not in \documentclass, since
+% 140 x 216 mm is not a class option.
+%
+% Engine: LuaLaTeX. The font is OpenType, and the centered
+% option measures the lines with Lua.
+%
+% The order below: language, font, microtypography, geometry,
+% type size, page style, hyperref, the poem environment,
+% parts, the front matter, the contents, and the booklet
+% padding last.
+% ============================================================
+
+
+% ============================================================
+% LANGUAGE
+%
+% babel is loaded here and not in main.tex. Hyphenation is
+% switched off inside the poems, but the front matter and the
+% contents page use the language's strings ("Contents").
+% ============================================================
+\RequirePackage[english]{babel}
+
+
+% ============================================================
+% FONT
+%
+% Garamond Libre, the same face as the book template. No
+% maths font: the style loads fontspec and not
+% unicode-math.
+% ============================================================
+\RequirePackage{fontspec}
+
+\setmainfont{GaramondLibre}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic ]
+
+
+% ============================================================
+% MICROTYPOGRAPHY
+%
+% protrusion hangs quotation marks and dashes at the start of
+% a line out into the margin, so the letters line up down the
+% left edge. tracking letterspaces the small caps. expansion
+% is off: it exists to even out justified lines, and poems
+% are not justified.
+% ============================================================
+\RequirePackage[
+  expansion=false,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% PAGE GEOMETRY
+%
+% FORMAT. 140 x 216 mm (5.5 x 8.5 in) is the usual trim size
+% for poetry collections. A5 is 8 mm wider and 6 mm shorter.
+%
+% TEXT BLOCK. 98 x 162 mm in both formats. The width is
+% chosen for the longest line, not for readability in running
+% text: at 12 pt it holds about 60 characters before a line
+% is broken. The height is 29 lines.
+%
+% MARGINS. Inner a little wider than outer. The poems are set
+% flush left, so the right part of the text block is mostly
+% air and adds itself to the outer margin on a recto; the
+% inner margin needs its share for the binding. The bottom
+% margin is the largest, and the page number stands in it.
+%
+%                inner  outer  top  bottom
+%   140 x 216      22     20    24    30   mm
+%   A5             26     24    21    27   mm
+% ============================================================
+\ifpoem@afem
+  \setlength{\paperwidth}{148mm}
+  \setlength{\paperheight}{210mm}
+\else
+  \setlength{\paperwidth}{140mm}
+  \setlength{\paperheight}{216mm}
+\fi
+
+\RequirePackage{geometry}
+\ifpoem@afem
+  \geometry{papersize={148mm,210mm},
+    inner=26mm, outer=24mm, top=21mm, bottom=27mm, footskip=12mm}
+\else
+  \geometry{papersize={140mm,216mm},
+    inner=22mm, outer=20mm, top=24mm, bottom=30mm, footskip=12mm}
+\fi
+
+% Page proofs: the page centred on A4 with crop marks (cam)
+% and crop's information line at the top — add noinfo to the
+% options below if you want the sheet without it.
+\ifpoem@korrektur
+  \RequirePackage[cam,a4,center]{crop}
+\fi
+
+
+% ============================================================
+% TYPE SIZE AND PAGE DEPTH
+%
+% 12/16 pt. Garamond Libre has a small eye (x-height
+% 0.407 em), so 12 pt reads as Times at about 10.3 pt;
+% 11 pt corresponds to 9.5 pt and is too small. 16 pt of leading
+% is more open than the book template's 14.79: poems are read
+% line by line, and the lines should stand apart.
+%
+% The pages are not stretched to full height. A poem ends
+% where it ends. The bottom of every page gets stretch of
+% order fill, one order above what \raggedbottom gives, so
+% the tiny stretch in the stanza space never shows. The
+% front-matter pages that push text to the bottom therefore
+% use filll and not \vfill.
+% ============================================================
+\linespread{1.1035}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\raggedbottom
+\def\@textbottom{\vskip\z@\@plus 1fill}
+
+
+% ============================================================
+% PAGE STYLE
+%
+% The page number centred at the bottom, one step below the
+% body text. No running head. The front matter, the contents
+% and the part pages carry no page number but are counted, so the
+% first poem stands on page 7 or thereabouts, as is usual in
+% a poetry collection.
+%
+% emptypage keeps the inserted blank pages completely empty.
+% ============================================================
+\def\ps@poem{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \def\@oddfoot{\hfil\small\thepage\hfil}%
+  \let\@evenfoot\@oddfoot
+}
+\pagestyle{poem}
+
+\RequirePackage{emptypage}
+
+
+% ============================================================
+% HYPERLINKS
+%
+% The links are black, so the page prints as it would without
+% them, but the contents are clickable in a PDF reader and
+% the poems appear as bookmarks.
+% ============================================================
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  allcolors=black,
+  linktoc=all
+}
+
+
+% ============================================================
+% POEMS
+%
+%   \begin{poem}[Title]
+%   Each line in the source is a line of the poem.
+%   A long line is broken by itself and gets a hanging indent.
+%
+%   A blank line gives a new stanza.
+%       Spaces at the start of a line indent it.
+%   \end{poem}
+%
+% The title is optional. Every poem begins on a new page, at
+% the same height: the title stands on the fourth line of the
+% text block, with three empty lines above it, and the poem
+% begins on the sixth. A poem without a title begins where
+% the title would have stood.
+%
+% LINES. A line break in the source is a line break in the
+% poem; \\ is not needed. A line too long for the text block
+% is broken, and the continuation is indented 3 em so it
+% cannot be mistaken for a new line.
+%
+% STANZAS. One or more blank lines give one line of space. A
+% poem longer than the page is divided between two stanzas,
+% not inside one. Only a stanza that does not fit on a page
+% by itself is divided.
+%
+% INDENTATION. Each space at the start of a line indents the
+% line half an em (0.5 em), so four spaces are 2 em. A tab
+% character counts as four spaces. Spaces inside a line are
+% kept as well: three spaces in the source give three word
+% spaces on the page.
+%
+% How it works: inside the environment, end of line, space
+% and tab are active characters. End of line ends the
+% paragraph, or adds the stanza space if the line was empty.
+% Every line is thus its own paragraph. It follows that a %
+% at the end of a line swallows the line break, as elsewhere
+% in LaTeX, and that lengths with spaces in them ("1em plus
+% 2pt") cannot be written inside a poem.
+%
+% The numbers in one place, should any need adjusting:
+% ============================================================
+\newcommand{\poem@sink}{2\baselineskip}      % space above the poem
+\newcommand{\poem@titleskip}{\baselineskip}  % space below the title
+\newcommand{\poem@stanzaskip}{\baselineskip} % space between stanzas
+\newcommand{\poem@hang}{3em}                 % indent of a broken line
+\newcommand{\poem@leadunit}{0.5em}           % indent per space
+\newcommand{\poem@titlefont}{\normalfont\large\itshape}
+
+\newdimen\poem@lead
+\newdimen\poem@offset
+\newdimen\poem@bsk
+\newcount\poem@nr
+\newif\ifpoem@hasline
+\newif\ifpoem@needfirst
+
+% End of line. In horizontal mode the line is ended. In
+% vertical mode the line was empty: the stanza space is then
+% added, but only after a line, so blank lines before the
+% poem and several blank lines in a row give no extra space.
+% The penalties steer the page break: 5000 between lines,
+% -100 between stanzas. The stanza space has a vanishingly
+% small stretch (fil) so that the penalties count: with no
+% stretch on the page TeX rates every break as equally bad
+% and takes the last one that fits, inside a stanza or not.
+% The space is never actually stretched, because the bottom
+% of the page has stretch of a higher order (see TYPE SIZE
+% AND PAGE DEPTH).
+\protected\def\poem@eol{%
+  \ifvmode
+    \ifpoem@hasline
+      \poem@haslinefalse
+      \penalty-100
+      \vskip\dimexpr\poem@stanzaskip\relax\@plus.0001fil
+    \fi
+  \else
+    \par
+    \penalty5000
+    \poem@haslinetrue
+  \fi
+  \global\poem@lead\z@
+}
+
+% Space. At the start of a line it is collected as
+% indentation; inside the line it is an ordinary word space.
+\protected\def\poem@sp{%
+  \ifvmode
+    \global\advance\poem@lead\poem@leadunit\relax
+  \else
+    \space
+  \fi
+}
+
+% The three active characters. The \lowercase trick turns ~
+% into the character to be defined, so the definitions can be
+% written with ordinary spaces and line breaks.
+\begingroup\lccode`\~=13 \lowercase{\endgroup
+  \def\poem@activate@eol{\catcode`\^^M=\active \let~\poem@eol}%
+  \def\poem@grabfirst#1~{\poem@firstline{#1}#1~}%
+}
+\begingroup\lccode`\~=32 \lowercase{\endgroup
+  \def\poem@activate@sp{\catcode`\ =\active \let~\poem@sp}%
+  \def\poem@plainsp{\def~{ }\def\poem@sp{ }}%
+}
+\begingroup\lccode`\~=9 \lowercase{\endgroup
+  \def\poem@activate@tab{%
+    \catcode`\^^I=\active
+    \def~{\poem@sp\poem@sp\poem@sp\poem@sp}}%
+}
+
+% Title or first line for the contents and the bookmarks: the
+% active spaces are turned into ordinary ones before the text
+% is written to the .toc.
+\newcommand{\poem@sanitize}[1]{%
+  \begingroup
+    \poem@plainsp
+    \protected@xdef\poem@entry{#1}%
+  \endgroup
+}
+
+% First line of a poem without a title. \everypar calls
+% \poem@grabfirst, which reads the rest of the line, sends it
+% here and puts it back unchanged.
+\newcommand{\poem@firstline}[1]{%
+  \poem@needfirstfalse
+  \poem@sanitize{#1}%
+  \phantomsection
+  \addcontentsline{toc}{poem}{\textit{\poem@entry}}%
+}
+
+% The head of a page: space down to a fixed height, and the
+% title if there is one. The empty box gives the next line
+% something to measure its leading from, so the first line
+% stands at the same height whatever letters it contains. The
+% title is set on the body text's leading, so the lines below
+% keep register. Also used by the contents page.
+\newcommand{\poem@head}[1]{%
+  \poem@bsk\baselineskip
+  \null
+  \vskip\dimexpr\poem@sink\relax\@plus.0001fil
+  \def\poem@arg{#1}%
+  \ifx\poem@arg\@empty\else
+    {\poem@titlefont\baselineskip\poem@bsk
+     \leftskip\poem@offset \rightskip\@flushglue
+     \hyphenpenalty\@M #1\par}%
+    \nobreak
+    \vskip\poem@titleskip
+  \fi
+}
+
+\newenvironment{poem}{%
+  \clearpage
+  \global\advance\poem@nr\@ne
+  \poem@setoffset
+  \leftskip\poem@offset
+  \rightskip\@flushglue
+  \hyphenpenalty\@M
+  \exhyphenpenalty\@M
+  \interlinepenalty\@M
+  \poem@haslinefalse
+  \global\poem@lead\z@
+  \poem@activate@eol
+  \poem@activate@sp
+  \poem@activate@tab
+  \poem@begin
+}{%
+  \par
+  \poem@finish
+  \clearpage
+}
+
+% The active characters are switched on before the optional
+% title is read, so the line break after \begin{poem} is not
+% read as an ordinary space and the first line keeps its
+% indentation.
+\newcommand{\poem@begin}[1][]{%
+  \def\poem@arg{#1}%
+  \ifx\poem@arg\@empty
+    \poem@needfirsttrue
+  \else
+    \poem@needfirstfalse
+    \poem@sanitize{#1}%
+    \phantomsection
+    \addcontentsline{toc}{poem}{\poem@entry}%
+  \fi
+  \poem@head{#1}%
+  \everypar{%
+    \hangindent\dimexpr\poem@lead+\poem@hang\relax
+    \hangafter\@ne
+    \ifdim\poem@lead>\z@ \hskip\poem@lead\relax \fi
+    \ifpoem@needfirst \expandafter\poem@grabfirst \fi
+  }%
+  \poem@measureon
+}
+
+
+% ============================================================
+% CENTRED POEMS
+%
+% With the centered option a Lua function measures the
+% natural width of every line as the paragraph is broken, and
+% the largest is written to the .aux when the poem ends. In
+% the next run the left margin of the poem is set to half of
+% what is left over. The title follows the poem's left edge.
+% ============================================================
+\newcommand{\poem@savewidth}[2]{%
+  \expandafter\gdef\csname poem@w@#1\endcsname{#2}}
+
+\ifpoem@centered
+  \directlua{
+    poem = poem or { on = false, max = 0 }
+    function poem.measure(head)
+      if poem.on then
+        local ls = tex.leftskip.width
+        for line in node.traverse_id(node.id("hlist"), head) do
+          local w = node.dimensions(line.head)
+          w = w - ls + line.shift
+          if w > poem.max then poem.max = w end
+        end
+      end
+      return head
+    end
+    luatexbase.add_to_callback("post_linebreak_filter",
+      poem.measure, "poem.measure")
+  }
+  \newcommand{\poem@measureon}{\directlua{poem.max = 0 poem.on = true}}
+  \newcommand{\poem@finish}{%
+    \directlua{poem.on = false}%
+    \immediate\write\@auxout{%
+      \string\poem@savewidth{\the\poem@nr}%
+        {\directlua{tex.sprint(poem.max)}sp}}%
+  }
+  \newcommand{\poem@setoffset}{%
+    \poem@offset\z@
+    \ifcsname poem@w@\the\poem@nr\endcsname
+      \poem@offset\dimexpr
+        (\linewidth-\csname poem@w@\the\poem@nr\endcsname)/2\relax
+      \ifdim\poem@offset<\z@ \poem@offset\z@ \fi
+    \fi
+  }
+\else
+  \let\poem@measureon\relax
+  \let\poem@finish\relax
+  \newcommand{\poem@setoffset}{\poem@offset\z@}
+\fi
+
+
+% ============================================================
+% PARTS
+%
+%   \part{I}
+%   \part{Winter}
+%
+% Divides the collection into parts. The title stands
+% alone in small caps on a recto without a page number, a
+% third of the way down, and the verso is blank, so the first
+% poem of the part begins on a recto.
+%
+% Defined with \DeclareRobustCommand because it replaces the
+% book class's own \part: no "Part I" label, no numbering,
+% just the title given.
+% ============================================================
+\DeclareRobustCommand{\part}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \phantomsection
+  \addcontentsline{toc}{poempart}{#1}%
+  \null
+  \vskip 0.3\textheight
+  \begin{center}
+    \large\scshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% HALF-TITLE
+%
+%   \halftitlepage
+%
+% The first page of the book: the title alone, small, on a
+% recto with a blank verso. Optional, and commented out in
+% main.tex: without it the book begins on the title page.
+% ============================================================
+\def\@subtitle{}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+
+\newcommand{\halftitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    \large\scshape \@title
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% TITLE PAGE
+%
+%   \title{...}  \author{...}  \date{...}
+%   \subtitle{...}                 % optional, e.g. "Poems"
+%   \booktitlepage
+%
+% Built as in the book template: title in large small caps,
+% an italic subtitle if one is set, author below, and the
+% date at the bottom. \date can just as well hold a publisher
+% or a place.
+% ============================================================
+\newcommand{\booktitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    {\huge\scshape \@title \par}
+    \ifx\@subtitle\@empty\else
+      \vspace{1.4em}
+      {\large\itshape \@subtitle \par}
+    \fi
+    \vspace{3em}
+    {\large \@author \par}
+  \end{center}
+  \vskip\z@\@plus 1filll
+  \begin{center}
+    {\normalsize\itshape \@date \par}
+  \end{center}
+  \clearpage
+}
+
+
+% ============================================================
+% COLOPHON
+%
+%   \colophonpage{%
+%     © 2026 Author Name\\
+%     Set in Garamond Libre\\
+%     ISBN 978-0-000-00000-0}
+%
+% The back of the title page: rights, printing and ISBN, in
+% small type at the bottom of the page. Separate the lines
+% with \\.
+% ============================================================
+\newcommand{\colophonpage}[1]{%
+  \clearpage
+  \thispagestyle{empty}%
+  \null
+  \vskip\z@\@plus 1filll
+  {\small\raggedright #1\par}
+  \clearpage
+}
+
+
+% ============================================================
+% DEDICATION PAGE
+%
+%   \dedicationpage{To someone.}
+%
+% One short italic line, centred a quarter of the way down a
+% recto, followed by a blank verso.
+% ============================================================
+\newcommand{\dedicationpage}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.25\textheight
+  \begin{center}
+    \itshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% CONTENTS
+%
+%   \poemtoc
+%
+% Stands last in the front matter in main.tex, on a recto
+% without a page number, and what follows begins on the next
+% recto. The command can also stand at the back of the
+% collection. The heading is set as a poem title, at the
+% same height. Poems
+% with a title are listed by title, poems without by their
+% first line in italics, and parts in small caps with
+% space above. No dot leaders; the page numbers stand at the
+% right edge.
+% ============================================================
+\newcommand*{\l@poem}[2]{%
+  {\leftskip\z@
+   \rightskip 2.5em
+   \parfillskip -2.5em
+   \hangindent 1.5em
+   \hangafter\@ne
+   \hyphenpenalty\@M
+   \noindent #1\nobreak\hfill\nobreak
+   \hb@xt@ 2.5em{\hss #2}\par}%
+}
+\newcommand*{\l@poempart}[2]{%
+  \addvspace{\baselineskip}%
+  {\noindent\scshape #1\par}%
+  \nobreak
+}
+\newcommand*{\toclevel@poempart}{0}
+\newcommand*{\toclevel@poem}{1}
+
+\newcommand{\poemtoc}{%
+  \cleardoublepage
+  \pagestyle{empty}%
+  \poem@offset\z@
+  \poem@head{\contentsname}%
+  \@starttoc{toc}%
+  \cleardoublepage
+  \pagestyle{poem}%
+}
+
+
+% ============================================================
+% BOOKLET
+%
+% With the booklet option the collection is padded with
+% blank pages until the page count is divisible by four, as
+% a folded and stapled booklet requires. The last of them is
+% the back of the booklet, so it closes on a blank page and
+% not on the last poem. \numexpr rounds on division, so the
+% remainder is taken with \divide, which truncates.
+% ============================================================
+\newcommand{\poem@padout}{%
+  \@tempcnta=\numexpr\value{page}-1\relax
+  \@tempcntb=\@tempcnta
+  \divide\@tempcntb by 4
+  \multiply\@tempcntb by 4
+  \ifnum\@tempcnta>\@tempcntb
+    \thispagestyle{empty}\null\clearpage
+    \expandafter\poem@padout
+  \fi}
+
+\ifpoem@booklet
+  \AtEndDocument{\clearpage\poem@padout}
+\fi
+
+
+% ============================================================
+% END OF FILE
+% ============================================================
+\endinput
