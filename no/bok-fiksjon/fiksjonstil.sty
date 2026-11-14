@@ -251,7 +251,7 @@
 \newcommand{\fiksjon@kortlinje}{4}  % tittel på kortprosa og innhold
 \newcommand{\fiksjon@dellinje}{10}  % tittel på delsider
 \newcommand{\fiksjon@tallfont}{%
-  \fontsize{24bp}{24bp}\selectfont\addfontfeatures{RawFeature=-onum}}
+  \fontsize{17bp}{17bp}\selectfont\addfontfeatures{RawFeature=-onum}}
 \newcommand{\fiksjon@tittelfont}{\large}
 
 \newbox\fiksjon@tittelboks
@@ -295,7 +295,8 @@
 % på tolvte linje, og tallet står midtstilt i lufta over,
 % med grunnlinja på femte linje.
 %
-% Tallet er satt med ordinære tall: minuskeltall ville latt
+% Tallet er 17 bp, samme trinn som kapitteltitlene i
+% bok-fag, og satt med ordinære tall: minuskeltall ville latt
 % 3, 4, 5, 7 og 9 henge under linja og de andre ikke. Et
 % unummerert kapittel får ordet som en tittel på samme
 % linje, og telleren går ikke.
@@ -407,7 +408,8 @@
 %   \del{Første del}
 %   \del{I}
 %
-% Deler boka i deler. Tittelen står alene i kapiteler på en
+% Deler boka i deler. Tittelen står alene i kapiteler i
+% 17,3 pt (\Large), litt over kapitteltallet, på en
 % høyreside uten sidetall, på tiende linje, omtrent en
 % tredjedel ned, og baksiden er blank, så første kapittel
 % eller novelle i delen begynner på en høyreside.
@@ -425,7 +427,7 @@
   \thispagestyle{empty}%
   \phantomsection
   \addcontentsline{toc}{fiksjondel}{#1}%
-  \setbox\fiksjon@tittelboks\hbox{\large\scshape #1}%
+  \setbox\fiksjon@tittelboks\hbox{\Large\scshape #1}%
   \fiksjon@aapning{\fiksjon@dellinje}%
     {\the\numexpr\fiksjon@dellinje+2\relax}%
   \cleardoublepage

@@ -149,11 +149,12 @@ the same page with more room around it.
   first line 17 mm below the top edge of the sheet
 - **Paragraphs:** justified, indent 1 em, no space between paragraphs
 - **Chapter and story opening:** the text on the twelfth line, the
-  number in 24 bp lining figures or the title in \large on the fifth;
+  number in 17 bp lining figures or the title in \large on the fifth;
   stories on a recto
 - **Short prose and contents:** the title on the fourth line, the text
   one empty line below
-- **Part pages:** the title in small capitals on the tenth line
+- **Part pages:** the title in small capitals at 17.3 pt on the tenth
+  line, so the part stands a little above the chapter number
 - **Title page:** the author at the top, the title in small capitals at
   20.7 pt, the genre in italics below, the publisher at the foot
 - **Folio:** centred, two lines below the last line of text (20 mm

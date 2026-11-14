@@ -250,7 +250,7 @@
 \newcommand{\fiction@shortline}{4}  % title of short prose and contents
 \newcommand{\fiction@partline}{10}  % title on part pages
 \newcommand{\fiction@numberfont}{%
-  \fontsize{24bp}{24bp}\selectfont\addfontfeatures{RawFeature=-onum}}
+  \fontsize{17bp}{17bp}\selectfont\addfontfeatures{RawFeature=-onum}}
 \newcommand{\fiction@titlefont}{\large}
 
 \newbox\fiction@titlebox
@@ -294,7 +294,8 @@
 % line, and the number stands centred in the space above,
 % with its baseline on the fifth line.
 %
-% The number is set in lining figures: old-style figures
+% The number is 17 bp, the same step as the chapter titles in
+% book-academic, and set in lining figures: old-style figures
 % would let 3, 4, 5, 7 and 9 hang below the line and the
 % others not. An unnumbered chapter gets its word as a title
 % on the same line, and the counter does not advance.
@@ -408,7 +409,8 @@
 %   \part{I}
 %
 % Divides the book into parts. The title stands alone in
-% small capitals on a recto without a folio, on the tenth
+% small capitals at 17.3 pt (\Large), a little above the
+% chapter number, on a recto without a folio, on the tenth
 % line, about a third of the way down, and the verso is
 % blank, so the first chapter or story of the part begins on
 % a recto. The chapter count runs on through the parts.
@@ -425,7 +427,7 @@
   \thispagestyle{empty}%
   \phantomsection
   \addcontentsline{toc}{fictionpart}{#1}%
-  \setbox\fiction@titlebox\hbox{\large\scshape #1}%
+  \setbox\fiction@titlebox\hbox{\Large\scshape #1}%
   \fiction@opening{\fiction@partline}%
     {\the\numexpr\fiction@partline+2\relax}%
   \cleardoublepage

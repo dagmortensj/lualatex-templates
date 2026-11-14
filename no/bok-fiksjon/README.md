@@ -141,12 +141,13 @@ samme siden med mer plass rundt.
 - **Marger:** innside 14 mm, utside 17 mm; toppen av versalene i første
   linje 17 mm under arkets overkant
 - **Avsnitt:** justert, innrykk 1 gefirt, ingen luft mellom avsnitt
-- **Kapittelstart og novelle:** teksten på tolvte linje, tallet i 24 bp
+- **Kapittelstart og novelle:** teksten på tolvte linje, tallet i 17 bp
   med ordinære tall eller tittelen i \large på femte; noveller på
   høyreside
 - **Kortprosa og innhold:** tittelen på fjerde linje, teksten én tom
   linje under
-- **Delsider:** tittelen i kapiteler på tiende linje
+- **Delsider:** tittelen i kapiteler i 17,3 pt på tiende linje, så delen står
+  litt over kapittelnummeret
 - **Tittelside:** forfatteren øverst, tittelen i kapiteler i 20,7 pt, sjangeren
   i kursiv under, forlaget nederst
 - **Sidetall:** midtstilt, to linjer under siste tekstlinje (20 mm over
