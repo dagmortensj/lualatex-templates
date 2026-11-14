@@ -63,7 +63,9 @@ Boken er delt i tre faser:
 
 `\frontchapter`, innholdsfortegnelsen, bibliografien og registeret får
 samme åpning som et nummerert kapittel, med tittelen i samme høyde, bare
-uten «Kapittel N» over. Første avsnitt får ikke innrykk.
+uten «Kapittel N» over. Første avsnitt får ikke innrykk. Forord, takk,
+bibliografi og register står i innholdet i kursiv, uten nummer, og
+bakstoffet har luft over seg der.
 
 ### Stikkordregister
 

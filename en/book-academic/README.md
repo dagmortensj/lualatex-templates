@@ -64,7 +64,9 @@ The book is divided into three phases:
 `\frontchapter`, the table of contents, the bibliography and the index
 get the same opening as a numbered chapter, with the title at the same
 height, only without "Chapter N" above it. The first paragraph has no
-indent.
+indent. Preface, acknowledgements, bibliography and index appear in the
+contents in italics, without a number, with space above the back
+matter.
 
 ### Index
 

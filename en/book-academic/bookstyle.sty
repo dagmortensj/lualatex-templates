@@ -385,7 +385,7 @@
   {\normalfont}
   {\filcenter\scshape \chaptername\ \thechapter}
   {3ex}
-  {\filcenter\Huge\bk@caps}
+  {\filcenter\Large\bk@caps}
 
 \titlespacing*{\chapter}
   {0pt}{3.5ex plus 1ex minus .2ex}{11ex plus 2ex minus .5ex}
@@ -400,7 +400,7 @@
   {\normalfont}
   {\filcenter\scshape\strut}
   {3ex}
-  {\filcenter\Huge\bk@caps}
+  {\filcenter\Large\bk@caps}
 
 % ------------------ Sections ---------------------
 \titleformat{\section}
@@ -600,11 +600,16 @@
 % and the title at the same height (see SECTIONING). The
 % first paragraph has no indent. The command sets the
 % running header itself, so "Chapter 0" does not appear
-% there.
+% there, and puts the title in the contents (see FRONT AND
+% BACK MATTER IN THE CONTENTS).
 % ============================================================
 \makeatletter
 
 \newcommand{\frontchapter}[1]{%
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{chapter}%
+    {\protect\numberline{}\texorpdfstring{\protect\bk@frontentry{#1}}{#1}}%
   \chapter*{#1}%
   \markboth{#1}{#1}%
 }
@@ -797,6 +802,30 @@
 % Bibliography list labels: "1." instead of "[1]",
 % to match the superscript style used in the text.
 \DeclareFieldFormat{labelnumberwidth}{#1.}
+
+
+% ============================================================
+% FRONT AND BACK MATTER IN THE CONTENTS
+%
+% Preface, acknowledgements, bibliography and index appear in
+% the table of contents without a number and in italics, with
+% the title in the same column as the chapter titles, so they
+% stand apart from the chapters. The back matter gets as much
+% space above it as a part, so the bibliography does not look
+% as if it belonged to the last part. For the same reason the
+% back matter sits at the top level of the bookmarks, not
+% under the last part. The bibliography and the index open
+% like \frontchapter.
+% ============================================================
+\makeatletter
+\newcommand{\bk@frontentry}[1]{{\normalfont\itshape #1}}
+\appto\backmatter{\addtocontents{toc}{\protect\addvspace{\cftbeforepartskip}}}
+\appto\backmatter{\def\toclevel@chapter{-1}}
+\defbibheading{bibliography}[\bibname]{\frontchapter{#1}}
+\AtBeginDocument{%
+  \@ifpackageloaded{imakeidx}{\indexsetup{level=\frontchapter}}{}%
+}
+\makeatother
 
 
 % ============================================================
