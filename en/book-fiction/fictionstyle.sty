@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{fictionstyle}[2026/11/14 v1.0 — novels and short stories]
+\ProvidesPackage{fictionstyle}[2026/11/14 v1.1 — novels, short stories and short prose]
 
 % ============================================================
 % PACKAGE OPTIONS
@@ -30,11 +30,12 @@
 
 
 % ============================================================
-% fictionstyle.sty — novels and short stories
+% fictionstyle.sty — novels, short stories and short prose
 %
 % Every typographic decision lives in this file. You should
 % not need to change anything here to set a book: write the
-% text in main.tex, with \chapter before each chapter.
+% text in main.tex, with \chapter, \story or \shortprose
+% before each text.
 %
 %   \documentclass[12pt,twoside]{book}
 %
@@ -46,8 +47,9 @@
 % Engine: LuaLaTeX. The font is OpenType.
 %
 % The order below: language, font, microtypography, leading,
-% geometry, page breaking, page style, hyperref, chapters,
-% scene breaks, parts, front matter and the booklet last.
+% geometry, page breaking, page style, hyperref, the openings
+% (chapters, stories, short prose), scene breaks, parts, front
+% matter, the contents and the booklet last.
 % ============================================================
 
 
@@ -62,7 +64,7 @@
 %
 % Garamond Libre, the same face as the other book templates.
 % Old-style figures in the text and the folios; the chapter
-% numbers use lining figures (see CHAPTERS). No maths font:
+% numbers use lining figures (see OPENINGS). No maths font:
 % the style loads fontspec and not unicode-math.
 % ============================================================
 \RequirePackage{fontspec}
@@ -194,8 +196,11 @@
 % ============================================================
 % HYPERLINKS
 %
-% Links are black. Chapters and parts appear as bookmarks in
-% the PDF.
+% Links are black, so the page prints as without them, but
+% the contents are clickable in a PDF viewer. Chapters,
+% stories, short prose with a title and parts appear as
+% bookmarks. \\ in a title is removed from the bookmark; the
+% space after it remains.
 % ============================================================
 \RequirePackage{xcolor}
 \RequirePackage{hyperref}
@@ -203,6 +208,8 @@
   colorlinks=true,
   allcolors=black
 }
+
+\pdfstringdefDisableCommands{\let\\\@empty}
 
 \newcounter{fiction@anchor}
 \newcommand{\fiction@bookmark}[2]{%
@@ -212,52 +219,148 @@
 
 
 % ============================================================
-% CHAPTERS
+% OPENINGS
 %
-%   \chapter              numbered: 1, 2, 3 ...
-%   \chapter[Prologue]    unnumbered, with a word instead
+% Chapters, stories, short prose and the table of contents
+% all begin the same way: an empty page down to a given
+% line, possibly with a title or a number centred on a line
+% above. Everything stays on the grid, so the lines of an
+% opening page line up with the lines of the facing page.
 %
-% Every chapter begins on a new page, recto or verso. The text
-% begins eleven lines down in the text block, on the twelfth
-% line, and the number stands centred in the space above,
-% with its baseline on the fifth line. Everything stays on the
-% grid, so the lines of a chapter page line up with the lines
-% of the facing page.
+%   \fiction@opening{title line}{text line}
 %
-% The number is set in lining figures: old-style figures
-% would let 3, 4, 5, 7 and 9 hang below the line and the
-% others not. An unnumbered chapter gets its word in small
-% capitals on the same baseline, and the counter does not
-% advance.
+% sets the contents of \fiction@titlebox with its first
+% baseline on the title line, and lets the text begin on the
+% text line. If the box is empty, there is only space.
 %
-% The first paragraph has no indent.
+% Titles are upright in \large, centred, without
+% hyphenation, on at most 80 % of the measure. A long title
+% breaks, and each line sits on the next grid line. \\ in the
+% title decides where it breaks; in the contents and the
+% bookmarks it becomes a space.
+%
+% The numbers together, should anything need adjusting:
 % ============================================================
-\newcommand{\fiction@drop}{11}   % blank lines above the text
-\newcommand{\fiction@numberline}{5} % the line the number is on
+\newcommand{\fiction@numberline}{5}   % chapter number and story title
+\newcommand{\fiction@drop}{12}     % first text line in chapters and stories
+\newcommand{\fiction@shortline}{4}  % title of short prose and contents
+\newcommand{\fiction@partline}{10}  % title on part pages
 \newcommand{\fiction@numberfont}{%
   \fontsize{24bp}{24bp}\selectfont\addfontfeatures{RawFeature=-onum}}
-\newcommand{\fiction@wordfont}{\large\scshape}
+\newcommand{\fiction@titlefont}{\large}
+
+\newbox\fiction@titlebox
+\newcommand{\fiction@title}[1]{%
+  \setbox\fiction@titlebox\hbox{%
+    \parbox[t]{0.8\textwidth}{%
+      \centering\fiction@titlefont
+      \baselineskip=15bp
+      \hyphenpenalty=\@M \exhyphenpenalty=\@M
+      #1\par}}}
+
+% Number of lines in the title: one, plus what lies below
+% the first baseline divided by the leading (rounded, so the
+% descenders of the last line do not count).
+\newcommand{\fiction@titlelines}{%
+  \numexpr 1+\dp\fiction@titlebox/\baselineskip\relax}
 
 \newcommand{\fiction@opening}[2]{%
   \par
-  \vbox to \dimexpr\topskip+\baselineskip*(\fiction@drop-1)\relax{%
-    \fiction@bookmark{0}{#1}%
-    \kern\dimexpr\topskip+\baselineskip*(\fiction@numberline-1)\relax
-    \vbox to\z@{\vss\hbox to\textwidth{\hfil#2\hfil}}%
+  \vbox to \dimexpr\topskip+\baselineskip*(#2-2)\relax{%
+    \ifvoid\fiction@titlebox\else
+      \kern\dimexpr\topskip+\baselineskip*(#1-1)\relax
+      \vbox to\z@{\vss
+        \hbox to\textwidth{\hfil\box\fiction@titlebox\hfil}}%
+    \fi
     \vfil}%
   \nobreak
   \@afterindentfalse
   \@afterheading
 }
 
+
+% ============================================================
+% CHAPTERS
+%
+%   \chapter              numbered: 1, 2, 3 ...
+%   \chapter[Epilogue]    unnumbered, with a word instead
+%
+% Every chapter begins on a new page, recto or verso. The text
+% begins eleven lines down in the text block, on the twelfth
+% line, and the number stands centred in the space above,
+% with its baseline on the fifth line.
+%
+% The number is set in lining figures: old-style figures
+% would let 3, 4, 5, 7 and 9 hang below the line and the
+% others not. An unnumbered chapter gets its word as a title
+% on the same line, and the counter does not advance.
+%
+% Chapters appear as bookmarks in the PDF, but not in the
+% table of contents. The first paragraph has no indent.
+% ============================================================
 \DeclareRobustCommand{\chapter}[1][]{%
   \clearpage
   \def\fiction@tmp{#1}%
   \ifx\fiction@tmp\@empty
     \refstepcounter{chapter}%
-    \fiction@opening{\thechapter}{\fiction@numberfont\thechapter}%
+    \setbox\fiction@titlebox\hbox{\fiction@numberfont\thechapter}%
+    \fiction@bookmark{0}{\thechapter}%
   \else
-    \fiction@opening{#1}{\fiction@wordfont #1}%
+    \fiction@title{#1}%
+    \fiction@bookmark{0}{#1}%
+  \fi
+  \fiction@opening{\fiction@numberline}{\fiction@drop}%
+}
+
+
+% ============================================================
+% STORIES
+%
+%   \story{Title}
+%   \story{A long title\\ broken where you like}
+%
+% Every story begins on a recto, with the same opening as a
+% chapter: the title on the fifth line and the text on the
+% twelfth. Stories appear in the table of contents and as
+% bookmarks.
+% ============================================================
+\DeclareRobustCommand{\story}[1]{%
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{fictiontext}{#1}%
+  \fiction@title{#1}%
+  \fiction@opening{\fiction@numberline}{\fiction@drop}%
+}
+
+
+% ============================================================
+% SHORT PROSE
+%
+%   \shortprose           without a title
+%   \shortprose[Title]    with a title
+%
+% Every piece begins on a new page, recto or verso, higher
+% up than a chapter: the title on the fourth line and the
+% text one empty line below the last title line, that is on
+% the sixth when the title is one line. Without a title the
+% text begins on the fourth line, where the title would
+% otherwise have been.
+%
+% Short prose with a title appears in the table of contents
+% and as a bookmark; without one it appears in neither.
+% ============================================================
+\DeclareRobustCommand{\shortprose}[1][]{%
+  \clearpage
+  \def\fiction@tmp{#1}%
+  \ifx\fiction@tmp\@empty
+    \setbox\fiction@titlebox\box\voidb@x
+    \fiction@opening{\fiction@shortline}{\fiction@shortline}%
+  \else
+    \phantomsection
+    \addcontentsline{toc}{fictiontext}{#1}%
+    \fiction@title{#1}%
+    \fiction@opening{\fiction@shortline}%
+      {\the\numexpr\fiction@shortline+\fiction@titlelines+1\relax}%
   \fi
 }
 
@@ -289,10 +392,11 @@
 %   \part{I}
 %
 % Divides the book into parts. The title stands alone in
-% small capitals on a recto without a folio, a third of the
-% way down, and the verso is blank, so the first chapter of
-% the part begins on a recto. The chapter count runs on
-% through the parts.
+% small capitals on a recto without a folio, on the tenth
+% line, about a third of the way down, and the verso is
+% blank, so the first chapter or story of the part begins on
+% a recto. The chapter count runs on through the parts.
+% Parts appear in the table of contents and as bookmarks.
 %
 % Defined with \DeclareRobustCommand because it replaces the
 % class's command; the Norwegian edition calls it \del, and
@@ -301,12 +405,11 @@
 \DeclareRobustCommand{\part}[1]{%
   \cleardoublepage
   \thispagestyle{empty}%
-  \fiction@bookmark{-1}{#1}%
-  \null
-  \vskip 0.3\textheight
-  \begin{center}
-    \large\scshape #1
-  \end{center}
+  \phantomsection
+  \addcontentsline{toc}{fictionpart}{#1}%
+  \setbox\fiction@titlebox\hbox{\large\scshape #1}%
+  \fiction@opening{\fiction@partline}%
+    {\the\numexpr\fiction@partline+2\relax}%
   \cleardoublepage
 }
 
@@ -408,6 +511,58 @@
     \itshape #1
   \end{center}
   \cleardoublepage
+}
+
+
+% ============================================================
+% CONTENTS
+%
+%   \contents
+%
+% A table of contents of parts, stories and short prose with
+% a title. Chapters are not listed: a novel with numbered
+% chapters rarely needs a table of contents, and the command
+% can simply be left out.
+%
+% Begins on a recto without a folio, with "Contents" as its
+% title on the fourth line, like short prose, and what
+% follows begins on the next recto. Can stand last in the
+% front matter or at the back of the book.
+%
+% Each entry stands on one grid line, with the page number
+% against the right edge and no leader dots. A title too
+% long for the line breaks with a hanging indent. Parts stand
+% in small capitals with one line of space above, except at
+% the top.
+% ============================================================
+\newcommand*{\l@fictiontext}[2]{%
+  {\def\\{\unskip\space\ignorespaces}%
+   \leftskip\z@
+   \rightskip 2.5em
+   \parfillskip -2.5em
+   \hangindent 1.5em
+   \hangafter\@ne
+   \hyphenpenalty\@M
+   \noindent #1\nobreak\hfill\nobreak
+   \hb@xt@ 2.5em{\hss #2}\par}%
+}
+\newcommand*{\l@fictionpart}[2]{%
+  \if@nobreak\else\addvspace{\baselineskip}\fi
+  {\def\\{\unskip\space\ignorespaces}\noindent\scshape #1\par}%
+  \nobreak
+}
+\newcommand*{\toclevel@fictionpart}{-1}
+\newcommand*{\toclevel@fictiontext}{0}
+
+\newcommand{\contents}{%
+  \cleardoublepage
+  \pagestyle{empty}%
+  \fiction@title{\contentsname}%
+  \fiction@opening{\fiction@shortline}%
+    {\the\numexpr\fiction@shortline+2\relax}%
+  \@starttoc{toc}%
+  \cleardoublepage
+  \pagestyle{fiction}%
 }
 
 

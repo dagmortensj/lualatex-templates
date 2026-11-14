@@ -37,12 +37,22 @@ cd "$(dirname "$0")/.." || exit 1
 # 'oppgave' can eat its middle.
 map() {
   sed -e 's/fiksjonstil/fictionstyle/g' \
+      -e 's/fiksjon@tittelboks/fiction@titlebox/g' \
+      -e 's/fiksjon@tittellinjer/fiction@titlelines/g' \
+      -e 's/fiksjon@tittelfont/fiction@titlefont/g' \
+      -e 's/fiksjon@tittel/fiction@title/g' \
+      -e 's/fiksjon@kortlinje/fiction@shortline/g' \
+      -e 's/fiksjon@dellinje/fiction@partline/g' \
+      -e 's/fiksjondel/fictionpart/g' \
+      -e 's/fiksjontekst/fictiontext/g' \
       -e 's/fiksjon/fiction/g' \
+      -e 's/\\novelle/\\story/g' \
+      -e 's/\\kortprosa/\\shortprose/g' \
+      -e 's/\\innhold/\\contents/g' \
       -e 's/\\kapittel/\\chapter/g' \
       -e 's/scenebrudd/scenebreak/g' \
       -e 's/tallinje/numberline/g' \
       -e 's/tallfont/numberfont/g' \
-      -e 's/ordfont/wordfont/g' \
       -e 's/aapning/opening/g' \
       -e 's/bokmerke/bookmark/g' \
       -e 's/anker/anchor/g' \

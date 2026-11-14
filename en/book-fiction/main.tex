@@ -60,6 +60,11 @@
 % ------------------ Dedication --------------------
 \dedicationpage{For someone.}
 
+% ------------------ Contents ----------------------
+% For a collection: stories, short prose with a title and
+% parts. The command can also stand at the back of the book.
+% \contents
+
 
 % ============================================================
 % THE TEXT
@@ -68,8 +73,12 @@
 % scenes. Every chapter begins on a new page. Replace the
 % placeholder text below with your own.
 %
+% For a collection: \story{Title} before each story, which
+% begins on a recto, and \shortprose or \shortprose[Title]
+% before each short piece, one per page.
+%
 % To divide the book into parts, put \part{Part One} before
-% the first chapter of each part.
+% the first chapter or text of each part.
 % ============================================================
 
 \chapter
@@ -118,7 +127,7 @@ In the afternoon she went down to the shore. The path was almost gone, but she f
 
 \chapter[Epilogue]
 
-A chapter can have a word instead of a number, written in brackets after the command. The word stands in small capitals at the height where the number would otherwise have been, and the counter stands still, so a prologue before the first chapter does not push the numbering.
+A chapter can have a word instead of a number, written in brackets after the command. The word stands as a title where the number would otherwise have been, and the counter stands still, so a prologue before the first chapter does not push the numbering.
 
 Replace this text with your own. That is all it takes.
 

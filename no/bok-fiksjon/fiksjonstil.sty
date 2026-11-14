@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{fiksjonstil}[2026/11/14 v1.0 — roman og noveller]
+\ProvidesPackage{fiksjonstil}[2026/11/14 v1.1 — roman, noveller og kortprosa]
 
 % ============================================================
 % PAKKEOPSJONER
@@ -30,11 +30,12 @@
 
 
 % ============================================================
-% fiksjonstil.sty — roman og noveller
+% fiksjonstil.sty — roman, noveller og kortprosa
 %
 % Alle typografiske valg bor i denne fila. Du skal ikke
 % trenge å endre noe her for å sette en bok: skriv teksten i
-% main.tex, med \kapittel foran hvert kapittel.
+% main.tex, med \kapittel, \novelle eller \kortprosa foran
+% hver tekst.
 %
 %   \documentclass[12pt,twoside]{book}
 %
@@ -46,8 +47,9 @@
 % Motor: LuaLaTeX. Fonten er OpenType.
 %
 % Rekkefølgen nedenfor: språk, font, mikrotypografi, kjegle,
-% geometri, sidefall, sidestil, hyperref, kapitler,
-% scenebrudd, deler, forstoffet og heftet sist.
+% geometri, sidefall, sidestil, hyperref, åpningene
+% (kapitler, noveller, kortprosa), scenebrudd, deler,
+% forstoffet, innholdet og heftet sist.
 % ============================================================
 
 
@@ -62,7 +64,7 @@
 %
 % Garamond Libre, samme skrift som de andre bokmalene.
 % Minuskeltall i teksten og i sidetallene; kapitteltallene
-% bruker ordinære tall (se KAPITLER). Ingen
+% bruker ordinære tall (se ÅPNINGER). Ingen
 % matematikkfont: stilen laster fontspec og ikke
 % unicode-math.
 % ============================================================
@@ -194,8 +196,11 @@
 % ============================================================
 % HYPERLENKER
 %
-% Lenkene er svarte. Kapitler og deler står som bokmerker i
-% PDF-en.
+% Lenkene er svarte, så siden trykkes som uten dem, men
+% innholdet er klikkbart i en PDF-leser. Kapitler, noveller,
+% kortprosa med tittel og deler står som bokmerker. \\ i en
+% tittel fjernes fra bokmerket; mellomrommet etter den blir
+% stående.
 % ============================================================
 \RequirePackage{xcolor}
 \RequirePackage{hyperref}
@@ -203,6 +208,8 @@
   colorlinks=true,
   allcolors=black
 }
+
+\pdfstringdefDisableCommands{\let\\\@empty}
 
 \newcounter{fiksjon@anker}
 \newcommand{\fiksjon@bokmerke}[2]{%
@@ -212,51 +219,148 @@
 
 
 % ============================================================
-% KAPITLER
+% ÅPNINGER
 %
-%   \kapittel             nummerert: 1, 2, 3 ...
-%   \kapittel[Prolog]     unummerert, med et ord i stedet
+% Kapitler, noveller, kortprosa og innholdsfortegnelsen
+% begynner alle på samme måte: en tom side ned til en gitt
+% linje, eventuelt med en tittel eller et tall midtstilt
+% på en linje over. Alt står i gridet, så linjene på en
+% åpningsside står i høyde med linjene på siden ved siden
+% av.
 %
-% Hvert kapittel begynner på en ny side, høyre eller
-% venstre. Teksten begynner elleve linjer ned i satsflata,
-% på tolvte linje, og tallet står midtstilt i lufta over,
-% med grunnlinja på femte linje. Alt holder seg i gridet,
-% så linjene på en kapittelside står i høyde med linjene på
-% siden ved siden av.
+%   \fiksjon@aapning{tittellinje}{tekstlinje}
 %
-% Tallet er satt med ordinære tall: minuskeltall ville latt
-% 3, 4, 5, 7 og 9 henge under linja og de andre ikke. Et
-% unummerert kapittel får ordet i kapiteler på samme
-% grunnlinje, og telleren går ikke.
+% setter innholdet i \fiksjon@tittelboks med første
+% grunnlinje på tittellinja, og lar teksten begynne på
+% tekstlinja. Er boksen tom, blir det bare luft.
 %
-% Første avsnitt får ikke innrykk.
+% Titler står oppreist i \large, midtstilt, uten orddeling,
+% på inntil 80 % av satsbredden. En lang tittel brytes, og
+% hver linje står på neste gridlinje. \\ i tittelen
+% bestemmer hvor den brytes; i innholdet og bokmerkene blir
+% den et mellomrom.
+%
+% Tallene samlet, om noe skal justeres:
 % ============================================================
-\newcommand{\fiksjon@slipp}{11}   % tomme linjer over teksten
-\newcommand{\fiksjon@tallinje}{5} % linja tallet står på
+\newcommand{\fiksjon@tallinje}{5}   % kapitteltall og novelletittel
+\newcommand{\fiksjon@slipp}{12}     % første tekstlinje i kapitler og noveller
+\newcommand{\fiksjon@kortlinje}{4}  % tittel på kortprosa og innhold
+\newcommand{\fiksjon@dellinje}{10}  % tittel på delsider
 \newcommand{\fiksjon@tallfont}{%
   \fontsize{24bp}{24bp}\selectfont\addfontfeatures{RawFeature=-onum}}
-\newcommand{\fiksjon@ordfont}{\large\scshape}
+\newcommand{\fiksjon@tittelfont}{\large}
+
+\newbox\fiksjon@tittelboks
+\newcommand{\fiksjon@tittel}[1]{%
+  \setbox\fiksjon@tittelboks\hbox{%
+    \parbox[t]{0.8\textwidth}{%
+      \centering\fiksjon@tittelfont
+      \baselineskip=15bp
+      \hyphenpenalty=\@M \exhyphenpenalty=\@M
+      #1\par}}}
+
+% Antall linjer i tittelen: én, pluss det som står under
+% første grunnlinje delt på linjeavstanden (avrundet, så
+% underlengdene i siste linje ikke teller).
+\newcommand{\fiksjon@tittellinjer}{%
+  \numexpr 1+\dp\fiksjon@tittelboks/\baselineskip\relax}
 
 \newcommand{\fiksjon@aapning}[2]{%
   \par
-  \vbox to \dimexpr\topskip+\baselineskip*(\fiksjon@slipp-1)\relax{%
-    \fiksjon@bokmerke{0}{#1}%
-    \kern\dimexpr\topskip+\baselineskip*(\fiksjon@tallinje-1)\relax
-    \vbox to\z@{\vss\hbox to\textwidth{\hfil#2\hfil}}%
+  \vbox to \dimexpr\topskip+\baselineskip*(#2-2)\relax{%
+    \ifvoid\fiksjon@tittelboks\else
+      \kern\dimexpr\topskip+\baselineskip*(#1-1)\relax
+      \vbox to\z@{\vss
+        \hbox to\textwidth{\hfil\box\fiksjon@tittelboks\hfil}}%
+    \fi
     \vfil}%
   \nobreak
   \@afterindentfalse
   \@afterheading
 }
 
+
+% ============================================================
+% KAPITLER
+%
+%   \kapittel             nummerert: 1, 2, 3 ...
+%   \kapittel[Epilog]     unummerert, med et ord i stedet
+%
+% Hvert kapittel begynner på en ny side, høyre eller
+% venstre. Teksten begynner elleve linjer ned i satsflata,
+% på tolvte linje, og tallet står midtstilt i lufta over,
+% med grunnlinja på femte linje.
+%
+% Tallet er satt med ordinære tall: minuskeltall ville latt
+% 3, 4, 5, 7 og 9 henge under linja og de andre ikke. Et
+% unummerert kapittel får ordet som en tittel på samme
+% linje, og telleren går ikke.
+%
+% Kapitlene står som bokmerker i PDF-en, men ikke i
+% innholdsfortegnelsen. Første avsnitt får ikke innrykk.
+% ============================================================
 \DeclareRobustCommand{\kapittel}[1][]{%
   \clearpage
   \def\fiksjon@tmp{#1}%
   \ifx\fiksjon@tmp\@empty
     \refstepcounter{chapter}%
-    \fiksjon@aapning{\thechapter}{\fiksjon@tallfont\thechapter}%
+    \setbox\fiksjon@tittelboks\hbox{\fiksjon@tallfont\thechapter}%
+    \fiksjon@bokmerke{0}{\thechapter}%
   \else
-    \fiksjon@aapning{#1}{\fiksjon@ordfont #1}%
+    \fiksjon@tittel{#1}%
+    \fiksjon@bokmerke{0}{#1}%
+  \fi
+  \fiksjon@aapning{\fiksjon@tallinje}{\fiksjon@slipp}%
+}
+
+
+% ============================================================
+% NOVELLER
+%
+%   \novelle{Tittel}
+%   \novelle{En lang tittel\\ brutt der du vil}
+%
+% Hver novelle begynner på en høyreside, med samme åpning
+% som et kapittel: tittelen på femte linje og teksten på
+% tolvte. Novellene står i innholdsfortegnelsen og som
+% bokmerker.
+% ============================================================
+\DeclareRobustCommand{\novelle}[1]{%
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{fiksjontekst}{#1}%
+  \fiksjon@tittel{#1}%
+  \fiksjon@aapning{\fiksjon@tallinje}{\fiksjon@slipp}%
+}
+
+
+% ============================================================
+% KORTPROSA
+%
+%   \kortprosa            uten tittel
+%   \kortprosa[Tittel]    med tittel
+%
+% Hver tekst begynner på en ny side, høyre eller venstre,
+% høyere opp enn et kapittel: tittelen står på fjerde linje
+% og teksten én tom linje under siste tittellinje, altså på
+% sjette når tittelen er på én linje. Uten tittel begynner
+% teksten på fjerde linje, der tittelen ellers ville stått.
+%
+% Kortprosa med tittel står i innholdsfortegnelsen og som
+% bokmerke; uten tittel står den ingen av stedene.
+% ============================================================
+\DeclareRobustCommand{\kortprosa}[1][]{%
+  \clearpage
+  \def\fiksjon@tmp{#1}%
+  \ifx\fiksjon@tmp\@empty
+    \setbox\fiksjon@tittelboks\box\voidb@x
+    \fiksjon@aapning{\fiksjon@kortlinje}{\fiksjon@kortlinje}%
+  \else
+    \phantomsection
+    \addcontentsline{toc}{fiksjontekst}{#1}%
+    \fiksjon@tittel{#1}%
+    \fiksjon@aapning{\fiksjon@kortlinje}%
+      {\the\numexpr\fiksjon@kortlinje+\fiksjon@tittellinjer+1\relax}%
   \fi
 }
 
@@ -288,9 +392,11 @@
 %   \del{I}
 %
 % Deler boka i deler. Tittelen står alene i kapiteler på en
-% høyreside uten sidetall, en tredjedel ned, og baksiden er
-% blank, så første kapittel i delen begynner på en
-% høyreside. Kapitteltellingen fortsetter gjennom delene.
+% høyreside uten sidetall, på tiende linje, omtrent en
+% tredjedel ned, og baksiden er blank, så første kapittel
+% eller novelle i delen begynner på en høyreside.
+% Kapitteltellingen fortsetter gjennom delene. Delene står
+% i innholdsfortegnelsen og som bokmerker.
 %
 % Definert med \DeclareRobustCommand fordi den engelske
 % utgaven heter \part og erstatter klassens kommando; de to
@@ -299,12 +405,11 @@
 \DeclareRobustCommand{\del}[1]{%
   \cleardoublepage
   \thispagestyle{empty}%
-  \fiksjon@bokmerke{-1}{#1}%
-  \null
-  \vskip 0.3\textheight
-  \begin{center}
-    \large\scshape #1
-  \end{center}
+  \phantomsection
+  \addcontentsline{toc}{fiksjondel}{#1}%
+  \setbox\fiksjon@tittelboks\hbox{\large\scshape #1}%
+  \fiksjon@aapning{\fiksjon@dellinje}%
+    {\the\numexpr\fiksjon@dellinje+2\relax}%
   \cleardoublepage
 }
 
@@ -405,6 +510,57 @@
     \itshape #1
   \end{center}
   \cleardoublepage
+}
+
+
+% ============================================================
+% INNHOLD
+%
+%   \innhold
+%
+% Innholdsfortegnelse over deler, noveller og kortprosa med
+% tittel. Kapitler står ikke der: en roman med nummererte
+% kapitler trenger sjelden en innholdsfortegnelse, og
+% kommandoen kan bare utelates.
+%
+% Begynner på en høyreside uten sidetall, med «Innhold» som
+% tittel på fjerde linje, som kortprosa, og det som følger
+% begynner på neste høyreside. Kan stå sist i forstoffet
+% eller bakerst i boka.
+%
+% Hver tekst står på én linje i gridet, med sidetallet mot
+% høyre kant og ingen punktledere. En tittel som er for lang
+% for linja, brytes og får hengende innrykk. Delene står i
+% kapiteler med én linjes luft over, bortsett fra øverst.
+% ============================================================
+\newcommand*{\l@fiksjontekst}[2]{%
+  {\def\\{\unskip\space\ignorespaces}%
+   \leftskip\z@
+   \rightskip 2.5em
+   \parfillskip -2.5em
+   \hangindent 1.5em
+   \hangafter\@ne
+   \hyphenpenalty\@M
+   \noindent #1\nobreak\hfill\nobreak
+   \hb@xt@ 2.5em{\hss #2}\par}%
+}
+\newcommand*{\l@fiksjondel}[2]{%
+  \if@nobreak\else\addvspace{\baselineskip}\fi
+  {\def\\{\unskip\space\ignorespaces}\noindent\scshape #1\par}%
+  \nobreak
+}
+\newcommand*{\toclevel@fiksjondel}{-1}
+\newcommand*{\toclevel@fiksjontekst}{0}
+
+\newcommand{\innhold}{%
+  \cleardoublepage
+  \pagestyle{empty}%
+  \fiksjon@tittel{\contentsname}%
+  \fiksjon@aapning{\fiksjon@kortlinje}%
+    {\the\numexpr\fiksjon@kortlinje+2\relax}%
+  \@starttoc{toc}%
+  \cleardoublepage
+  \pagestyle{fiksjon}%
 }
 
 

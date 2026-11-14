@@ -23,7 +23,7 @@ English in `en/`, Norwegian in `no/`.
 | **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, emphasis boxes, Python listings; optional unnumbered mode |
 | **exam** / **prove** | A4, 12 pt | Classroom tests: title block with name, date, time and aids; Part 1 / Part 2 or Level 1–3; multiple-choice lists; "Page 2 of 5" on every page; optional cover page and booklet padding for duplex printing |
 | **formulasheet** / **formelark** | A4, folded to A5 | A formula sheet: two landscape A5 pages stacked on one sheet — constants above the fold, formulas below, two columns each; fold marks; optional tight mode |
-| **book-fiction** / **bok-fiksjon** | 128 × 204 mm | A novel or a collection of short stories: justified text on a fixed line grid, chapter openings with a large centred number, scene breaks, parts, half-title, title page and colophon |
+| **book-fiction** / **bok-fiksjon** | 128 × 204 mm | A novel, a story collection or short prose: justified text on a fixed line grid, chapter openings with a large centred number, titled stories on a recto, short prose one piece per page with an optional title, scene breaks, parts, contents, half-title, title page and colophon |
 | **book-poetry** / **bok-dikt** | 140 × 216 mm or A5 | A poetry collection: one poem per page with an optional title, line breaks and indentation taken from the source, parts, half-title, title page, colophon, and contents by title or first line |
 
 `notes`, `handout` and `exam` share their exercise environments, so a
@@ -44,7 +44,8 @@ mathematics, no citations and their own page sizes. `book-poetry` has
 an environment that reads a poem as it is written. `book-fiction` grew
 out of `book-poetry`, with the same front matter, parts and booklet
 padding, and replaces the poem environment with running text on a
-fixed line grid, numbered chapter openings and scene breaks.
+fixed line grid, numbered chapters, titled stories, short prose and
+scene breaks.
 
 ## Fonts and engine
 
@@ -161,9 +162,10 @@ The two versions are functionally equivalent. What differs:
   `tight`. The Norwegian `book-poetry` (`bok-dikt`) uses the environment
   `dikt`, `\del` and the options `sentrert` and `hefte`; the English one
   `poem`, `\part`, `centered` and `booklet`. The Norwegian
-  `book-fiction` (`bok-fiksjon`) uses `\kapittel`, `\scenebrudd`,
-  `\del` and the option `hefte`; the English one `\chapter`,
-  `\scenebreak`, `\part` and `booklet`. `parity-diff.sh` maps one onto the
+  `book-fiction` (`bok-fiksjon`) uses `\kapittel`, `\novelle`,
+  `\kortprosa`, `\scenebrudd`, `\del`, `\innhold` and the option
+  `hefte`; the English one `\chapter`, `\story`, `\shortprose`,
+  `\scenebreak`, `\part`, `\contents` and `booklet`. `parity-diff.sh` maps one onto the
   other.
 - **Comments and placeholder text** — in the matching language
 - **Numbers** — the Norwegian style files set `siunitx` to a decimal

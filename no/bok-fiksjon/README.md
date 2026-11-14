@@ -1,8 +1,9 @@
 # bok-fiksjon-mal
 
-LaTeX-mal for en roman eller en novellesamling: løpende tekst i fast
-linjegrid, kapitler med stort tall, scenebrudd, deler og forstoff.
-Settes med **LuaLaTeX** i Garamond Libre.
+LaTeX-mal for en roman, en novellesamling eller en samling kortprosa:
+løpende tekst i fast linjegrid, kapitler med stort tall, noveller og
+kortprosa med titler, scenebrudd, deler, innholdsfortegnelse og
+forstoff. Settes med **LuaLaTeX** i Garamond Libre.
 
 ## Filer
 
@@ -43,14 +44,53 @@ Et kapittel med et ord i stedet for tall.
 - **`\kapittel`** begynner et nytt kapittel på ny side, høyre eller
   venstre. Tallet står midtstilt i lufta over teksten, og teksten
   begynner elleve linjer ned. Kapitlene nummereres av seg selv.
-- **`\kapittel[Prolog]`** gir et unummerert kapittel med ordet i
-  kapiteler der tallet ellers ville stått. Telleren går ikke, så en
+- **`\kapittel[Prolog]`** gir et unummerert kapittel med ordet som
+  tittel der tallet ellers ville stått. Telleren går ikke, så en
   prolog skyver ikke nummereringen.
 - **`\scenebrudd`** gir én blank linje, og neste avsnitt uten innrykk.
   Faller bruddet nederst på en side, står siden med en tom linje til
   slutt; faller det helt øverst, forsvinner det.
 - **Avsnitt** skilles med en blank linje i kilden, som ellers i LaTeX,
   og får innrykk på én gefirt.
+
+## Novellesamling og kortprosa
+
+```latex
+\innhold
+
+\novelle{Sommerhuset}
+
+Første avsnitt i novellen.
+
+\novelle{Det siste toget fra Dombås\\ den vinteren far ble syk}
+
+\kortprosa[Måker]
+
+En kort tekst med tittel.
+
+\kortprosa
+
+En kort tekst uten tittel.
+```
+
+- **`\novelle{Tittel}`** begynner på en høyreside, med samme åpning som
+  et kapittel: tittelen på femte linje og teksten på tolvte.
+- **`\kortprosa[Tittel]`** begynner på en ny side, høyre eller venstre,
+  med tittelen på fjerde linje og teksten én tom linje under. Uten
+  tittel, **`\kortprosa`**, begynner teksten på fjerde linje. Én tekst
+  per side; en lengre tekst fortsetter på neste side som vanlig.
+- **Titler** står oppreist i \large, midtstilt, og brytes over flere
+  linjer når de er lange, hver linje på neste gridlinje. Med `\\` i
+  tittelen bestemmer du selv hvor den brytes. I innholdsfortegnelsen
+  og bokmerkene blir `\\` et mellomrom.
+- **`\innhold`** setter innholdsfortegnelsen: deler, noveller og
+  kortprosa med tittel, med sidetall mot høyre kant og ingen
+  punktledere. Kapitler og kortprosa uten tittel står ikke der. Legg
+  kommandoen sist i forstoffet eller bakerst i boka, eller utelat den.
+
+`\kapittel`, `\novelle` og `\kortprosa` kan blandes, for eksempel en
+lang novelle delt i nummererte kapitler, eller noen korte tekster
+mellom de lange.
 
 ## Kommandoer
 
@@ -59,9 +99,12 @@ Et kapittel med et ord i stedet for tall.
 \booktitlepage             % Tittelside (\title, \subtitle, \author, \date)
 \colophonpage{...}         % Kolofon på baksiden av tittelsiden
 \dedicationpage{...}       % Dedikasjon
+\innhold                   % Innholdsfortegnelse (kommentert ut i main.tex)
 \del{Første del}           % Delside, høyreside med blank bakside
 \kapittel                  % Nytt kapittel, nummerert
 \kapittel[Prolog]          % Nytt kapittel med et ord i stedet for tall
+\novelle{Tittel}           % Ny novelle, på høyreside
+\kortprosa[Tittel]         % Ny kort tekst, tittel valgfri
 \scenebrudd                % Blank linje mellom to scener
 ```
 
@@ -70,9 +113,8 @@ trenger i `main.tex`, så holder sidefallet seg riktig. Uten `\del`
 kommer kapitlene fortløpende. Med `\del` fortsetter kapitteltellingen
 gjennom delene.
 
-Malen har ingen innholdsfortegnelse — en roman med nummererte kapitler
-trenger sjelden det — men kapitler og deler står som bokmerker i
-PDF-en. Den har heller ingen omslagsside. Et omslag med rygg og
+Kapitler, noveller, kortprosa med tittel og deler står som bokmerker i
+PDF-en, også uten `\innhold`. Malen har ingen omslagsside. Et omslag med rygg og
 bakside avhenger av trykkeriet og sidetallet, og lages som en egen PDF.
 
 ## Pakkeopsjoner
@@ -98,8 +140,12 @@ samme siden med mer plass rundt.
 - **Marger:** innside 14 mm, utside 17 mm; toppen av versalene i første
   linje 17 mm under arkets overkant
 - **Avsnitt:** justert, innrykk 1 gefirt, ingen luft mellom avsnitt
-- **Kapittelstart:** teksten på tolvte linje, tallet i 24 bp med
-  ordinære tall på femte
+- **Kapittelstart og novelle:** teksten på tolvte linje, tallet i 24 bp
+  med ordinære tall eller tittelen i \large på femte; noveller på
+  høyreside
+- **Kortprosa og innhold:** tittelen på fjerde linje, teksten én tom
+  linje under
+- **Delsider:** tittelen i kapiteler på tiende linje
 - **Sidetall:** midtstilt, to linjer under siste tekstlinje (20 mm over
   nederkanten), også på kapittelsider; forstoff og delsider uten
 - **Mikrotypografi:** protrusion, expansion og sperring av kapiteler
