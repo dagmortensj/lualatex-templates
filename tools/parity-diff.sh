@@ -25,7 +25,8 @@
 #     Oppgave/Exercise, poeng/points, «Side … av»/"Page … of",
 #     «Lykke til!»/"Good luck!", and the option-warning text
 #   - the formula-sheet style's page-count warning text
-#   - the poetry style's \ProvidesPackage description
+#   - the poetry and fiction styles' \ProvidesPackage
+#     descriptions
 # Anything else is drift.
 # ============================================================
 set -u
@@ -35,7 +36,18 @@ cd "$(dirname "$0")/.." || exit 1
 # names first, so e.g. 'deloppgaver' is mapped before
 # 'oppgave' can eat its middle.
 map() {
-  sed -e 's/diktstil/poetrystyle/g' \
+  sed -e 's/fiksjonstil/fictionstyle/g' \
+      -e 's/fiksjon/fiction/g' \
+      -e 's/\\kapittel/\\chapter/g' \
+      -e 's/scenebrudd/scenebreak/g' \
+      -e 's/tallinje/numberline/g' \
+      -e 's/tallfont/numberfont/g' \
+      -e 's/ordfont/wordfont/g' \
+      -e 's/aapning/opening/g' \
+      -e 's/bokmerke/bookmark/g' \
+      -e 's/anker/anchor/g' \
+      -e 's/slipp/drop/g' \
+      -e 's/diktstil/poetrystyle/g' \
       -e 's/sentrert/centered/g' \
       -e 's/diktdel/poempart/g' \
       -e 's/dikt/poem/g' \
@@ -128,9 +140,9 @@ compare() {  # compare <no-file> <en-file> [sed expression run before map]
   fi
 }
 
-compare no/bok/bokstil.sty        en/book/bookstyle.sty
-compare no/bok/main.tex           en/book/main.tex
-compare no/bok/innhold/kapittel1.tex en/book/content/chapter1.tex
+compare no/bok-fag/bokstil.sty        en/book-academic/bookstyle.sty
+compare no/bok-fag/main.tex           en/book-academic/main.tex
+compare no/bok-fag/innhold/kapittel1.tex en/book-academic/content/chapter1.tex
 compare no/notat/notatstil.sty    en/notes/notesstyle.sty
 compare no/notat/main.tex         en/notes/main.tex
 compare no/ffv/ffvstil.sty        en/ffv/ffvstyle.sty
@@ -141,11 +153,13 @@ compare no/prove/provestil.sty    en/exam/examstyle.sty
 compare no/prove/main.tex         en/exam/main.tex
 compare no/formelark/formelarkstil.sty en/formulasheet/formulasheetstyle.sty
 compare no/formelark/main.tex     en/formulasheet/main.tex
-# \del is \exampart in exam but \part in poetry, so the
-# poetry pair maps it itself before the shared map runs.
+# \del is \exampart in exam but \part in poetry and fiction,
+# so those pairs map it themselves before the shared map runs.
 poetry_del='s/\\del\([^a-zA-Z]\)/\\part\1/g'
-compare no/dikt/diktstil.sty      en/poetry/poetrystyle.sty "$poetry_del"
-compare no/dikt/main.tex          en/poetry/main.tex "$poetry_del"
+compare no/bok-dikt/diktstil.sty      en/book-poetry/poetrystyle.sty "$poetry_del"
+compare no/bok-dikt/main.tex          en/book-poetry/main.tex "$poetry_del"
+compare no/bok-fiksjon/fiksjonstil.sty en/book-fiction/fictionstyle.sty "$poetry_del"
+compare no/bok-fiksjon/main.tex       en/book-fiction/main.tex "$poetry_del"
 
 if [ "$fail" -eq 0 ]; then
   printf '\nAll pairs structurally identical.\n'

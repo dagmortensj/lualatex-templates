@@ -21,7 +21,7 @@
 *.lof
 *.lot
 
-# makeindex — the book template documents an index in \backmatter
+# makeindex — book-academic documents an index in \backmatter
 *.idx
 *.ind
 *.ilg

@@ -1,0 +1,439 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{fiksjonstil}[2026/11/14 v1.0 — roman og noveller]
+
+% ============================================================
+% PAKKEOPSJONER
+%
+%   \usepackage{fiksjonstil}              128 x 204 mm, trykk
+%   \usepackage[hefte]{fiksjonstil}       blanke sider til
+%                                         slutt, så heftet får
+%                                         bakside
+%   \usepackage[korrektur]{fiksjonstil}   sidekorrektur: siden
+%                                         uendret, sentrert på
+%                                         A4 med skjæremerker
+%
+% hefte — for en kort tekst som skrives ut som falset hefte:
+% sidetallet fylles opp til et multiplum av fire med blanke
+% sider til slutt, og den siste er baksiden. Sidene får
+% plass uskalert på hver A5-halvdel av et A4-ark.
+%
+% korrektur — gir samme linje- og sidebrudd som trykk, med
+% luft rundt siden til merknader. 'proof' godtas som
+% synonym.
+% ============================================================
+\newif\iffiksjon@korrektur
+\newif\iffiksjon@hefte
+\DeclareOption{korrektur}{\fiksjon@korrekturtrue}
+\DeclareOption{proof}{\fiksjon@korrekturtrue}
+\DeclareOption{hefte}{\fiksjon@heftetrue}
+\ProcessOptions\relax
+
+
+% ============================================================
+% fiksjonstil.sty — roman og noveller
+%
+% Alle typografiske valg bor i denne fila. Du skal ikke
+% trenge å endre noe her for å sette en bok: skriv teksten i
+% main.tex, med \kapittel foran hvert kapittel.
+%
+%   \documentclass[12pt,twoside]{book}
+%
+% Papirformatet settes her og ikke i \documentclass, siden
+% 128 x 204 mm ikke er et klassevalg. 12pt-valget gir
+% størrelsene rundt brødteksten (\small, \large, \huge);
+% brødteksten selv settes under.
+%
+% Motor: LuaLaTeX. Fonten er OpenType.
+%
+% Rekkefølgen nedenfor: språk, font, mikrotypografi, kjegle,
+% geometri, sidefall, sidestil, hyperref, kapitler,
+% scenebrudd, deler, forstoffet og heftet sist.
+% ============================================================
+
+
+% ============================================================
+% SPRÅK
+% ============================================================
+\RequirePackage[norsk]{babel}
+
+
+% ============================================================
+% FONT
+%
+% Garamond Libre, samme skrift som de andre bokmalene.
+% Minuskeltall i teksten og i sidetallene; kapitteltallene
+% bruker ordinære tall (se KAPITLER). Ingen
+% matematikkfont: stilen laster fontspec og ikke
+% unicode-math.
+% ============================================================
+\RequirePackage{fontspec}
+
+\setmainfont{GaramondLibre}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic,
+  Numbers        = OldStyle ]
+
+
+% ============================================================
+% MIKROTYPOGRAFI
+%
+% Teksten er justert, så både protrusion og expansion er på:
+% protrusion henger tegnsetting litt ut i margen, og
+% expansion gir jevnere ordmellomrom. tracking sperrer
+% kapitelene.
+% ============================================================
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% KJEGLE
+%
+% 11,75/15 bp, målt fra en norsk roman satt i Adobe Garamond.
+% Garamond Libre har nesten samme tetthet: over 97 mm gir den
+% rundt 57 tegn per linje. bp er punktet InDesign bruker, så
+% tallene er de samme som i forbildet.
+%
+% \topskip er én linje, så første grunnlinje står én linje
+% ned i satsflata, og hver linje på siden står i et fast
+% grid med 15 bp mellom grunnlinjene.
+% ============================================================
+\renewcommand{\normalsize}{%
+  \@setfontsize\normalsize{11.75bp}{15bp}%
+  \let\@listi\@listI}
+\normalsize
+\setlength{\topskip}{15bp}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+
+
+% ============================================================
+% SIDEGEOMETRI
+%
+% FORMAT. 128 x 204 mm, et vanlig norsk romanformat.
+%
+% SATSFLATE. 97 mm bred og 30 linjer høy. Toppen av
+% versalene i første linje står 17 mm under arkets overkant,
+% første grunnlinje 19,9 mm, siste 173,4 mm.
+%
+% MARGER. Innside 14 mm, utside 17 mm. Bunnmargen er
+% resten, 30,6 mm, og sidetallet står i den.
+%
+%   innside  utside  topp   bunn
+%     14      17     14,64  30,61  mm
+%
+% Toppmargen er til toppen av satsflata, som ligger én linje
+% (\topskip) over første grunnlinje.
+% ============================================================
+\setlength{\paperwidth}{128mm}
+\setlength{\paperheight}{204mm}
+
+\RequirePackage{geometry}
+\geometry{papersize={128mm,204mm},
+  inner=14mm, outer=17mm, top=14.64mm,
+  textheight=450bp, footskip=30bp}
+
+% Sidekorrektur: siden sentrert på A4 med skjæremerker (cam)
+% og crops informasjonslinje øverst — legg til noinfo i
+% opsjonene under om du vil ha arket uten den.
+\iffiksjon@korrektur
+  \RequirePackage[cam,a4,center]{crop}
+\fi
+
+
+% ============================================================
+% SIDEFALL
+%
+% Sidene står i fast grid og strekkes ikke. En side er full,
+% 30 linjer, med to unntak: siste side i et kapittel slutter
+% der teksten slutter, og en side blir én linje kortere når
+% siste linje i et avsnitt ellers ville stått alene øverst
+% på neste side (horunge). Første linje i et avsnitt kan
+% stå alene nederst; å flytte den ville gitt korte sider
+% langt oftere.
+%
+% Bunnen av hver side får strekk av orden fill, så en kort
+% side står åpen nederst og ikke fordeler lufta mellom
+% linjene.
+% ============================================================
+\raggedbottom
+\def\@textbottom{\vskip\z@\@plus 1fill}
+\widowpenalty=\@M
+\clubpenalty=\z@
+\brokenpenalty=\z@
+
+
+% ============================================================
+% SIDESTIL
+%
+% Sidetallet midtstilt nederst, to linjer under siste
+% tekstlinje, 20 mm over arkets nederkant. Også på
+% kapittelsidene. Ingen topptekst. Forstoffet og delsidene
+% er uten sidetall, men telles med.
+%
+% emptypage holder de innskutte blanksidene helt tomme.
+% ============================================================
+\def\ps@fiksjon{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \def\@oddfoot{\hfil\thepage\hfil}%
+  \let\@evenfoot\@oddfoot
+}
+\pagestyle{fiksjon}
+
+\RequirePackage{emptypage}
+
+
+% ============================================================
+% HYPERLENKER
+%
+% Lenkene er svarte. Kapitler og deler står som bokmerker i
+% PDF-en.
+% ============================================================
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  allcolors=black
+}
+
+\newcounter{fiksjon@anker}
+\newcommand{\fiksjon@bokmerke}[2]{%
+  \stepcounter{fiksjon@anker}%
+  \pdfbookmark[#1]{#2}{fiksjon@anker.\arabic{fiksjon@anker}}%
+}
+
+
+% ============================================================
+% KAPITLER
+%
+%   \kapittel             nummerert: 1, 2, 3 ...
+%   \kapittel[Prolog]     unummerert, med et ord i stedet
+%
+% Hvert kapittel begynner på en ny side, høyre eller
+% venstre. Teksten begynner elleve linjer ned i satsflata,
+% på tolvte linje, og tallet står midtstilt i lufta over,
+% med grunnlinja på femte linje. Alt holder seg i gridet,
+% så linjene på en kapittelside står i høyde med linjene på
+% siden ved siden av.
+%
+% Tallet er satt med ordinære tall: minuskeltall ville latt
+% 3, 4, 5, 7 og 9 henge under linja og de andre ikke. Et
+% unummerert kapittel får ordet i kapiteler på samme
+% grunnlinje, og telleren går ikke.
+%
+% Første avsnitt får ikke innrykk.
+% ============================================================
+\newcommand{\fiksjon@slipp}{11}   % tomme linjer over teksten
+\newcommand{\fiksjon@tallinje}{5} % linja tallet står på
+\newcommand{\fiksjon@tallfont}{%
+  \fontsize{24bp}{24bp}\selectfont\addfontfeatures{RawFeature=-onum}}
+\newcommand{\fiksjon@ordfont}{\large\scshape}
+
+\newcommand{\fiksjon@aapning}[2]{%
+  \par
+  \vbox to \dimexpr\topskip+\baselineskip*(\fiksjon@slipp-1)\relax{%
+    \fiksjon@bokmerke{0}{#1}%
+    \kern\dimexpr\topskip+\baselineskip*(\fiksjon@tallinje-1)\relax
+    \vbox to\z@{\vss\hbox to\textwidth{\hfil#2\hfil}}%
+    \vfil}%
+  \nobreak
+  \@afterindentfalse
+  \@afterheading
+}
+
+\DeclareRobustCommand{\kapittel}[1][]{%
+  \clearpage
+  \def\fiksjon@tmp{#1}%
+  \ifx\fiksjon@tmp\@empty
+    \refstepcounter{chapter}%
+    \fiksjon@aapning{\thechapter}{\fiksjon@tallfont\thechapter}%
+  \else
+    \fiksjon@aapning{#1}{\fiksjon@ordfont #1}%
+  \fi
+}
+
+
+% ============================================================
+% SCENEBRUDD
+%
+%   ... siste avsnitt i en scene.
+%   \scenebrudd
+%   Første avsnitt i neste scene ...
+%
+% Én blank linje, og neste avsnitt uten innrykk. Faller
+% bruddet nederst på en side, står siden med en tom linje
+% til slutt, og neste scene begynner øverst på neste side.
+% Faller det helt øverst, forsvinner det, som i trykte bøker
+% med blank linje som skille.
+% ============================================================
+\newcommand{\scenebrudd}{%
+  \par
+  \vskip\baselineskip
+  \everypar{{\setbox\z@\lastbox}\everypar{}}%
+}
+
+
+% ============================================================
+% DELER
+%
+%   \del{Første del}
+%   \del{I}
+%
+% Deler boka i deler. Tittelen står alene i kapiteler på en
+% høyreside uten sidetall, en tredjedel ned, og baksiden er
+% blank, så første kapittel i delen begynner på en
+% høyreside. Kapitteltellingen fortsetter gjennom delene.
+%
+% Definert med \DeclareRobustCommand fordi den engelske
+% utgaven heter \part og erstatter klassens kommando; de to
+% stilfilene skal være like.
+% ============================================================
+\DeclareRobustCommand{\del}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \fiksjon@bokmerke{-1}{#1}%
+  \null
+  \vskip 0.3\textheight
+  \begin{center}
+    \large\scshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% SMUSSTITTEL
+%
+%   \halftitlepage
+%
+% Bokas første side: bare tittelen, liten, på en høyreside
+% med blank bakside. Valgfri, og kommentert ut i main.tex:
+% uten den begynner boka på tittelsiden.
+% ============================================================
+\def\@subtitle{}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+
+\newcommand{\halftitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    \large\scshape \@title
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% TITTELSIDE
+%
+%   \title{...}  \author{...}  \date{...}
+%   \subtitle{...}                 % valgfritt, f.eks. «Roman»
+%   \booktitlepage
+%
+% Samme oppbygning som i de andre bokmalene: tittel i store
+% kapiteler, kursiv undertittel om den er satt, forfatter
+% under, og dato nederst. I \date kan det like gjerne stå et
+% forlag eller et sted.
+% ============================================================
+\newcommand{\booktitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    {\huge\scshape \@title \par}
+    \ifx\@subtitle\@empty\else
+      \vspace{1.4em}
+      {\large\itshape \@subtitle \par}
+    \fi
+    \vspace{3em}
+    {\large \@author \par}
+  \end{center}
+  \vskip\z@\@plus 1filll
+  \begin{center}
+    {\normalsize\itshape \@date \par}
+  \end{center}
+  \clearpage
+}
+
+
+% ============================================================
+% KOLOFON
+%
+%   \colophonpage{%
+%     © 2026 Forfatternavn\\
+%     Satt med Garamond Libre\\
+%     ISBN 978-82-000-0000-0}
+%
+% Baksiden av tittelsiden: rettigheter, trykk og ISBN, liten
+% skrift nederst på siden. Skill linjene med \\.
+% ============================================================
+\newcommand{\colophonpage}[1]{%
+  \clearpage
+  \thispagestyle{empty}%
+  \null
+  \vskip\z@\@plus 1filll
+  {\small\raggedright #1\par}
+  \clearpage
+}
+
+
+% ============================================================
+% DEDIKASJONSSIDE
+%
+%   \dedicationpage{Til noen.}
+%
+% Én kort kursiv linje, sentrert en fjerdedel ned på en
+% høyreside, fulgt av en blank bakside.
+% ============================================================
+\newcommand{\dedicationpage}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.25\textheight
+  \begin{center}
+    \itshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% HEFTE
+%
+% Med opsjonen hefte fylles boka opp med blanke sider til
+% sidetallet er delelig med fire, som et falset og stiftet
+% hefte krever. Den siste av dem er heftets bakside, så
+% heftet lukkes med en blank side og ikke med siste
+% tekstside. \numexpr runder ved divisjon, så resten regnes
+% med \divide, som trunkerer.
+% ============================================================
+\newcommand{\fiksjon@fyllopp}{%
+  \@tempcnta=\numexpr\value{page}-1\relax
+  \@tempcntb=\@tempcnta
+  \divide\@tempcntb by 4
+  \multiply\@tempcntb by 4
+  \ifnum\@tempcnta>\@tempcntb
+    \thispagestyle{empty}\null\clearpage
+    \expandafter\fiksjon@fyllopp
+  \fi}
+
+\iffiksjon@hefte
+  \AtEndDocument{\clearpage\fiksjon@fyllopp}
+\fi
+
+
+% ============================================================
+% SLUTT PÅ FIL
+% ============================================================
+\endinput

@@ -1,0 +1,125 @@
+% !TEX program = lualatex
+% ============================================================
+% main.tex — selve boka
+%
+% Denne fila er struktur og tekst. Alle typografiske valg bor
+% i fiksjonstil.sty, som også laster babel og setter
+% papirformatet.
+%
+% Kompiler med LuaLaTeX, ikke pdflatex:
+%   latexmk -lualatex main
+% ============================================================
+\documentclass[12pt,twoside]{book}
+
+
+% ============================================================
+% LAST INN FIKSJONSTIL
+% ============================================================
+
+% ------------------ Trykk, 128 x 204 mm -----------
+\usepackage{fiksjonstil}
+
+% ------------------ Hefte -------------------------
+% For en kort tekst skrevet ut som falset hefte: blanke
+% sider til slutt, så sidetallet er delelig med fire.
+% \usepackage[hefte]{fiksjonstil}
+
+% ------------------ Sidekorrektur -----------------
+% Siden uendret, sentrert på A4 med skjæremerker.
+% \usepackage[korrektur]{fiksjonstil}
+
+
+% ============================================================
+% DOKUMENT
+% ============================================================
+\begin{document}
+
+\title{Bokas tittel}
+\subtitle{Roman}
+\author{Forfatternavn}
+\date{\the\year}
+
+
+% ============================================================
+% FORSTOFF
+% ============================================================
+
+% ------------------ Smusstittel -------------------
+% Valgfri: bare tittelen på en egen side foran tittelsiden.
+% \halftitlepage
+
+% ------------------ Tittelside --------------------
+\booktitlepage
+
+% ------------------ Kolofon -----------------------
+\colophonpage{%
+  © \the\year\ Forfatternavn\\
+  Satt med Garamond Libre i \LaTeX\\
+  ISBN 978-82-000-0000-0}
+
+% ------------------ Dedikasjon --------------------
+\dedicationpage{Til noen.}
+
+
+% ============================================================
+% TEKSTEN
+%
+% \kapittel foran hvert kapittel, \scenebrudd mellom to
+% scener. Hvert kapittel begynner på en ny side. Bytt ut
+% plassholderteksten under med din egen.
+%
+% Vil du dele boka i deler, sett \del{Første del} foran
+% første kapittel i hver del.
+% ============================================================
+
+\kapittel
+
+Dette er første avsnitt i første kapittel. Det har ikke innrykk, siden det følger rett etter kapittelstarten, og det begynner på tolvte linje i satsflata. Tallet over står midtstilt i lufta, på femte linje, og resten av siden er tom.
+
+Alle linjer i boka står i et fast grid. Det er femten punkt mellom grunnlinjene, og en full side har tretti linjer. Fordi kapittelstarten også er målt i hele linjer, står linjene på denne siden i høyde med linjene på motsatt side av oppslaget og på baksiden av bladet, så teksten på baksiden ikke skinner gjennom mellom linjene.
+
+Skriften er Garamond Libre i elleve og tre kvart punkt. Den ble valgt etter en norsk roman satt i Adobe Garamond, og de to har nesten samme tetthet: en linje rommer rundt femtisju tegn, det samme som i forbildet. Tallene i teksten er minuskeltall, som 1984 og 2026, så de står i linje med de små bokstavene og ikke med versalene.
+
+Avsnittene skilles med innrykk og ikke med luft. Innrykket er én gefirt, like bredt som skriftstørrelsen er høy. Det er nok til at øyet finner begynnelsen av et nytt avsnitt uten å stanse, og lite nok til at siden holder seg rolig.
+
+Teksten er justert, og ordene deles etter norske regler. Mikrotypografien strekker og krymper bokstavene en anelse der det trengs, så mellomrommene mellom ordene blir jevnere enn de ellers ville vært, og tegnsetting i linjeslutt henger litt ut i margen så kanten ser rett ut.
+
+\scenebrudd
+
+En blank linje skiller to scener. Det første avsnittet etter bruddet har ikke innrykk, slik det første avsnittet etter kapittelstarten heller ikke har det. Det er alt som markerer skillet: ingen stjerne, ingen strek, bare én linjes luft.
+
+Faller bruddet nederst på en side, blir siden stående med en tom linje til slutt, og den nye scenen begynner øverst på neste side. Faller det helt øverst, forsvinner det. Slik er det i de fleste trykte bøker som bruker blank linje som skille, og som regel viser teksten selv at noe nytt har begynt.
+
+Sidene er fulle. Det eneste unntaket inne i et kapittel er når den siste linja i et avsnitt ellers ville blitt stående alene øverst på neste side. Da flyttes linja over den med, og siden blir én linje kortere. Den første linja i et avsnitt får derimot stå alene nederst; å flytte også den ville gitt korte sider langt oftere enn det er verdt.
+
+Sidetallet står midtstilt under teksten, to linjer under den siste. Det står også på sidene der et kapittel begynner, men ikke i forstoffet, på delsidene eller på de blanke sidene.
+
+Resten av dette kapittelet er fylltekst, så du kan se hvordan en full side ser ut. Det var sent på ettermiddagen da hun kom fram til huset. Veien hadde vært lengre enn hun husket, og bussen hadde stanset ved hver eneste gård langs fjorden. Nå sto hun ved grinda med kofferten i hånda og så opp mot vinduene. Det lyste ikke i noen av dem.
+
+Hun hadde ikke vært her siden hun var tolv. Huset var mindre enn i minnet, og malingen hadde flasset av veggen mot vest, der været sto på om vinteren. Hagen var gjengrodd. Bare syrinbusken ved trappa var som før, og den sto i full blomst.
+
+Nøkkelen lå der moren hadde sagt den skulle ligge, under en stein ved kjellerdøra. Den var rusten og satt fast i låsen, og hun måtte vri den fram og tilbake flere ganger før den ga etter. Inne luktet det støv og gammel ved. Hun ble stående i gangen en stund før hun fant lysbryteren.
+
+Det var ikke mye som hadde forandret seg. Kjøkkenbordet sto der det alltid hadde stått, med vokspledd og en tom fruktskål på midten. På veggen hang en kalender fra et år hun ikke husket. Hun gikk fra rom til rom og åpnet vinduene, ett etter ett, til trekken gikk gjennom hele huset og gardinene løftet seg.
+
+\kapittel
+
+Andre kapittel begynner på ny side, rett etter at det første slutter. Det kan være en høyreside eller en venstreside. I en roman med mange kapitler ville en regel om høyreside gitt mange blanke sider, og de leses lett som et opphold i fortellingen.
+
+Telleren går av seg selv, så kapitlene nummereres i den rekkefølgen de står i fila. Deler du boka i deler, fortsetter tellingen gjennom delene og begynner ikke på nytt.
+
+Neste morgen våknet hun av at noen banket på døra. Det var naboen, en eldre mann hun syntes hun kjente igjen, med en pose egg og en avis under armen. Han sa at han hadde sett lyset kvelden før og tenkt at det måtte være henne. Moren hadde ringt og sagt at hun skulle komme.
+
+De ble stående i døra og snakke en stund. Han fortalte om vinteren som hadde vært, om stormen i februar som hadde tatt halve taket av naustet, og om butikken på kaia som hadde lagt ned. Hun lyttet og nikket og sa ikke stort. Da han gikk, sto hun igjen med eggene og visste ikke helt hva hun skulle gjøre med dem.
+
+\scenebrudd
+
+Om ettermiddagen gikk hun ned til sjøen. Stien var nesten borte, men hun fant fram likevel, som om beina husket den bedre enn hun gjorde selv. Nede i fjæra lå båten fortsatt, snudd opp ned på to bukker, med grønn mose i skjøtene. Hun satte seg på en stein ved siden av den og så utover vannet til det begynte å bli kaldt.
+
+\kapittel[Epilog]
+
+Et kapittel kan få et ord i stedet for et tall, skrevet i klammer etter kommandoen. Ordet står i kapiteler på samme høyde som tallet ellers ville stått, og telleren står stille, så en prolog foran første kapittel ikke skyver nummereringen.
+
+Bytt ut denne teksten med din egen. Det er alt som skal til.
+
+\end{document}

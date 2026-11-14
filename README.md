@@ -1,15 +1,15 @@
 # lualatex-templates
 
-Seven LaTeX templates — six for academic and teaching work (a monograph,
+Eight LaTeX templates — six for academic and teaching work (a monograph,
 a two-column article, lecture notes, problem sheets, classroom tests,
-and a folded formula sheet) and one for a poetry collection — each in
-English and Norwegian. Copy a folder, edit `main.tex`,
-compile.
+and a folded formula sheet) and two for literature (a novel and a poetry
+collection) — each in English and Norwegian. Copy a folder, edit
+`main.tex`, compile.
 
 Typeset with **LuaLaTeX** and `unicode-math`, OpenType fonts throughout.
 A pdflatex edition lives in
 [pdflatex-templates](https://github.com/dagmortensj/pdflatex-templates);
-the poetry template exists only here.
+the fiction and poetry templates exist only here.
 
 ## Templates
 
@@ -17,33 +17,42 @@ English in `en/`, Norwegian in `no/`.
 
 | Template | Format | What it is |
 |---|---|---|
-| **book** / **bok** | B5 or A4 | A monograph in CUP style: parts, chapters, drop caps, superscript citations |
+| **book-academic** / **bok-fag** | B5 or A4 | A monograph in CUP style: parts, chapters, drop caps, superscript citations |
 | **ffv** | A4, two columns | An essayistic physics or mathematics article, numbered citations |
 | **notes** / **notat** | A4 | Long-form notes: theorem and exercise environments, emphasis boxes, framed contents, Python listings |
 | **handout** | A4 | Problem sheets: exercises with lettered parts, theorem environments, emphasis boxes, Python listings; optional unnumbered mode |
 | **exam** / **prove** | A4, 12 pt | Classroom tests: title block with name, date, time and aids; Part 1 / Part 2 or Level 1–3; multiple-choice lists; "Page 2 of 5" on every page; optional cover page and booklet padding for duplex printing |
 | **formulasheet** / **formelark** | A4, folded to A5 | A formula sheet: two landscape A5 pages stacked on one sheet — constants above the fold, formulas below, two columns each; fold marks; optional tight mode |
-| **poetry** / **dikt** | 140 × 216 mm or A5 | A poetry collection: one poem per page with an optional title, line breaks and indentation taken from the source, parts, half-title, title page, colophon, and contents by title or first line |
+| **book-fiction** / **bok-fiksjon** | 128 × 204 mm | A novel or a collection of short stories: justified text on a fixed line grid, chapter openings with a large centred number, scene breaks, parts, half-title, title page and colophon |
+| **book-poetry** / **bok-dikt** | 140 × 216 mm or A5 | A poetry collection: one poem per page with an optional title, line breaks and indentation taken from the source, parts, half-title, title page, colophon, and contents by title or first line |
 
 `notes`, `handout` and `exam` share their exercise environments, so a
-problem set moves between them unchanged; `book` and `notes` share their
+problem set moves between them unchanged; `book-academic` and `notes` share their
 equation spacing, so the two read as a family. `exam` is `handout`
 stripped of theorems and boxes and given what a test needs instead; it
 is the only one that loads neither `hyperref` nor a bibliography
 package, since a test is printed. `formulasheet` is the odd one out:
 no prose, no exercises — two landscape A5 pages that `pgfpages` stacks
 on one A4 sheet, tables in each, and the same fonts and dark red as
-`exam`. `poetry` stands on its own. It uses the same face
-as `book` and the same names for its front-matter commands, but shares
-no code with it: no mathematics, no citations, its own page size, and
-an environment that reads a poem as it is written.
+`exam`.
+
+The three `book-` templates share a prefix so they sort together: a
+monograph, a novel and a poetry collection. `book-poetry` and
+`book-fiction` use the same face as `book-academic` and the same names
+for its front-matter commands, but share no code with it: no
+mathematics, no citations and their own page sizes. `book-poetry` has
+an environment that reads a poem as it is written. `book-fiction` grew
+out of `book-poetry`, with the same front matter, parts and booklet
+padding, and replaces the poem environment with running text on a
+fixed line grid, numbered chapter openings and scene breaks.
 
 ## Fonts and engine
 
 **Compile with `lualatex`, not `pdflatex`.** The fonts are OpenType and
-load through `unicode-math`. The wrong engine gives you a wall of errors
+load through `fontspec`, and in all but the two literary templates
+through `unicode-math`. The wrong engine gives you a wall of errors
 rather than a helpful message. Use `latexmk -lualatex`: `notes` and
-`book` need biber, and `exam` needs a second pass for "Page 2 of 5".
+`book-academic` need biber, and `exam` needs a second pass for "Page 2 of 5".
 
 Each template folder carries a `.latexmkrc` that selects LuaLaTeX, so a
 plain `latexmk main` uses the right engine. It also covers editors that
@@ -55,16 +64,17 @@ compiler to LuaLaTeX in the project menu.
 
 | Template | Text | Mathematics |
 |---|---|---|
-| **book** | Garamond Libre, 12 pt | STIX Two Math at `Scale=0.90` |
+| **book-academic** | Garamond Libre, 12 pt | STIX Two Math at `Scale=0.90` |
 | **ffv** | STIX Two Text, 10 pt | STIX Two Math |
 | **notes** | NewComputerModern Book, 11 pt | NewCM Math Book |
 | **handout** | NewComputerModern Book, 11 pt | NewCM Math Book |
 | **exam** | NewComputerModern Book, 12 pt; NewCM Sans for headings | NewCM Math Book |
 | **formulasheet** | NewComputerModern Book, 10 pt; NewCM Sans for headings | NewCM Math Book |
-| **poetry** | Garamond Libre, 12 pt | none — loads `fontspec`, not `unicode-math` |
+| **book-fiction** | Garamond Libre, 11.75/15 bp | none — loads `fontspec`, not `unicode-math` |
+| **book-poetry** | Garamond Libre, 12 pt | none — loads `fontspec`, not `unicode-math` |
 
 Three rules follow from `unicode-math` and hold for the six templates
-that load it, which is all but `poetry`:
+that load it, which is all but `book-fiction` and `book-poetry`:
 
 - **Bold maths is `\symbf` / `\symbfit` / `\symbfup`**, never `\bm`, which
   is incompatible and hard-errors on Greek. `\boldmath` does not work
@@ -83,12 +93,13 @@ table of what was checked.
 
 `notes` and `handout` also load `siunitx`, `tensor` and `physics2`
 ready to use, for units, tensor indices and bra-ket; `exam` and
-`formulasheet` load `siunitx`. Every style file except `poetry`'s gives
+`formulasheet` load `siunitx`. Every style file except those of
+`book-fiction` and `book-poetry` gives
 vector arrows with `\vv{F}` and `\vv{AB}` without an extra package (do
 not load `esvect`), and switches on `\mathitalicsmode=1` so italic
 correction works as in pdflatex.
 
-All fourteen build with no warnings.
+All sixteen build with no warnings.
 
 ## Quick start
 
@@ -98,10 +109,11 @@ All fourteen build with no warnings.
 4. `latexmk -lualatex main`
 
 Every folder holds `main.tex`, a style file where all the formatting
-lives, and its own `README.md`. `book`, `ffv` and `notes` add a `.bib`
-with example entries; `book`, `notes` and `handout` add a `figures/`
-folder with a stock figure; `formulasheet` and `poetry` ship only
-`main.tex`, the style file and `README.md`. The bundled `main.pdf` shows what each one
+lives, and its own `README.md`. `book-academic`, `ffv` and `notes` add
+a `.bib` with example entries; `book-academic`, `notes` and `handout`
+add a `figures/` folder with a stock figure; `formulasheet`,
+`book-fiction` and `book-poetry` ship only `main.tex`, the style file
+and `README.md`. The bundled `main.pdf` shows what each one
 produces before you compile anything.
 
 `exam` has four package options — none, `[coverpage]`, `[booklet]` and
@@ -114,20 +126,26 @@ check. Its `README.md` shows each.
 argument. Too much content shows up the way it always does in LaTeX: as
 an extra page, here a second A4 sheet.
 
-`poetry` has four: `[a5]` for printing at home on A5 with the same
+`book-fiction` has two: `[booklet]`, as below, for a short story
+printed at home as a folded booklet, and `[proof]` for the page on A4
+with crop marks. Every line stands on a 15 bp grid, so the proof shows
+the line and page breaks of print.
+
+`book-poetry` has four: `[a5]` for printing at home on A5 with the same
 text block, so line and page breaks match the 140 × 216 mm print
 edition; `[booklet]` to pad the page count to a multiple of four, so a
 folded booklet closes on a blank back; `[centered]` to centre each poem
 on its longest line; and `[proof]` for the page on A4 with crop marks,
-as in `book`.
+as in `book-academic`.
 
 ## Languages
 
 The two versions are functionally equivalent. What differs:
 
 - **Babel** — `[english]` vs `[norsk]`
-- **Filenames** — Norwegian folders use Norwegian names: `bok`,
-  `referanser.bib`, `bokstil.sty`, `prove/provestil.sty`. `no/handout`
+- **Filenames** — Norwegian folders use Norwegian names: `bok-fag`,
+  `bok-fiksjon`, `bok-dikt`, `referanser.bib`, `bokstil.sty`,
+  `prove/provestil.sty`. `no/handout`
   is the exception, since the folder name is not translated and neither
   is its style file.
 - **Command names** — the Norwegian `exam` (`prøve`) uses Norwegian
@@ -140,9 +158,12 @@ The two versions are functionally equivalent. What differs:
   `formlerto`, `\formelrad`, `\formelstrekk` and the option `tett`;
   the English one `half`, `\topic`, `constants`, `twocol`,
   `formulas`, `formulastwo`, `\formularow`, `\formulastretch` and
-  `tight`. The Norwegian `poetry` (`dikt`) uses the environment `dikt`,
-  `\del` and the options `sentrert` and `hefte`; the English one `poem`,
-  `\part`, `centered` and `booklet`. `parity-diff.sh` maps one onto the
+  `tight`. The Norwegian `book-poetry` (`bok-dikt`) uses the environment
+  `dikt`, `\del` and the options `sentrert` and `hefte`; the English one
+  `poem`, `\part`, `centered` and `booklet`. The Norwegian
+  `book-fiction` (`bok-fiksjon`) uses `\kapittel`, `\scenebrudd`,
+  `\del` and the option `hefte`; the English one `\chapter`,
+  `\scenebreak`, `\part` and `booklet`. `parity-diff.sh` maps one onto the
   other.
 - **Comments and placeholder text** — in the matching language
 - **Numbers** — the Norwegian style files set `siunitx` to a decimal

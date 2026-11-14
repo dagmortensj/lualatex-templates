@@ -1,4 +1,4 @@
-# book-template
+# book-academic template
 
 LaTeX book template in CUP style with superscript citations.
 Typeset with **LuaLaTeX** — Garamond Libre for text, STIX Two Math

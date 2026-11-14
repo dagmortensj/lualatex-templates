@@ -4,25 +4,26 @@ Les `~/Developer/CLAUDE.md` først; dette er tillegget som gjelder bare dette re
 
 ## Hva repoet er
 
-Sju maler, hver i `en/` og `no/`, fjorten mapper i alt:
+Åtte maler, hver i `en/` og `no/`, seksten mapper i alt:
 
 | `en/` | `no/` | Stilfil |
 |---|---|---|
-| `book` | `bok` | `bookstyle.sty` / `bokstil.sty` |
+| `book-academic` | `bok-fag` | `bookstyle.sty` / `bokstil.sty` |
 | `ffv` | `ffv` | `ffvstyle.sty` / `ffvstil.sty` |
 | `notes` | `notat` | `notesstyle.sty` / `notatstil.sty` |
 | `handout` | `handout` | `handoutstyle.sty` (samme navn i begge) |
 | `exam` | `prove` | `examstyle.sty` / `provestil.sty` |
 | `formulasheet` | `formelark` | `formulasheetstyle.sty` / `formelarkstil.sty` |
-| `poetry` | `dikt` | `poetrystyle.sty` / `diktstil.sty` |
+| `book-fiction` | `bok-fiksjon` | `fictionstyle.sty` / `fiksjonstil.sty` |
+| `book-poetry` | `bok-dikt` | `poetrystyle.sty` / `diktstil.sty` |
 
-Hver mappe har `main.tex`, stilfila (all formatering ligger der), `README.md`, `.latexmkrc` og en bundlet `main.pdf` som viser resultatet. `book`, `ffv` og `notes` har `.bib`; `book`, `notes` og `handout` har `figures/` (`figurer/`). `main.pdf` er **ikke** gitignorert — den er en del av repoet og skal være fersk ved commit.
+Hver mappe har `main.tex`, stilfila (all formatering ligger der), `README.md`, `.latexmkrc` og en bundlet `main.pdf` som viser resultatet. `book-academic`, `ffv` og `notes` har `.bib`; `book-academic`, `notes` og `handout` har `figures/` (`figurer/`). `main.pdf` er **ikke** gitignorert — den er en del av repoet og skal være fersk ved commit.
 
-Søsterrepoet `pdflatex-templates` har samme malsett for pdflatex, unntatt `poetry`/`dikt`, som bare finnes her (ingen matematikk, og opsjonen `centered`/`sentrert` bruker Lua). En endring i layout eller funksjonalitet skal normalt inn i begge, i hver sin pakkedialekt; en endring som bare gjelder `unicode-math`/OpenType, hører bare hjemme her.
+Søsterrepoet `pdflatex-templates` har samme malsett for pdflatex, unntatt `book-fiction`/`bok-fiksjon` og `book-poetry`/`bok-dikt`, som bare finnes her (ingen matematikk, `fontspec`, og opsjonen `centered`/`sentrert` bruker Lua). En endring i layout eller funksjonalitet skal normalt inn i begge, i hver sin pakkedialekt; en endring som bare gjelder `unicode-math`/OpenType, hører bare hjemme her.
 
 ## Regler som følger av `unicode-math`
 
-Gjelder alle malene unntatt `poetry`/`dikt`, som laster `fontspec` alene og ikke har matematikkfont eller `\vv`.
+Gjelder alle malene unntatt `book-fiction`/`bok-fiksjon` og `book-poetry`/`bok-dikt`, som laster `fontspec` alene og ikke har matematikkfont eller `\vv`.
 
 - **Fet matte er `\symbf` / `\symbfit` / `\symbfup`**, aldri `\bm`, aldri `\boldmath`.
 - **Ikke last `amssymb`** — bryter bygget. **Ikke last `mathtools`** — gir unicode-math-varsler; `physics2` (`ab.legacy`), `tensor` og unicode-math sin egen `\coloneq` dekker behovet.
@@ -40,9 +41,9 @@ De to utgavene skal avvike **bare i språkstrenger, filnavn og kommentarer**. Al
 
 ## Bygg og verifisering
 
-- Alltid `latexmk -lualatex -interaction=nonstopmode main` (eller bare `latexmk main`, `.latexmkrc` velger motoren). Aldri ren `lualatex`: `notes` og `book` trenger biber, `exam` trenger et pass til for «Side 2 av 5».
-- **Alle fjorten skal bygge uten warnings.** Det er standarden repoet lover i README; sjekk `main.log` for `Warning` etter en endring, ikke bare om PDF-en kom ut.
-- `exam` har pakkevalgene `coverpage`, `booklet`, `statuscheck` (`forside`, `hefte`, `statussjekk`); `formulasheet` har `tight` (`tett`); `poetry` har `a5`, `booklet` (`hefte`), `centered` (`sentrert`) og `proof` (`korrektur`). En endring i disse stilfilene må prøves med hvert valg, ikke bare standard. I `poetry` skal `a5` gi nøyaktig samme linje- og sidebrudd som standardformatet.
+- Alltid `latexmk -lualatex -interaction=nonstopmode main` (eller bare `latexmk main`, `.latexmkrc` velger motoren). Aldri ren `lualatex`: `notes` og `book-academic` trenger biber, `exam` trenger et pass til for «Side 2 av 5».
+- **Alle seksten skal bygge uten warnings.** Det er standarden repoet lover i README; sjekk `main.log` for `Warning` etter en endring, ikke bare om PDF-en kom ut.
+- `exam` har pakkevalgene `coverpage`, `booklet`, `statuscheck` (`forside`, `hefte`, `statussjekk`); `formulasheet` har `tight` (`tett`); `book-poetry` har `a5`, `booklet` (`hefte`), `centered` (`sentrert`) og `proof` (`korrektur`); `book-fiction` har `booklet` (`hefte`) og `proof` (`korrektur`). En endring i disse stilfilene må prøves med hvert valg, ikke bare standard. I `book-poetry` skal `a5` gi nøyaktig samme linje- og sidebrudd som standardformatet. I `book-fiction` står alt i et grid på 15 bp: kapittelstart, scenebrudd og sidetall skal være hele linjer, og en full side har 30.
 - Bygg skjer på Macen (Dag-Morten) eller i sandboxen (verifisering), aldri i `device_bash`-VM-en — se hovedfila.
 
 ## Terminal for Dag-Morten

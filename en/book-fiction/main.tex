@@ -1,0 +1,125 @@
+% !TEX program = lualatex
+% ============================================================
+% main.tex — the book itself
+%
+% This file is structure and text. Every typographic decision
+% lives in fictionstyle.sty, which also loads babel and sets
+% the paper size.
+%
+% Compile with LuaLaTeX, not pdflatex:
+%   latexmk -lualatex main
+% ============================================================
+\documentclass[12pt,twoside]{book}
+
+
+% ============================================================
+% LOAD FICTIONSTYLE
+% ============================================================
+
+% ------------------ Print, 128 x 204 mm -----------
+\usepackage{fictionstyle}
+
+% ------------------ Booklet -----------------------
+% For a short text printed as a folded booklet: blank pages
+% at the end, so the page count is divisible by four.
+% \usepackage[booklet]{fictionstyle}
+
+% ------------------ Page proofs -------------------
+% The page untouched, centred on A4 with crop marks.
+% \usepackage[proof]{fictionstyle}
+
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+\begin{document}
+
+\title{The Title of the Book}
+\subtitle{A Novel}
+\author{Author Name}
+\date{\the\year}
+
+
+% ============================================================
+% FRONT MATTER
+% ============================================================
+
+% ------------------ Half-title --------------------
+% Optional: the title alone on a page before the title page.
+% \halftitlepage
+
+% ------------------ Title page --------------------
+\booktitlepage
+
+% ------------------ Colophon ----------------------
+\colophonpage{%
+  © \the\year\ Author Name\\
+  Set in Garamond Libre with \LaTeX\\
+  ISBN 978-0-000-00000-0}
+
+% ------------------ Dedication --------------------
+\dedicationpage{For someone.}
+
+
+% ============================================================
+% THE TEXT
+%
+% \chapter before each chapter, \scenebreak between two
+% scenes. Every chapter begins on a new page. Replace the
+% placeholder text below with your own.
+%
+% To divide the book into parts, put \part{Part One} before
+% the first chapter of each part.
+% ============================================================
+
+\chapter
+
+This is the first paragraph of the first chapter. It has no indent, since it follows straight after the chapter opening, and it begins on the twelfth line of the text block. The number above stands centred in the space, on the fifth line, and the rest of the page is empty.
+
+Every line in the book stands on a fixed grid. There are fifteen points between baselines, and a full page has thirty lines. Because the chapter opening is also measured in whole lines, the lines on this page line up with the lines on the facing page and on the back of the leaf, so the text on the back does not show through between the lines.
+
+The face is Garamond Libre at eleven and three-quarter points. It was chosen after a Norwegian novel set in Adobe Garamond, and the two have almost the same density: a line holds about fifty-seven characters, the same as in the model. Figures in the text are old-style, like 1984 and 2026, so they sit with the lowercase letters and not with the capitals.
+
+Paragraphs are separated by an indent and not by space. The indent is one em, as wide as the type size is high. That is enough for the eye to find the start of a new paragraph without stopping, and little enough to keep the page calm.
+
+The text is justified and hyphenated by the rules of the language. The microtypography stretches and shrinks the letters a little where needed, so the spaces between words are more even than they would otherwise be, and punctuation at the end of a line hangs slightly into the margin so the edge looks straight.
+
+\scenebreak
+
+A blank line separates two scenes. The first paragraph after the break has no indent, just as the first paragraph after the chapter opening has none. That is all that marks the division: no asterisk, no rule, just one line of space.
+
+If the break falls at the foot of a page, the page ends with an empty line, and the new scene begins at the top of the next page. If it falls at the very top, it disappears. That is how most printed books that use a blank line as the divider behave, and as a rule the text itself shows that something new has begun.
+
+The pages are full. The one exception within a chapter is when the last line of a paragraph would otherwise be left alone at the top of the next page. Then the line above it moves too, and the page is one line short. The first line of a paragraph, on the other hand, may stand alone at the foot; moving that as well would give short pages far more often than it is worth.
+
+The folio is centred below the text, two lines below the last. It also appears on the pages where a chapter begins, but not in the front matter, on the part pages or on the blank pages.
+
+The rest of this chapter is filler text, so you can see what a full page looks like. It was late in the afternoon when she reached the house. The road had been longer than she remembered, and the bus had stopped at every single farm along the fjord. Now she stood at the gate with the suitcase in her hand and looked up at the windows. There was no light in any of them.
+
+She had not been here since she was twelve. The house was smaller than in her memory, and the paint had flaked off the west wall, where the weather beat in winter. The garden was overgrown. Only the lilac by the steps was as before, and it was in full bloom.
+
+The key lay where her mother had said it would, under a stone by the cellar door. It was rusty and stuck in the lock, and she had to turn it back and forth several times before it gave. Inside it smelled of dust and old firewood. She stood in the hall for a while before she found the light switch.
+
+Not much had changed. The kitchen table stood where it had always stood, with an oilcloth and an empty fruit bowl in the middle. On the wall hung a calendar from a year she did not remember. She went from room to room and opened the windows, one after another, until the draught went through the whole house and the curtains lifted.
+
+\chapter
+
+The second chapter begins on a new page, right after the first one ends. It may be a recto or a verso. In a novel with many chapters a rule of always starting on a recto would leave many blank pages, and those easily read as a pause in the story.
+
+The counter runs by itself, so the chapters are numbered in the order they stand in the file. If you divide the book into parts, the count runs on through the parts and does not start again.
+
+The next morning she woke to someone knocking at the door. It was the neighbour, an older man she thought she recognised, with a bag of eggs and a newspaper under his arm. He said he had seen the light the evening before and thought it must be her. Her mother had rung and said she was coming.
+
+They stood in the doorway and talked for a while. He told her about the winter that had been, about the storm in February that had taken half the roof off the boathouse, and about the shop on the quay that had closed. She listened and nodded and did not say much. When he left, she was left standing with the eggs and did not quite know what to do with them.
+
+\scenebreak
+
+In the afternoon she went down to the shore. The path was almost gone, but she found her way all the same, as if her legs remembered it better than she did. Down on the beach the boat still lay, upside down on two trestles, with green moss in the seams. She sat on a stone beside it and looked out over the water until it began to grow cold.
+
+\chapter[Epilogue]
+
+A chapter can have a word instead of a number, written in brackets after the command. The word stands in small capitals at the height where the number would otherwise have been, and the counter stands still, so a prologue before the first chapter does not push the numbering.
+
+Replace this text with your own. That is all it takes.
+
+\end{document}

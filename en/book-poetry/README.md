@@ -1,4 +1,4 @@
-# poetry template
+# book-poetry template
 
 LaTeX template for a poetry collection: one poem per page, optional
 titles, front matter and contents. Typeset with **LuaLaTeX** in
@@ -105,7 +105,7 @@ The options combine: `\usepackage[a5,booklet]{poetrystyle}`.
 
 Garamond Libre has a small eye (x-height 0.407 em), so 12 pt reads as
 Times at about 10.3 pt. 11 pt corresponds to 9.5 pt and is small on a
-book page. The 16 pt leading is more open than the book template's,
+book page. The 16 pt leading is more open than `book-academic`'s,
 since poems are read line by line.
 
 ### Why these margins

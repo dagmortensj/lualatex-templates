@@ -1,0 +1,442 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{fictionstyle}[2026/11/14 v1.0 — novels and short stories]
+
+% ============================================================
+% PACKAGE OPTIONS
+%
+%   \usepackage{fictionstyle}              128 x 204 mm, print
+%   \usepackage[booklet]{fictionstyle}     blank pages at the
+%                                          end, so the booklet
+%                                          has a back
+%   \usepackage[proof]{fictionstyle}       page proofs: the page
+%                                          untouched, centred on
+%                                          A4 with crop marks
+%
+% booklet — for a short text printed as a folded booklet: the
+% page count is padded to a multiple of four with blank pages
+% at the end, and the last of them is the back. The pages fit
+% unscaled on each A5 half of an A4 sheet.
+%
+% proof — gives the same line and page breaks as print, with
+% room around the page for notes. 'korrektur' is accepted as
+% a synonym.
+% ============================================================
+\newif\iffiction@korrektur
+\newif\iffiction@booklet
+\DeclareOption{korrektur}{\fiction@korrekturtrue}
+\DeclareOption{proof}{\fiction@korrekturtrue}
+\DeclareOption{booklet}{\fiction@booklettrue}
+\ProcessOptions\relax
+
+
+% ============================================================
+% fictionstyle.sty — novels and short stories
+%
+% Every typographic decision lives in this file. You should
+% not need to change anything here to set a book: write the
+% text in main.tex, with \chapter before each chapter.
+%
+%   \documentclass[12pt,twoside]{book}
+%
+% The paper size is set here and not in \documentclass, since
+% 128 x 204 mm is not a class option. The 12pt option gives
+% the sizes around the body text (\small, \large, \huge); the
+% body text itself is set below.
+%
+% Engine: LuaLaTeX. The font is OpenType.
+%
+% The order below: language, font, microtypography, leading,
+% geometry, page breaking, page style, hyperref, chapters,
+% scene breaks, parts, front matter and the booklet last.
+% ============================================================
+
+
+% ============================================================
+% LANGUAGE
+% ============================================================
+\RequirePackage[english]{babel}
+
+
+% ============================================================
+% FONT
+%
+% Garamond Libre, the same face as the other book templates.
+% Old-style figures in the text and the folios; the chapter
+% numbers use lining figures (see CHAPTERS). No maths font:
+% the style loads fontspec and not unicode-math.
+% ============================================================
+\RequirePackage{fontspec}
+
+\setmainfont{GaramondLibre}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic,
+  Numbers        = OldStyle ]
+
+
+% ============================================================
+% MICROTYPOGRAPHY
+%
+% The text is justified, so both protrusion and expansion are
+% on: protrusion hangs punctuation slightly into the margin,
+% and expansion evens out the word spaces. tracking
+% letterspaces the small capitals.
+% ============================================================
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% LEADING
+%
+% 11.75/15 bp, measured from a Norwegian novel set in Adobe
+% Garamond. Garamond Libre has almost the same density: over
+% 97 mm it gives about 57 characters per line. bp is the point
+% InDesign uses, so the numbers match the model.
+%
+% \topskip is one line, so the first baseline sits one line
+% down in the text block, and every line on the page stands
+% on a fixed grid with 15 bp between baselines.
+% ============================================================
+\renewcommand{\normalsize}{%
+  \@setfontsize\normalsize{11.75bp}{15bp}%
+  \let\@listi\@listI}
+\normalsize
+\setlength{\topskip}{15bp}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+
+
+% ============================================================
+% PAGE GEOMETRY
+%
+% FORMAT. 128 x 204 mm, a common Norwegian novel size.
+%
+% TEXT BLOCK. 97 mm wide and 30 lines deep. The top of the
+% capitals in the first line is 17 mm below the top edge of
+% the sheet, the first baseline 19.9 mm, the last 173.4 mm.
+%
+% MARGINS. Inner 14 mm, outer 17 mm. The bottom margin is the
+% rest, 30.6 mm, and the folio sits in it.
+%
+%   inner  outer  top    bottom
+%    14     17    14.64  30.61   mm
+%
+% The top margin is to the top of the text block, which lies
+% one line (\topskip) above the first baseline.
+% ============================================================
+\setlength{\paperwidth}{128mm}
+\setlength{\paperheight}{204mm}
+
+\RequirePackage{geometry}
+\geometry{papersize={128mm,204mm},
+  inner=14mm, outer=17mm, top=14.64mm,
+  textheight=450bp, footskip=30bp}
+
+% Page proofs: the page centred on A4 with crop marks (cam)
+% and crop's information line at the top — add noinfo to the
+% options below for a sheet without it.
+\iffiction@korrektur
+  \RequirePackage[cam,a4,center]{crop}
+\fi
+
+
+% ============================================================
+% PAGE BREAKING
+%
+% The pages stand on a fixed grid and are not stretched. A
+% page is full, 30 lines, with two exceptions: the last page
+% of a chapter ends where the text ends, and a page is one
+% line short when the last line of a paragraph would
+% otherwise stand alone at the top of the next page (a
+% widow). The first line of a paragraph may stand alone at
+% the bottom; moving it as well would give short pages far
+% more often.
+%
+% The bottom of every page gets stretch of order fill, so a
+% short page stays open at the foot and does not spread the
+% space between the lines.
+% ============================================================
+\raggedbottom
+\def\@textbottom{\vskip\z@\@plus 1fill}
+\widowpenalty=\@M
+\clubpenalty=\z@
+\brokenpenalty=\z@
+
+
+% ============================================================
+% PAGE STYLE
+%
+% The folio centred at the foot, two lines below the last
+% line of text, 20 mm above the bottom edge of the sheet. On
+% chapter pages too. No running head. The front matter and
+% the part pages have no folio but are counted.
+%
+% emptypage keeps the inserted blank pages entirely empty.
+% ============================================================
+\def\ps@fiction{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \def\@oddfoot{\hfil\thepage\hfil}%
+  \let\@evenfoot\@oddfoot
+}
+\pagestyle{fiction}
+
+\RequirePackage{emptypage}
+
+
+% ============================================================
+% HYPERLINKS
+%
+% Links are black. Chapters and parts appear as bookmarks in
+% the PDF.
+% ============================================================
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  allcolors=black
+}
+
+\newcounter{fiction@anchor}
+\newcommand{\fiction@bookmark}[2]{%
+  \stepcounter{fiction@anchor}%
+  \pdfbookmark[#1]{#2}{fiction@anchor.\arabic{fiction@anchor}}%
+}
+
+
+% ============================================================
+% CHAPTERS
+%
+%   \chapter              numbered: 1, 2, 3 ...
+%   \chapter[Prologue]    unnumbered, with a word instead
+%
+% Every chapter begins on a new page, recto or verso. The text
+% begins eleven lines down in the text block, on the twelfth
+% line, and the number stands centred in the space above,
+% with its baseline on the fifth line. Everything stays on the
+% grid, so the lines of a chapter page line up with the lines
+% of the facing page.
+%
+% The number is set in lining figures: old-style figures
+% would let 3, 4, 5, 7 and 9 hang below the line and the
+% others not. An unnumbered chapter gets its word in small
+% capitals on the same baseline, and the counter does not
+% advance.
+%
+% The first paragraph has no indent.
+% ============================================================
+\newcommand{\fiction@drop}{11}   % blank lines above the text
+\newcommand{\fiction@numberline}{5} % the line the number is on
+\newcommand{\fiction@numberfont}{%
+  \fontsize{24bp}{24bp}\selectfont\addfontfeatures{RawFeature=-onum}}
+\newcommand{\fiction@wordfont}{\large\scshape}
+
+\newcommand{\fiction@opening}[2]{%
+  \par
+  \vbox to \dimexpr\topskip+\baselineskip*(\fiction@drop-1)\relax{%
+    \fiction@bookmark{0}{#1}%
+    \kern\dimexpr\topskip+\baselineskip*(\fiction@numberline-1)\relax
+    \vbox to\z@{\vss\hbox to\textwidth{\hfil#2\hfil}}%
+    \vfil}%
+  \nobreak
+  \@afterindentfalse
+  \@afterheading
+}
+
+\DeclareRobustCommand{\chapter}[1][]{%
+  \clearpage
+  \def\fiction@tmp{#1}%
+  \ifx\fiction@tmp\@empty
+    \refstepcounter{chapter}%
+    \fiction@opening{\thechapter}{\fiction@numberfont\thechapter}%
+  \else
+    \fiction@opening{#1}{\fiction@wordfont #1}%
+  \fi
+}
+
+
+% ============================================================
+% SCENE BREAKS
+%
+%   ... the last paragraph of a scene.
+%   \scenebreak
+%   The first paragraph of the next scene ...
+%
+% One blank line, and the next paragraph without indent. If
+% the break falls at the foot of a page, the page ends with an
+% empty line and the next scene begins at the top of the next
+% page. If it falls at the very top, it disappears, as in
+% printed books that use a blank line as the divider.
+% ============================================================
+\newcommand{\scenebreak}{%
+  \par
+  \vskip\baselineskip
+  \everypar{{\setbox\z@\lastbox}\everypar{}}%
+}
+
+
+% ============================================================
+% PARTS
+%
+%   \part{Part One}
+%   \part{I}
+%
+% Divides the book into parts. The title stands alone in
+% small capitals on a recto without a folio, a third of the
+% way down, and the verso is blank, so the first chapter of
+% the part begins on a recto. The chapter count runs on
+% through the parts.
+%
+% Defined with \DeclareRobustCommand because it replaces the
+% class's command; the Norwegian edition calls it \del, and
+% the two style files are to be identical.
+% ============================================================
+\DeclareRobustCommand{\part}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \fiction@bookmark{-1}{#1}%
+  \null
+  \vskip 0.3\textheight
+  \begin{center}
+    \large\scshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% HALF-TITLE
+%
+%   \halftitlepage
+%
+% The first page of the book: the title alone, small, on a
+% recto with a blank verso. Optional, and commented out in
+% main.tex: without it the book begins on the title page.
+% ============================================================
+\def\@subtitle{}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+
+\newcommand{\halftitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    \large\scshape \@title
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% TITLE PAGE
+%
+%   \title{...}  \author{...}  \date{...}
+%   \subtitle{...}                 % optional, e.g. "A Novel"
+%   \booktitlepage
+%
+% Built like the other book templates: the title in large
+% small capitals, an italic subtitle if one is set, the
+% author below, and the date at the foot. \date may just as
+% well hold a publisher or a place.
+% ============================================================
+\newcommand{\booktitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.18\textheight
+  \begin{center}
+    {\huge\scshape \@title \par}
+    \ifx\@subtitle\@empty\else
+      \vspace{1.4em}
+      {\large\itshape \@subtitle \par}
+    \fi
+    \vspace{3em}
+    {\large \@author \par}
+  \end{center}
+  \vskip\z@\@plus 1filll
+  \begin{center}
+    {\normalsize\itshape \@date \par}
+  \end{center}
+  \clearpage
+}
+
+
+% ============================================================
+% COLOPHON
+%
+%   \colophonpage{%
+%     © 2026 Author Name\\
+%     Set in Garamond Libre\\
+%     ISBN 978-0-000-00000-0}
+%
+% The back of the title page: rights, printing and ISBN, in
+% small type at the foot of the page. Separate the lines with
+% \\.
+% ============================================================
+\newcommand{\colophonpage}[1]{%
+  \clearpage
+  \thispagestyle{empty}%
+  \null
+  \vskip\z@\@plus 1filll
+  {\small\raggedright #1\par}
+  \clearpage
+}
+
+
+% ============================================================
+% DEDICATION PAGE
+%
+%   \dedicationpage{For someone.}
+%
+% One short italic line, centred a quarter of the way down on
+% a recto, followed by a blank verso.
+% ============================================================
+\newcommand{\dedicationpage}[1]{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \null
+  \vskip 0.25\textheight
+  \begin{center}
+    \itshape #1
+  \end{center}
+  \cleardoublepage
+}
+
+
+% ============================================================
+% BOOKLET
+%
+% With the booklet option the book is padded with blank pages
+% until the page count is divisible by four, as a folded and
+% stapled booklet requires. The last of them is the back of
+% the booklet, so it closes on a blank page and not on the
+% last page of text. \numexpr rounds when dividing, so the
+% remainder is computed with \divide, which truncates.
+% ============================================================
+\newcommand{\fiction@padout}{%
+  \@tempcnta=\numexpr\value{page}-1\relax
+  \@tempcntb=\@tempcnta
+  \divide\@tempcntb by 4
+  \multiply\@tempcntb by 4
+  \ifnum\@tempcnta>\@tempcntb
+    \thispagestyle{empty}\null\clearpage
+    \expandafter\fiction@padout
+  \fi}
+
+\iffiction@booklet
+  \AtEndDocument{\clearpage\fiction@padout}
+\fi
+
+
+% ============================================================
+% END OF FILE
+% ============================================================
+\endinput

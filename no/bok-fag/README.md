@@ -1,4 +1,4 @@
-# bok-mal
+# bok-fag-mal
 
 LaTeX-bokmal i CUP-stil med superskriftsiteringer.
 Settes med **LuaLaTeX** — Garamond Libre til tekst, STIX Two Math

@@ -1,4 +1,4 @@
-# dikt-mal
+# bok-dikt-mal
 
 LaTeX-mal for en diktsamling: ett dikt per side, valgfri tittel,
 forstoff og innhold. Settes med **LuaLaTeX** i Garamond Libre.
@@ -102,7 +102,7 @@ Opsjonene kan kombineres: `\usepackage[a5,hefte]{diktstil}`.
 
 Garamond Libre har lite øye (x-høyde 0,407 em), så 12 pt leser som
 Times i omtrent 10,3 pt. 11 pt tilsvarer 9,5 pt og blir smått på en
-bokside. Linjeavstanden på 16 pt er romsligere enn bokmalens,
+bokside. Linjeavstanden på 16 pt er romsligere enn i `bok-fag`,
 siden dikt leses linje for linje.
 
 ### Hvorfor disse margene
