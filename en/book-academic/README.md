@@ -44,7 +44,7 @@ The book is divided into three phases:
 
 | Phase         | Command         | Contents                                         |
 |---------------|-----------------|--------------------------------------------------|
-| Front matter  | `\frontmatter`  | Title, dedication, TOC, preface, acknowledgments |
+| Front matter  | `\frontmatter`  | Half-title, title, colophon, dedication, contents, preface, acknowledgments |
 | Main matter   | `\mainmatter`   | Introduction, parts and chapters                 |
 | Back matter   | `\backmatter`   | Bibliography, index                              |
 
@@ -53,11 +53,25 @@ The book is divided into three phases:
 ### Page templates
 
 ```latex
+\halftitlepage             % Half-title (optional, commented out in main.tex)
 \booktitlepage             % Title page
+\colophonpage{...}         % Colophon on the back of the title page
 \dedicationpage{...}       % Dedication (recto, centered italic)
 \booktoc                   % Table of contents
 \frontchapter{Preface}     % Unnumbered chapter in front matter
 ```
+
+`\frontchapter`, the table of contents, the bibliography and the index
+get the same opening as a numbered chapter, with the title at the same
+height, only without "Chapter N" above it. The first paragraph has no
+indent.
+
+### Index
+
+Remove the comment signs before `\usepackage{imakeidx}` and
+`\makeindex` in the preamble and before `\printindex` in the back
+matter, and mark words in the text with `\index{word}`. latexmk runs
+makeindex by itself.
 
 ### Chapter opening with drop cap
 
@@ -160,7 +174,8 @@ remain, and they are yours to live with.
 - **Align rows:** `\jot` = 8 pt (default 3 pt) — more air between the
   rows of `align`, shared by all the templates
 - **Paragraphs:** indented 1.25 em, no inter-paragraph skip
-- **Microtypography:** protrusion, expansion, tracking enabled
+- **Microtypography:** protrusion, expansion, tracking enabled; titles
+  in capitals letterspaced by 80 thousandths of an em
 - **Sections:** unnumbered, but appear in TOC
 - **Citations:** superscript numbers, placed exactly where written
 - **Bibliography:** `1.` instead of `[1]`, sorted by citation order

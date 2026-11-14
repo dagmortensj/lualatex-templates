@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{fiksjonstil}[2026/11/14 v1.1 — roman, noveller og kortprosa]
+\ProvidesPackage{fiksjonstil}[2026/11/14 v1.2 — roman, noveller og kortprosa]
 
 % ============================================================
 % PAKKEOPSJONER
@@ -212,6 +212,10 @@
 \pdfstringdefDisableCommands{\let\\\@empty}
 
 \newcounter{fiksjon@anker}
+% Bokmerkenivået for kapitler: 0 i en roman, 1 inne i en
+% novelle, så kapitlene legger seg under novellen.
+\newcommand{\fiksjon@kapnivaa}{0}
+
 \newcommand{\fiksjon@bokmerke}[2]{%
   \stepcounter{fiksjon@anker}%
   \pdfbookmark[#1]{#2}{fiksjon@anker.\arabic{fiksjon@anker}}%
@@ -298,17 +302,22 @@
 %
 % Kapitlene står som bokmerker i PDF-en, men ikke i
 % innholdsfortegnelsen. Første avsnitt får ikke innrykk.
+%
+% Kapitler inne i en novelle nummereres fra 1 i hver novelle
+% og står under novellen i bokmerkene. I en roman fortsetter
+% tellingen gjennom delene; kommer en del eller kortprosa
+% etter en novelle, begynner tellingen på nytt.
 % ============================================================
 \DeclareRobustCommand{\kapittel}[1][]{%
   \clearpage
   \def\fiksjon@tmp{#1}%
   \ifx\fiksjon@tmp\@empty
-    \refstepcounter{chapter}%
+    \stepcounter{chapter}%
     \setbox\fiksjon@tittelboks\hbox{\fiksjon@tallfont\thechapter}%
-    \fiksjon@bokmerke{0}{\thechapter}%
+    \fiksjon@bokmerke{\fiksjon@kapnivaa}{\thechapter}%
   \else
     \fiksjon@tittel{#1}%
-    \fiksjon@bokmerke{0}{#1}%
+    \fiksjon@bokmerke{\fiksjon@kapnivaa}{#1}%
   \fi
   \fiksjon@aapning{\fiksjon@tallinje}{\fiksjon@slipp}%
 }
@@ -324,9 +333,14 @@
 % som et kapittel: tittelen på femte linje og teksten på
 % tolvte. Novellene står i innholdsfortegnelsen og som
 % bokmerker.
+%
+% En novelle kan deles i kapitler med \kapittel; tellingen
+% begynner på 1 i hver novelle.
 % ============================================================
 \DeclareRobustCommand{\novelle}[1]{%
   \cleardoublepage
+  \setcounter{chapter}{0}%
+  \gdef\fiksjon@kapnivaa{1}%
   \phantomsection
   \addcontentsline{toc}{fiksjontekst}{#1}%
   \fiksjon@tittel{#1}%
@@ -351,6 +365,8 @@
 % ============================================================
 \DeclareRobustCommand{\kortprosa}[1][]{%
   \clearpage
+  \ifnum\fiksjon@kapnivaa=\@ne \setcounter{chapter}{0}\fi
+  \gdef\fiksjon@kapnivaa{0}%
   \def\fiksjon@tmp{#1}%
   \ifx\fiksjon@tmp\@empty
     \setbox\fiksjon@tittelboks\box\voidb@x
@@ -404,6 +420,8 @@
 % ============================================================
 \DeclareRobustCommand{\del}[1]{%
   \cleardoublepage
+  \ifnum\fiksjon@kapnivaa=\@ne \setcounter{chapter}{0}\fi
+  \gdef\fiksjon@kapnivaa{0}%
   \thispagestyle{empty}%
   \phantomsection
   \addcontentsline{toc}{fiksjondel}{#1}%

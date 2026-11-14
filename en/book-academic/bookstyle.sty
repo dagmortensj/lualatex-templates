@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bookstyle}[2026/09/04 v1.14 — frozen CUP-style book layout]
+\ProvidesPackage{bookstyle}[2026/11/14 v1.15 — frozen CUP-style book layout]
 
 % ============================================================
 % PACKAGE OPTIONS
@@ -370,18 +370,37 @@
 % bold upright, one size step apart. \chaptername and
 % \partname come from babel, so they follow the document
 % language.
+%
+% Titles in capitals are letterspaced a little, 80
+% thousandths of an em (\textls from microtype): capitals
+% set tight look heavy, and spacing them is the convention.
 % ============================================================
 \RequirePackage{titlesec}
+
+% Titles in capitals: uppercase, slightly letterspaced.
+\newcommand{\bk@caps}[1]{\textls[80]{\MakeUppercase{#1}}}
 
 % ------------------ Main chapters ----------------
 \titleformat{\chapter}[display]
   {\normalfont}
   {\filcenter\scshape \chaptername\ \thechapter}
   {3ex}
-  {\filcenter\Huge\MakeUppercase}
+  {\filcenter\Huge\bk@caps}
 
 \titlespacing*{\chapter}
   {0pt}{3.5ex plus 1ex minus .2ex}{11ex plus 2ex minus .5ex}
+
+% ------------------ Unnumbered chapters ----------
+% \chapter* and everything built on it: preface and
+% acknowledgements (\frontchapter), the table of contents,
+% the bibliography and the index. The same form as a
+% numbered chapter, with an empty line where "Chapter N"
+% stands, so the title lands at the same height.
+\titleformat{name=\chapter,numberless}[display]
+  {\normalfont}
+  {\filcenter\scshape\strut}
+  {3ex}
+  {\filcenter\Huge\bk@caps}
 
 % ------------------ Sections ---------------------
 \titleformat{\section}
@@ -421,7 +440,7 @@
   {\normalfont}
   {\filcenter\scshape \partname\ \thepart}
   {3ex}
-  {\filcenter\LARGE\MakeUppercase}
+  {\filcenter\LARGE\bk@caps}
 
 \titlespacing*{\part}
   {0pt}{0.35\textheight}{0.35\textheight}
@@ -459,13 +478,10 @@
 % TABLE OF CONTENTS
 %
 % No dot leaders and no framing rules: page numbers sit
-% flush right and the title is set like a chapter. Call it
-% with \booktoc.
+% flush right. The title is an unnumbered chapter, like the
+% preface. Call it with \booktoc.
 % ============================================================
 \RequirePackage{tocloft}
-
-\renewcommand{\cfttoctitlefont}{\Huge\scshape}
-\renewcommand{\cftaftertoctitle}{\par\vspace{2ex}}
 
 \renewcommand{\cftchapleader}{\hfill}
 \renewcommand{\cftsecleader}{\hfill}
@@ -487,7 +503,9 @@
 \setlength{\cftbeforesubsecskip}{1.5pt}
 
 \newcommand{\booktoc}{%
-  \tableofcontents
+  \chapter*{\contentsname}%
+  \markboth{\contentsname}{\contentsname}%
+  \@starttoc{toc}%
 }
 
 
@@ -577,25 +595,18 @@
 %
 %   \frontchapter{Preface}
 %
-% An unnumbered, flush-left heading one step smaller than a
-% main chapter, for the preface, acknowledgements and the
-% like. It sets the running header itself, which is what
-% keeps "Chapter 0" from appearing. Begin the first
-% paragraph with \noindent.
+% An unnumbered chapter for the preface, acknowledgements
+% and the like, with the same opening as a numbered chapter
+% and the title at the same height (see SECTIONING). The
+% first paragraph has no indent. The command sets the
+% running header itself, so "Chapter 0" does not appear
+% there.
 % ============================================================
 \makeatletter
 
 \newcommand{\frontchapter}[1]{%
-  \cleardoublepage
-  \thispagestyle{frontmatteropen}
-
-  % Set running header text (avoids "Chapter 0")
-  \markboth{#1}{}
-
-  % Heading block
-  \vspace*{3ex}
-  {\noindent\LARGE\bfseries #1\par}
-  \vspace{3ex}
+  \chapter*{#1}%
+  \markboth{#1}{#1}%
 }
 
 \makeatother
@@ -614,6 +625,29 @@
 
 
 % ============================================================
+% HALF-TITLE
+%
+%   \halftitlepage
+%
+% The first page of the book: the title alone, small, on a
+% recto with a blank verso. Optional, and commented out in
+% main.tex: without it the book begins on the title page.
+% \title must be set first.
+% ============================================================
+\makeatletter
+\newcommand{\halftitlepage}{%
+  \cleardoublepage
+  \thispagestyle{empty}
+  \vspace*{0.18\textheight}
+  \begin{center}
+    {\large\scshape \@title \par}
+  \end{center}
+  \cleardoublepage
+}
+\makeatother
+
+
+% ============================================================
 % TITLE PAGE
 %
 %   \title{...}  \author{...}  \date{...}
@@ -623,7 +657,9 @@
 % Title in large small caps, an italic subtitle below it if
 % one is set, author under that, date at the foot. Written
 % out rather than built on \maketitle so every space is
-% visible here.
+% visible here. Not the titlepage environment: it resets the
+% page number to 1, which would give the half-title and the
+% title page the same number.
 % ============================================================
 \makeatletter
 
@@ -631,32 +667,54 @@
 \newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
 
 \newcommand{\booktitlepage}{%
-  \begin{titlepage}
-    \thispagestyle{empty}
+  \cleardoublepage
+  \thispagestyle{empty}
 
-    \vspace*{0.18\textheight}
+  \vspace*{0.18\textheight}
 
-    \begin{center}
-      {\Huge\scshape \@title \par}
+  \begin{center}
+    {\Huge\scshape \@title \par}
 
-      \ifx\@subtitle\@empty\else
-        \vspace{1.6em}
-        {\Large\itshape \@subtitle \par}
-      \fi
+    \ifx\@subtitle\@empty\else
+      \vspace{1.6em}
+      {\Large\itshape \@subtitle \par}
+    \fi
 
-      \vspace{3em}
-      {\large \@author \par}
-    \end{center}
+    \vspace{3em}
+    {\large \@author \par}
+  \end{center}
 
-    \vfill
+  \vfill
 
-    \begin{center}
-      {\normalsize\itshape \@date \par}
-    \end{center}
-  \end{titlepage}
+  \begin{center}
+    {\normalsize\itshape \@date \par}
+  \end{center}
+  \clearpage
 }
 
 \makeatother
+
+
+% ============================================================
+% COLOPHON
+%
+%   \colophonpage{%
+%     © 2026 Author Name\\
+%     Set in Garamond Libre\\
+%     ISBN 978-0-000-00000-0}
+%
+% The back of the title page: rights, printing and ISBN, in
+% small type at the foot of the page. Separate the lines with
+% \\.
+% ============================================================
+\newcommand{\colophonpage}[1]{%
+  \clearpage
+  \thispagestyle{empty}
+  \null
+  \vfill
+  {\small\raggedright #1\par}
+  \clearpage
+}
 
 
 % ============================================================

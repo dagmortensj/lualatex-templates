@@ -86,7 +86,7 @@ Opsjonene kan kombineres: `\usepackage[a5,hefte]{diktstil}`.
 
 ## Typografi
 
-- **Skrift:** Garamond Libre, 12/16 pt
+- **Skrift:** Garamond Libre, 12/16 pt, minuskeltall
 - **Motor:** LuaLaTeX (`fontspec`, OpenType)
 - **Format:** 140 × 216 mm, eller A5 med `a5`
 - **Satsflate:** 98 × 162 mm, 29 linjer, lik i begge formater

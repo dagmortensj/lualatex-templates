@@ -43,6 +43,7 @@ map() {
       -e 's/fiksjon@tittel/fiction@title/g' \
       -e 's/fiksjon@kortlinje/fiction@shortline/g' \
       -e 's/fiksjon@dellinje/fiction@partline/g' \
+      -e 's/fiksjon@kapnivaa/fiction@chapterlevel/g' \
       -e 's/fiksjondel/fictionpart/g' \
       -e 's/fiksjontekst/fictiontext/g' \
       -e 's/fiksjon/fiction/g' \

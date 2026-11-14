@@ -90,7 +90,8 @@ En kort tekst uten tittel.
 
 `\kapittel`, `\novelle` og `\kortprosa` kan blandes, for eksempel en
 lang novelle delt i nummererte kapitler, eller noen korte tekster
-mellom de lange.
+mellom de lange. Kapitler inne i en novelle nummereres fra 1 i hver
+novelle og står under novellen i bokmerkene.
 
 ## Kommandoer
 

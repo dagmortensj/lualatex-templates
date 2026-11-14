@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{fictionstyle}[2026/11/14 v1.1 — novels, short stories and short prose]
+\ProvidesPackage{fictionstyle}[2026/11/14 v1.2 — novels, short stories and short prose]
 
 % ============================================================
 % PACKAGE OPTIONS
@@ -212,6 +212,10 @@
 \pdfstringdefDisableCommands{\let\\\@empty}
 
 \newcounter{fiction@anchor}
+% The bookmark level for chapters: 0 in a novel, 1 inside a
+% story, so the chapters sit under the story.
+\newcommand{\fiction@chapterlevel}{0}
+
 \newcommand{\fiction@bookmark}[2]{%
   \stepcounter{fiction@anchor}%
   \pdfbookmark[#1]{#2}{fiction@anchor.\arabic{fiction@anchor}}%
@@ -297,17 +301,22 @@
 %
 % Chapters appear as bookmarks in the PDF, but not in the
 % table of contents. The first paragraph has no indent.
+%
+% Chapters inside a story are numbered from 1 in each story
+% and sit under the story in the bookmarks. In a novel the
+% count runs on through the parts; when a part or short prose
+% follows a story, the count starts again.
 % ============================================================
 \DeclareRobustCommand{\chapter}[1][]{%
   \clearpage
   \def\fiction@tmp{#1}%
   \ifx\fiction@tmp\@empty
-    \refstepcounter{chapter}%
+    \stepcounter{chapter}%
     \setbox\fiction@titlebox\hbox{\fiction@numberfont\thechapter}%
-    \fiction@bookmark{0}{\thechapter}%
+    \fiction@bookmark{\fiction@chapterlevel}{\thechapter}%
   \else
     \fiction@title{#1}%
-    \fiction@bookmark{0}{#1}%
+    \fiction@bookmark{\fiction@chapterlevel}{#1}%
   \fi
   \fiction@opening{\fiction@numberline}{\fiction@drop}%
 }
@@ -323,9 +332,14 @@
 % chapter: the title on the fifth line and the text on the
 % twelfth. Stories appear in the table of contents and as
 % bookmarks.
+%
+% A story can be divided into chapters with \chapter; the
+% count starts at 1 in each story.
 % ============================================================
 \DeclareRobustCommand{\story}[1]{%
   \cleardoublepage
+  \setcounter{chapter}{0}%
+  \gdef\fiction@chapterlevel{1}%
   \phantomsection
   \addcontentsline{toc}{fictiontext}{#1}%
   \fiction@title{#1}%
@@ -351,6 +365,8 @@
 % ============================================================
 \DeclareRobustCommand{\shortprose}[1][]{%
   \clearpage
+  \ifnum\fiction@chapterlevel=\@ne \setcounter{chapter}{0}\fi
+  \gdef\fiction@chapterlevel{0}%
   \def\fiction@tmp{#1}%
   \ifx\fiction@tmp\@empty
     \setbox\fiction@titlebox\box\voidb@x
@@ -404,6 +420,8 @@
 % ============================================================
 \DeclareRobustCommand{\part}[1]{%
   \cleardoublepage
+  \ifnum\fiction@chapterlevel=\@ne \setcounter{chapter}{0}\fi
+  \gdef\fiction@chapterlevel{0}%
   \thispagestyle{empty}%
   \phantomsection
   \addcontentsline{toc}{fictionpart}{#1}%

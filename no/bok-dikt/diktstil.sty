@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{diktstil}[2026/11/13 v1.0 — diktsamling]
+\ProvidesPackage{diktstil}[2026/11/14 v1.1 — diktsamling]
 
 % ============================================================
 % PAKKEOPSJONER
@@ -78,7 +78,9 @@
 % ============================================================
 % FONT
 %
-% Garamond Libre, samme skrift som bok-fag. Ingen
+% Garamond Libre, samme skrift som bok-fag. Minuskeltall,
+% som i bok-fiksjon: tall i et dikt, i sidetallene og i
+% innholdet står i linje med de små bokstavene. Ingen
 % matematikkfont: stilen laster fontspec og ikke
 % unicode-math.
 % ============================================================
@@ -89,7 +91,8 @@
   UprightFont    = *-Regular,
   ItalicFont     = *-Italic,
   BoldFont       = *-Bold,
-  BoldItalicFont = *-BoldItalic ]
+  BoldItalicFont = *-BoldItalic,
+  Numbers        = OldStyle ]
 
 
 % ============================================================

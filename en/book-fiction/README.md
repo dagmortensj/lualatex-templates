@@ -93,7 +93,8 @@ A short piece without a title.
 
 `\chapter`, `\story` and `\shortprose` can be mixed, for instance a
 long story divided into numbered chapters, or a few short pieces
-between the long ones.
+between the long ones. Chapters inside a story are numbered from 1 in
+each story and sit under the story in the bookmarks.
 
 `\chapter` and `\part` replace the class commands of the same name and
 take different arguments: no title, and an optional word in brackets.

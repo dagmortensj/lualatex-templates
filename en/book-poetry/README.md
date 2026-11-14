@@ -88,7 +88,7 @@ The options combine: `\usepackage[a5,booklet]{poetrystyle}`.
 
 ## Typography
 
-- **Text:** Garamond Libre, 12/16 pt
+- **Text:** Garamond Libre, 12/16 pt, old-style figures
 - **Engine:** LuaLaTeX (`fontspec`, OpenType)
 - **Page size:** 140 × 216 mm, or A5 with `a5`
 - **Text block:** 98 × 162 mm, 29 lines, the same in both formats

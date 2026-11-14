@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{poetrystyle}[2026/11/13 v1.0 — poetry collection]
+\ProvidesPackage{poetrystyle}[2026/11/14 v1.1 — poetry collection]
 
 % ============================================================
 % PACKAGE OPTIONS
@@ -80,8 +80,10 @@
 % ============================================================
 % FONT
 %
-% Garamond Libre, the same face as book-academic. No
-% maths font: the style loads fontspec and not
+% Garamond Libre, the same face as book-academic. Old-style
+% figures, as in book-fiction: figures in a poem, in the
+% folios and in the contents sit with the lowercase letters.
+% No maths font: the style loads fontspec and not
 % unicode-math.
 % ============================================================
 \RequirePackage{fontspec}
@@ -91,7 +93,8 @@
   UprightFont    = *-Regular,
   ItalicFont     = *-Italic,
   BoldFont       = *-Bold,
-  BoldItalicFont = *-BoldItalic ]
+  BoldItalicFont = *-BoldItalic,
+  Numbers        = OldStyle ]
 
 
 % ============================================================
