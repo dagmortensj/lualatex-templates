@@ -463,10 +463,15 @@
 %   \subtitle{...}                 % optional, e.g. "A Novel"
 %   \booktitlepage
 %
-% Built like the other book templates: the title in large
-% small capitals, an italic subtitle if one is set, the
-% author below, and the date at the foot. \date may just as
-% well hold a publisher or a place.
+% As in novels and poetry collections: the author at the
+% top, then the title in small capitals and an italic subtitle
+% if one is set, typically the genre ("A Novel"). \date stands at
+% the foot, and here it is best the publisher; the year
+% belongs in the colophon.
+%
+% The title is 20.7 pt (\LARGE). The academic book uses
+% 24.9 pt on a B5 page; on this format that would take up
+% nearly the whole measure.
 % ============================================================
 \newcommand{\booktitlepage}{%
   \cleardoublepage
@@ -474,13 +479,13 @@
   \null
   \vskip 0.18\textheight
   \begin{center}
-    {\huge\scshape \@title \par}
+    {\large \@author \par}
+    \vspace{2.2em}
+    {\LARGE\scshape \@title \par}
     \ifx\@subtitle\@empty\else
-      \vspace{1.4em}
+      \vspace{1.2em}
       {\large\itshape \@subtitle \par}
     \fi
-    \vspace{3em}
-    {\large \@author \par}
   \end{center}
   \vskip\z@\@plus 1filll
   \begin{center}

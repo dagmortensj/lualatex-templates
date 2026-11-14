@@ -98,6 +98,8 @@ The options combine: `\usepackage[a5,booklet]{poetrystyle}`.
   text block, first line on the sixth
 - **Page numbers:** centred at the bottom; none on front matter,
   contents and part pages
+- **Title page:** the author at the top, the title in small capitals at
+  20.7 pt, the genre in italics below, the publisher at the foot
 - **Microtypography:** protrusion and tracking of small caps; no
   expansion
 

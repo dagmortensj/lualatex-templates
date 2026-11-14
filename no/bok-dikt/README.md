@@ -95,6 +95,8 @@ Opsjonene kan kombineres: `\usepackage[a5,hefte]{diktstil}`.
 - **Dikt:** venstrestilt, tittel i kursiv på fjerde linje i satsflata,
   første linje på sjette
 - **Sidetall:** midtstilt nederst; forstoff, innhold og delsider uten
+- **Tittelside:** forfatteren øverst, tittelen i kapiteler i 20,7 pt, sjangeren
+  i kursiv under, forlaget nederst
 - **Mikrotypografi:** protrusion og sperring av kapiteler; ingen
   expansion
 

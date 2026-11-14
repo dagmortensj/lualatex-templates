@@ -154,6 +154,8 @@ the same page with more room around it.
 - **Short prose and contents:** the title on the fourth line, the text
   one empty line below
 - **Part pages:** the title in small capitals on the tenth line
+- **Title page:** the author at the top, the title in small capitals at
+  20.7 pt, the genre in italics below, the publisher at the foot
 - **Folio:** centred, two lines below the last line of text (20 mm
   above the bottom edge), on chapter pages too; front matter and part
   pages without

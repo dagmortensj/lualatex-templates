@@ -147,6 +147,8 @@ samme siden med mer plass rundt.
 - **Kortprosa og innhold:** tittelen på fjerde linje, teksten én tom
   linje under
 - **Delsider:** tittelen i kapiteler på tiende linje
+- **Tittelside:** forfatteren øverst, tittelen i kapiteler i 20,7 pt, sjangeren
+  i kursiv under, forlaget nederst
 - **Sidetall:** midtstilt, to linjer under siste tekstlinje (20 mm over
   nederkanten), også på kapittelsider; forstoff og delsider uten
 - **Mikrotypografi:** protrusion, expansion og sperring av kapiteler

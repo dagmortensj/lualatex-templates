@@ -525,10 +525,14 @@
 %   \subtitle{...}                 % valgfritt, f.eks. «Dikt»
 %   \booktitlepage
 %
-% Samme oppbygning som i bok-fag: tittel i store kapiteler,
-% kursiv undertittel om den er satt, forfatter under, og
-% dato nederst. I \date kan det like gjerne stå et forlag
-% eller et sted.
+% Som i norske romaner og diktsamlinger: forfatteren øverst,
+% så tittelen i kapiteler og en kursiv undertittel om den er
+% satt, gjerne sjangeren («Dikt»). Nederst står \date, som her
+% helst er forlaget; året hører hjemme i kolofonen.
+%
+% Tittelen er 20,7 pt (\LARGE). Fagboka bruker 24,9 pt på en
+% B5-side; på dette formatet ville det tatt nesten hele
+% satsbredden.
 % ============================================================
 \newcommand{\booktitlepage}{%
   \cleardoublepage
@@ -536,13 +540,13 @@
   \null
   \vskip 0.18\textheight
   \begin{center}
-    {\huge\scshape \@title \par}
+    {\large \@author \par}
+    \vspace{2.2em}
+    {\LARGE\scshape \@title \par}
     \ifx\@subtitle\@empty\else
-      \vspace{1.4em}
+      \vspace{1.2em}
       {\large\itshape \@subtitle \par}
     \fi
-    \vspace{3em}
-    {\large \@author \par}
   \end{center}
   \vskip\z@\@plus 1filll
   \begin{center}
