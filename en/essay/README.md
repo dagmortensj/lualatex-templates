@@ -37,7 +37,7 @@ latexmk -lualatex main
 ```
 
 `\maketitle` sets the title at the top of the first page, centred: the
-title in small caps at 20.7 pt on the first line, an italic subtitle two
+title in roman at 20.7 pt on the first line, an italic subtitle two
 lines below if one is set, the name three lines below that and the date
 in italic on the line after. The text begins four lines below the date,
 on the ninth line when the title takes one line and there is no
@@ -115,7 +115,7 @@ The template has no package options.
 - **Margins:** 45 mm on each side; the top of the text block 30 mm
   below the top edge of the sheet, the first baseline 35.6 mm
 - **Paragraphs:** justified, indent 1 em, no space between paragraphs
-- **Title:** small caps at 20.7 pt with 24 bp leading; subtitle in
+- **Title:** roman at 20.7 pt with 24 bp leading; subtitle in
   italic, \large; name and date at text size, the date in italic
 - **Headings:** small caps at text size, centred
 - **Footnotes:** 10/13 bp, at the foot of the page

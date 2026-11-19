@@ -36,7 +36,7 @@ latexmk -lualatex main
 ```
 
 `\maketitle` setter tittelen øverst på første side, midtstilt: tittelen
-i kapiteler i 20,7 pt på første linje, en kursiv undertittel to linjer
+i vanlig skrift i 20,7 pt på første linje, en kursiv undertittel to linjer
 under om den er satt, navnet tre linjer under det og datoen i kursiv på
 linja etter. Teksten begynner fire linjer under datoen, på niende linje
 når tittelen står på én linje og det ikke er noen undertittel.
@@ -113,7 +113,7 @@ Malen har ingen pakkeopsjoner.
 - **Marger:** 45 mm på hver side; toppen av satsflata 30 mm under
   arkets overkant, første grunnlinje 35,6 mm
 - **Avsnitt:** justert, innrykk 1 gefirt, ingen luft mellom avsnitt
-- **Tittel:** kapiteler i 20,7 pt med 24 bp linjeavstand; undertittel i
+- **Tittel:** vanlig skrift i 20,7 pt med 24 bp linjeavstand; undertittel i
   kursiv, \large; navn og dato i brødtekststørrelse, datoen kursiv
 - **Overskrifter:** kapiteler i brødtekststørrelse, midtstilt
 - **Fotnoter:** 10/13 bp, nederst på siden
