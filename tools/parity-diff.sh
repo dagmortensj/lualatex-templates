@@ -25,7 +25,7 @@
 #     Oppgave/Exercise, poeng/points, «Side … av»/"Page … of",
 #     «Lykke til!»/"Good luck!", and the option-warning text
 #   - the formula-sheet style's page-count warning text
-#   - the poetry and fiction styles' \ProvidesPackage
+#   - the poetry, fiction and essay styles' \ProvidesPackage
 #     descriptions
 # Anything else is drift.
 # ============================================================
@@ -36,7 +36,27 @@ cd "$(dirname "$0")/.." || exit 1
 # names first, so e.g. 'deloppgaver' is mapped before
 # 'oppgave' can eat its middle.
 map() {
-  sed -e 's/fiksjonstil/fictionstyle/g' \
+  sed -e 's/essaystil/essaystyle/g' \
+      -e 's/essay@undertittellinje/essay@subtitleline/g' \
+      -e 's/essay@undertittelboks/essay@subtitlebox/g' \
+      -e 's/essay@etterundertittel/essay@subtitlegap/g' \
+      -e 's/essay@tittelavstand/essay@titleleading/g' \
+      -e 's/essay@tittelfont/essay@titlefont/g' \
+      -e 's/essay@tittelboks/essay@titlebox/g' \
+      -e 's/essay@ettertittel/essay@textgap/g' \
+      -e 's/essay@etternavn/essay@namegap/g' \
+      -e 's/essay@navnelinje/essay@nameline/g' \
+      -e 's/essay@navneboks/essay@namebox/g' \
+      -e 's/essay@datolinje/essay@dateline/g' \
+      -e 's/essay@datoboks/essay@datebox/g' \
+      -e 's/essay@blokk/essay@block/g' \
+      -e 's/essay@linjer/essay@lines/g' \
+      -e 's/essay@plasser/essay@place/g' \
+      -e 's/essay@slutt/essay@end/g' \
+      -e 's/essay@neste/essay@next/g' \
+      -e 's/\\overskrift\([^a-zA-Z]\)/\\heading\1/g' \
+      -e 's/\\tekstbrudd/\\textbreak/g' \
+      -e 's/fiksjonstil/fictionstyle/g' \
       -e 's/fiksjon@tittelboks/fiction@titlebox/g' \
       -e 's/fiksjon@tittellinjer/fiction@titlelines/g' \
       -e 's/fiksjon@tittelfont/fiction@titlefont/g' \
@@ -171,6 +191,8 @@ compare no/bok-dikt/diktstil.sty      en/book-poetry/poetrystyle.sty "$poetry_de
 compare no/bok-dikt/main.tex          en/book-poetry/main.tex "$poetry_del"
 compare no/bok-fiksjon/fiksjonstil.sty en/book-fiction/fictionstyle.sty "$poetry_del"
 compare no/bok-fiksjon/main.tex       en/book-fiction/main.tex "$poetry_del"
+compare no/essay/essaystil.sty       en/essay/essaystyle.sty
+compare no/essay/main.tex           en/essay/main.tex
 
 if [ "$fail" -eq 0 ]; then
   printf '\nAll pairs structurally identical.\n'

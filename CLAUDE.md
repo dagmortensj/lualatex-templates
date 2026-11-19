@@ -4,7 +4,7 @@ Les `~/Developer/CLAUDE.md` først; dette er tillegget som gjelder bare dette re
 
 ## Hva repoet er
 
-Åtte maler, hver i `en/` og `no/`, seksten mapper i alt:
+Ni maler, hver i `en/` og `no/`, atten mapper i alt:
 
 | `en/` | `no/` | Stilfil |
 |---|---|---|
@@ -16,14 +16,15 @@ Les `~/Developer/CLAUDE.md` først; dette er tillegget som gjelder bare dette re
 | `formulasheet` | `formelark` | `formulasheetstyle.sty` / `formelarkstil.sty` |
 | `book-fiction` | `bok-fiksjon` | `fictionstyle.sty` / `fiksjonstil.sty` |
 | `book-poetry` | `bok-dikt` | `poetrystyle.sty` / `diktstil.sty` |
+| `essay` | `essay` | `essaystyle.sty` / `essaystil.sty` |
 
 Hver mappe har `main.tex`, stilfila (all formatering ligger der), `README.md`, `.latexmkrc` og en bundlet `main.pdf` som viser resultatet. `book-academic`, `ffv` og `notes` har `.bib`; `book-academic`, `notes` og `handout` har `figures/` (`figurer/`). `main.pdf` er **ikke** gitignorert — den er en del av repoet og skal være fersk ved commit.
 
-Søsterrepoet `pdflatex-templates` har samme malsett for pdflatex, unntatt `book-fiction`/`bok-fiksjon` og `book-poetry`/`bok-dikt`, som bare finnes her (ingen matematikk, `fontspec`, og opsjonen `centered`/`sentrert` bruker Lua). En endring i layout eller funksjonalitet skal normalt inn i begge, i hver sin pakkedialekt; en endring som bare gjelder `unicode-math`/OpenType, hører bare hjemme her.
+Søsterrepoet `pdflatex-templates` har samme malsett for pdflatex, unntatt `book-fiction`/`bok-fiksjon`, `book-poetry`/`bok-dikt` og `essay`, som bare finnes her (ingen matematikk, `fontspec`, og opsjonen `centered`/`sentrert` bruker Lua). En endring i layout eller funksjonalitet skal normalt inn i begge, i hver sin pakkedialekt; en endring som bare gjelder `unicode-math`/OpenType, hører bare hjemme her.
 
 ## Regler som følger av `unicode-math`
 
-Gjelder alle malene unntatt `book-fiction`/`bok-fiksjon` og `book-poetry`/`bok-dikt`, som laster `fontspec` alene og ikke har matematikkfont eller `\vv`.
+Gjelder alle malene unntatt `book-fiction`/`bok-fiksjon`, `book-poetry`/`bok-dikt` og `essay`, som laster `fontspec` alene og ikke har matematikkfont eller `\vv`.
 
 - **Fet matte er `\symbf` / `\symbfit` / `\symbfup`**, aldri `\bm`, aldri `\boldmath`.
 - **Ikke last `amssymb`** — bryter bygget. **Ikke last `mathtools`** — gir unicode-math-varsler; `physics2` (`ab.legacy`), `tensor` og unicode-math sin egen `\coloneq` dekker behovet.
@@ -42,8 +43,8 @@ De to utgavene skal avvike **bare i språkstrenger, filnavn og kommentarer**. Al
 ## Bygg og verifisering
 
 - Alltid `latexmk -lualatex -interaction=nonstopmode main` (eller bare `latexmk main`, `.latexmkrc` velger motoren). Aldri ren `lualatex`: `notes` og `book-academic` trenger biber, `exam` trenger et pass til for «Side 2 av 5».
-- **Alle seksten skal bygge uten warnings.** Det er standarden repoet lover i README; sjekk `main.log` for `Warning` etter en endring, ikke bare om PDF-en kom ut.
-- `exam` har pakkevalgene `coverpage`, `booklet`, `statuscheck` (`forside`, `hefte`, `statussjekk`); `formulasheet` har `tight` (`tett`); `book-poetry` har `a5`, `booklet` (`hefte`), `centered` (`sentrert`) og `proof` (`korrektur`); `book-fiction` har `booklet` (`hefte`) og `proof` (`korrektur`). En endring i disse stilfilene må prøves med hvert valg, ikke bare standard. I `book-poetry` skal `a5` gi nøyaktig samme linje- og sidebrudd som standardformatet. I `book-fiction` står alt i et grid på 15 bp: kapittelstart, scenebrudd og sidetall skal være hele linjer, og en full side har 30.
+- **Alle atten skal bygge uten warnings.** Det er standarden repoet lover i README; sjekk `main.log` for `Warning` etter en endring, ikke bare om PDF-en kom ut.
+- `exam` har pakkevalgene `coverpage`, `booklet`, `statuscheck` (`forside`, `hefte`, `statussjekk`); `formulasheet` har `tight` (`tett`); `book-poetry` har `a5`, `booklet` (`hefte`), `centered` (`sentrert`) og `proof` (`korrektur`); `book-fiction` har `booklet` (`hefte`) og `proof` (`korrektur`). En endring i disse stilfilene må prøves med hvert valg, ikke bare standard. I `book-poetry` skal `a5` gi nøyaktig samme linje- og sidebrudd som standardformatet. I `book-fiction` står alt i et grid på 15 bp: kapittelstart, scenebrudd og sidetall skal være hele linjer, og en full side har 30. `essay` har samme slags grid på 16 bp: tittelblokk, overskrifter, tekstbrudd og sitater skal være hele linjer, og en full side har 40.
 - Bygg skjer på Macen (Dag-Morten) eller i sandboxen (verifisering), aldri i `device_bash`-VM-en — se hovedfila.
 
 ## Terminal for Dag-Morten

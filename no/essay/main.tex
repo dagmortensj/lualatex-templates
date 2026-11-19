@@ -1,0 +1,80 @@
+% !TEX program = lualatex
+% ============================================================
+% main.tex — selve essayet
+%
+% Denne fila er struktur og tekst. Alle typografiske valg bor
+% i essaystil.sty, som også laster babel og setter
+% papirformatet.
+%
+% Kompiler med LuaLaTeX, ikke pdflatex:
+%   latexmk -lualatex main
+% ============================================================
+\documentclass[12pt]{article}
+
+
+% ============================================================
+% LAST INN ESSAYSTIL
+% ============================================================
+\usepackage{essaystil}
+
+
+% ============================================================
+% TITTEL, NAVN OG DATO
+%
+% \date{\today} gir dagens dato på norsk. Skriv en fast dato
+% i stedet om essayet skal leveres med en bestemt dato, eller
+% \date{} for ingen dato.
+% ============================================================
+\title{Essayets tittel}
+% \subtitle{En undertittel}
+\author{Navn Navnesen}
+\date{\today}
+
+
+% ============================================================
+% DOKUMENT
+% ============================================================
+\begin{document}
+
+\maketitle
+
+
+% ============================================================
+% TEKSTEN
+%
+% \overskrift{Tittel} foran en del av teksten, om essayet
+% trenger det; \tekstbrudd for en blank linje mellom to
+% deler uten overskrift. Bytt ut plassholderteksten under
+% med din egen.
+% ============================================================
+
+Dette er første avsnitt i essayet. Det har ikke innrykk, siden det følger rett etter tittelen, og det begynner fire linjer under datoen. Tittelen, navnet og datoen står midtstilt øverst på første side, og det er alt essayet har av forstoff.
+
+Alle linjer står i et fast grid med seksten punkt mellom grunnlinjene, og en full side har førti linjer. Skriften er Garamond Libre i tolv punkt, den samme som i bokmalene. Satsbredden er tolv centimeter, som gir rundt sytti tegn per linje. Det er omtrent så langt øyet kan følge en linje og finne starten på den neste uten å lete. Marginene blir brede på et A4-ark, men de gir plass til kommentarer i margen når essayet skal leses av noen andre.
+
+Avsnittene skilles med innrykk og ikke med luft. Innrykket er én gefirt, like bredt som skriftstørrelsen er høy. Teksten er justert, og ordene deles etter norske regler. Tallene i teksten er minuskeltall, som 1814 og 2026, så de står i linje med de små bokstavene.\footnote{Fotnotene står nederst på siden i ti punkt, også når siden er kort. Fotnotetallet i teksten er et ekte hevet tall fra fonten.}
+
+\overskrift{En overskrift}
+
+Overskriftene er unummererte og står i kapiteler, midtstilt, med én blank linje over. Teksten begynner på linja rett under, uten innrykk. Et kort essay trenger sjelden overskrifter, og da kan de bare utelates; et lengre essay kan deles i noen få deler med hver sin overskrift.
+
+Et sitat som er for langt til å stå i teksten, settes som et blokksitat med miljøet quote:
+
+\begin{quote}
+Et blokksitat er rykket inn fra begge kanter og står i samme skriftstørrelse som teksten, med én blank linje over og under, så linjene står i gridet også her.
+\end{quote}
+Teksten etter sitatet fortsetter avsnittet uten innrykk når det ikke står en blank linje i kilden mellom sitatet og teksten. Med en blank linje begynner et nytt avsnitt, med innrykk som vanlig.
+
+\tekstbrudd
+
+En blank linje skiller to deler av teksten uten at det trengs en overskrift. Det første avsnittet etter bruddet har ikke innrykk. Faller bruddet nederst på en side, blir siden stående med en tom linje til slutt, og faller det helt øverst, forsvinner det.
+
+Resten av denne teksten er fylltekst, så du kan se hvordan en full side ser ut. Det er lett å tro at et essay er en friere form enn en artikkel, og på én måte er det riktig: essayet trenger ikke å bevise noe, og det kan ta omveier som en artikkel ville strøket. Men friheten har en pris. Når teksten ikke har en fast struktur å støtte seg på, må hver setning bære sin egen vekt, og leseren merker fort når den ikke gjør det.
+
+Montaigne kalte tekstene sine forsøk, og ordet sier noe om hva sjangeren er ment å være. Et forsøk kan mislykkes. Det kan begynne et sted og ende et annet, og det kan innrømme at forfatteren ikke vet svaret. Et godt essay kan ende uten et svar, så lenge veien dit var verdt å gå.
+
+Det gjelder også formen på siden. En tekst som skal leses fra begynnelse til slutt, uten å slås opp i, har det best med rolige sider: én skrift, én størrelse, jevne linjer og lite som trekker blikket bort fra teksten. Det er derfor malen har så få virkemidler. Tittelen, overskriftene og sitatene er det hele.
+
+Bytt ut denne teksten med din egen. Det er alt som skal til.
+
+\end{document}

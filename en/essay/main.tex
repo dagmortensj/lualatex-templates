@@ -1,0 +1,80 @@
+% !TEX program = lualatex
+% ============================================================
+% main.tex — the essay itself
+%
+% This file is structure and text. Every typographic choice
+% lives in essaystyle.sty, which also loads babel and sets
+% the paper size.
+%
+% Compile with LuaLaTeX, not pdflatex:
+%   latexmk -lualatex main
+% ============================================================
+\documentclass[12pt]{article}
+
+
+% ============================================================
+% LOAD ESSAYSTYLE
+% ============================================================
+\usepackage{essaystyle}
+
+
+% ============================================================
+% TITLE, NAME AND DATE
+%
+% \date{\today} gives today's date in English. Write a fixed
+% date instead if the essay is to be handed in with a given
+% date, or \date{} for no date.
+% ============================================================
+\title{Title of the Essay}
+% \subtitle{A subtitle}
+\author{First Lastname}
+\date{\today}
+
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+\begin{document}
+
+\maketitle
+
+
+% ============================================================
+% THE TEXT
+%
+% \heading{Title} before a part of the text, if the essay
+% needs one; \textbreak for a blank line between two parts
+% without a heading. Replace the placeholder text below with
+% your own.
+% ============================================================
+
+This is the first paragraph of the essay. It has no indent, since it follows straight after the title, and it begins four lines below the date. The title, the name and the date stand centred at the top of the first page, and that is all the front matter the essay has.
+
+Every line stands on a fixed grid with sixteen points between the baselines, and a full page has forty lines. The face is Garamond Libre at twelve points, the same as in the book templates. The measure is twelve centimetres, which gives about seventy characters a line. That is roughly as far as the eye can follow a line and find the start of the next one without searching. The margins become wide on an A4 sheet, but they leave room for comments when someone else is to read the essay.
+
+Paragraphs are separated by an indent and not by space. The indent is one em, as wide as the type size is high. The text is justified, and words are hyphenated by English rules. Figures in the text are old-style, like 1814 and 2026, so they stand in line with the lowercase letters.\footnote{Footnotes stand at the foot of the page in ten points, also when the page is short. The footnote number in the text is a true superior figure from the font.}
+
+\heading{A heading}
+
+Headings are unnumbered and set in small caps, centred, with one blank line above. The text begins on the line right below, without indent. A short essay rarely needs headings, and then they can simply be left out; a longer essay can be divided into a few parts with a heading each.
+
+A quotation too long to stand in the text is set as a block quotation with the quote environment:
+
+\begin{quote}
+A block quotation is indented from both edges and set in the same size as the text, with one blank line above and below, so the lines stand on the grid here too.
+\end{quote}
+The text after the quotation continues the paragraph without indent when there is no blank line in the source between the quotation and the text. With a blank line a new paragraph begins, indented as usual.
+
+\textbreak
+
+A blank line separates two parts of the text without the need for a heading. The first paragraph after the break has no indent. If the break falls at the foot of a page, the page is left with an empty line at the end, and if it falls at the very top, it disappears.
+
+The rest of this text is filler, so you can see what a full page looks like. It is easy to believe that an essay is a freer form than an article, and in one sense that is right: the essay need not prove anything, and it may take detours an article would have cut. But the freedom has a price. When the text has no fixed structure to lean on, each sentence has to carry its own weight, and the reader soon notices when it does not.
+
+Montaigne called his texts attempts, and the word says something about what the genre is meant to be. An attempt can fail. It can begin in one place and end in another, and it can admit that the writer does not know the answer. A good essay can end without an answer, as long as the way there was worth taking.
+
+The same holds for the form of the page. A text meant to be read from beginning to end, rather than consulted, does best with quiet pages: one face, one size, even lines and little that draws the eye away from the text. That is why the template has so few devices. The title, the headings and the quotations are all there is.
+
+Replace this text with your own. That is all it takes.
+
+\end{document}

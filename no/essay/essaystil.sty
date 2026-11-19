@@ -1,0 +1,398 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{essaystil}[2026/11/19 v1.0 — essay på A4]
+
+% ============================================================
+% essaystil.sty — essay på A4
+%
+% Alle typografiske valg bor i denne fila. Skriv teksten i
+% main.tex: tittel, navn og dato i preamblen, \maketitle
+% først i dokumentet, så teksten.
+%
+%   \documentclass[12pt]{article}
+%
+% Stilen bygger på fiksjonstil.sty i bok-fiksjon: samme
+% skrift, samme mikrotypografi og samme faste linjegrid, men
+% på A4, ensidig, med tittel, navn og dato øverst på første
+% side i stedet for tittelside og forstoff.
+%
+% Motor: LuaLaTeX. Fonten er OpenType.
+%
+% Rekkefølgen nedenfor: språk, font, mikrotypografi, kjegle,
+% geometri, sidefall, sidestil, hyperref, tittel, overskrifter,
+% tekstbrudd, sitater og fotnoter.
+% ============================================================
+
+
+% ============================================================
+% SPRÅK
+% ============================================================
+\RequirePackage[norsk]{babel}
+
+
+% ============================================================
+% FONT
+%
+% Garamond Libre, samme skrift som bokmalene. Minuskeltall i
+% teksten og i sidetallene. Ingen matematikkfont: stilen
+% laster fontspec og ikke unicode-math.
+% ============================================================
+\RequirePackage{fontspec}
+
+\setmainfont{GaramondLibre}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic,
+  Numbers        = OldStyle ]
+
+
+% ============================================================
+% MIKROTYPOGRAFI
+%
+% Teksten er justert, så både protrusion og expansion er på:
+% protrusion henger tegnsetting litt ut i margen, og
+% expansion gir jevnere ordmellomrom. tracking sperrer
+% kapitelene.
+% ============================================================
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% KJEGLE
+%
+% 12/16 bp. Over 120 mm gir det rundt 70 tegn per linje,
+% innenfor det som leses godt i én spalte.
+%
+% \topskip er én linje, så første grunnlinje står én linje
+% ned i satsflata, og hver linje på siden står i et fast
+% grid med 16 bp mellom grunnlinjene. \essay@grid husker
+% linjeavstanden, så tittelen kan regne i hele linjer også
+% der skriften er større.
+% ============================================================
+\renewcommand{\normalsize}{%
+  \@setfontsize\normalsize{12bp}{16bp}%
+  \let\@listi\@listI}
+\normalsize
+\setlength{\topskip}{16bp}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+
+\newdimen\essay@grid
+\essay@grid=\baselineskip
+
+
+% ============================================================
+% SIDEGEOMETRI
+%
+% FORMAT. A4, ensidig.
+%
+% SATSFLATE. 120 mm bred og 40 linjer høy. Første
+% grunnlinje står 35,6 mm under arkets overkant, siste
+% 255,8 mm.
+%
+% MARGER. 45 mm på hver side. Toppmargen er 30 mm til
+% toppen av satsflata, som ligger én linje (\topskip) over
+% første grunnlinje. Bunnmargen er resten, 41,2 mm, og
+% sidetallet står i den.
+% ============================================================
+\RequirePackage{geometry}
+\geometry{a4paper,
+  hmargin=45mm, top=30mm,
+  textheight=640bp, footskip=32bp}
+
+
+% ============================================================
+% SIDEFALL
+%
+% Sidene står i fast grid og strekkes ikke. En side er full,
+% 40 linjer, med to unntak: siste side slutter der teksten
+% slutter, og en side blir én linje kortere når siste linje
+% i et avsnitt ellers ville stått alene øverst på neste side
+% (horunge). Første linje i et avsnitt kan stå alene
+% nederst.
+%
+% Bunnen av hver side får strekk av orden fill, så en kort
+% side står åpen nederst og ikke fordeler lufta mellom
+% linjene.
+% ============================================================
+\raggedbottom
+\def\@textbottom{\vskip\z@\@plus 1fill}
+\widowpenalty=\@M
+\clubpenalty=\z@
+\brokenpenalty=\z@
+
+
+% ============================================================
+% SIDESTIL
+%
+% Sidetallet midtstilt nederst, to linjer under siste
+% tekstlinje, på alle sider. Ingen topptekst.
+% ============================================================
+\def\ps@essay{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \def\@oddfoot{\hfil\thepage\hfil}%
+  \let\@evenfoot\@oddfoot
+}
+\pagestyle{essay}
+
+
+% ============================================================
+% HYPERLENKER
+%
+% Lenkene er svarte, så siden skrives ut som uten dem, men
+% fotnoter og lenker er klikkbare i en PDF-leser.
+% Overskriftene står som bokmerker, og tittelen og navnet
+% går inn i PDF-ens metadata. \\ i en tittel fjernes fra
+% bokmerket og metadataene.
+% ============================================================
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  allcolors=black
+}
+
+\pdfstringdefDisableCommands{\let\\\@empty}
+
+\newcounter{essay@anker}
+\newcommand{\essay@bokmerke}[1]{%
+  \stepcounter{essay@anker}%
+  \pdfbookmark[0]{#1}{essay@anker.\arabic{essay@anker}}%
+}
+
+
+% ============================================================
+% TITTEL
+%
+%   \title{...}  \author{...}  \date{...}
+%   \subtitle{...}                 % valgfritt
+%   \maketitle
+%
+% Øverst på første side, midtstilt: tittelen i kapiteler i
+% 20,7 pt (\LARGE) på første linje, en kursiv undertittel to
+% linjer under om den er satt, navnet tre linjer under det
+% og datoen i kursiv på linja etter. Teksten begynner fire
+% linjer under datoen, på niende linje når tittelen står på
+% én linje og det ikke er noen undertittel.
+%
+% Navn, dato og undertittel står i gridet. Tittelen har
+% 24 bp linjeavstand, halvannen linje, og det som følger
+% begynner på første hele linje under den. Hver del står på
+% inntil 80 % av satsbredden, uten orddeling, og brytes der
+% den er for lang; \\ bestemmer hvor. \date{} eller
+% \author{} gir ingen linje for datoen eller navnet.
+%
+% Tallene samlet, om noe skal justeres:
+% ============================================================
+\newcommand{\essay@tittelfont}{\LARGE\scshape}
+\newcommand{\essay@tittelavstand}{24bp}  % linjeavstand i tittelen
+\newcommand{\essay@etterundertittel}{2}  % linjer fra tittel til undertittel
+\newcommand{\essay@etternavn}{3}         % linjer fra tittel til navn
+\newcommand{\essay@ettertittel}{4}       % linjer fra dato til tekst
+
+\def\@subtitle{}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+
+\newbox\essay@tittelboks
+\newbox\essay@undertittelboks
+\newbox\essay@navneboks
+\newbox\essay@datoboks
+
+% \essay@blokk{boks}{font}{linjeavstand}{tekst} setter
+% teksten midtstilt i en boks så bred som satsflata. Boksens
+% høyde er første linjes høyde, så grunnlinja i første linje
+% er boksens grunnlinje.
+\newcommand{\essay@blokk}[4]{%
+  \setbox#1\hbox to\textwidth{\hfil
+    \vtop{%
+      \hsize=0.8\textwidth
+      \centering #2%
+      \baselineskip=#3\relax
+      \hyphenpenalty=\@M \exhyphenpenalty=\@M
+      #4\par}%
+    \hfil}}
+
+% \essay@linjer{boks}{linjeavstand} gir i \@tempcnta hvor
+% mange gridlinjer siste grunnlinje i boksen står under den
+% første, rundet opp. Antall linjer i boksen er dybden delt
+% på linjeavstanden, rundet av, så underlengdene i siste
+% linje ikke teller.
+\newcommand{\essay@linjer}[2]{%
+  \@tempdima=\dimexpr #2*\numexpr\dp#1/\dimexpr#2\relax\relax\relax
+  \@tempcnta=\dimexpr\@tempdima+\essay@grid-100sp\relax
+  \@tempcntb=\essay@grid
+  \divide\@tempcnta\@tempcntb}
+
+% \essay@plasser{linje}{boks} setter boksen med grunnlinja på
+% den gitte linja i satsflata, uten å ta plass.
+\newcommand{\essay@plasser}[2]{%
+  \nointerlineskip
+  \vbox to\z@{%
+    \kern\dimexpr\topskip+\essay@grid*(#1-1)-\ht#2\relax
+    \box#2\vss}}
+
+\renewcommand{\maketitle}{%
+  \par
+  \begingroup
+  \hypersetup{pdftitle={\@title}, pdfauthor={\@author}}%
+  % Tittel på første linje
+  \essay@blokk\essay@tittelboks{\essay@tittelfont}%
+    {\essay@tittelavstand}{\@title}%
+  \essay@linjer\essay@tittelboks{\essay@tittelavstand}%
+  \edef\essay@slutt{\the\numexpr 1+\@tempcnta\relax}%
+  \edef\essay@neste{\essay@etternavn}%
+  % Undertittel
+  \ifx\@subtitle\@empty
+    \edef\essay@undertittellinje{0}%
+  \else
+    \essay@blokk\essay@undertittelboks{\large\itshape}%
+      {\essay@grid}{\@subtitle}%
+    \edef\essay@undertittellinje{%
+      \the\numexpr\essay@slutt+\essay@etterundertittel\relax}%
+    \essay@linjer\essay@undertittelboks{\essay@grid}%
+    \edef\essay@slutt{%
+      \the\numexpr\essay@undertittellinje+\@tempcnta\relax}%
+  \fi
+  % Navn
+  \ifx\@author\@empty
+    \edef\essay@navnelinje{0}%
+  \else
+    \essay@blokk\essay@navneboks{}{\essay@grid}{\@author}%
+    \edef\essay@navnelinje{%
+      \the\numexpr\essay@slutt+\essay@neste\relax}%
+    \essay@linjer\essay@navneboks{\essay@grid}%
+    \edef\essay@slutt{%
+      \the\numexpr\essay@navnelinje+\@tempcnta\relax}%
+    \def\essay@neste{1}%
+  \fi
+  % Dato
+  \ifx\@date\@empty
+    \edef\essay@datolinje{0}%
+  \else
+    \essay@blokk\essay@datoboks{\itshape}{\essay@grid}{\@date}%
+    \edef\essay@datolinje{%
+      \the\numexpr\essay@slutt+\essay@neste\relax}%
+    \essay@linjer\essay@datoboks{\essay@grid}%
+    \edef\essay@slutt{%
+      \the\numexpr\essay@datolinje+\@tempcnta\relax}%
+  \fi
+  % Alt samlet i én boks ned til linja over teksten
+  \vbox to\dimexpr\topskip+\essay@grid*%
+      (\essay@slutt+\essay@ettertittel-2)\relax{%
+    \essay@plasser{1}\essay@tittelboks
+    \ifnum\essay@undertittellinje>\z@
+      \essay@plasser{\essay@undertittellinje}\essay@undertittelboks
+    \fi
+    \ifnum\essay@navnelinje>\z@
+      \essay@plasser{\essay@navnelinje}\essay@navneboks
+    \fi
+    \ifnum\essay@datolinje>\z@
+      \essay@plasser{\essay@datolinje}\essay@datoboks
+    \fi
+    \vfil}%
+  \endgroup
+  \nobreak
+  \@afterindentfalse
+  \@afterheading
+}
+
+
+% ============================================================
+% OVERSKRIFTER
+%
+%   \overskrift{Tittel}
+%
+% En unummerert overskrift i kapiteler, midtstilt, med én
+% blank linje over og teksten på linja rett under. Står den
+% rett etter tittelen eller en annen overskrift, faller den
+% blanke linja bort. En lang overskrift brytes, og hver
+% linje står på neste gridlinje. Første avsnitt etter
+% overskriften får ikke innrykk, og overskriften blir ikke
+% stående alene nederst på en side med mindre enn to
+% tekstlinjer under seg.
+%
+% Overskriftene står som bokmerker i PDF-en.
+% ============================================================
+\DeclareRobustCommand{\overskrift}[1]{%
+  \par
+  \if@nobreak\else\vskip\essay@grid\fi
+  \essay@bokmerke{#1}%
+  {\centering\scshape
+   \hyphenpenalty=\@M \exhyphenpenalty=\@M
+   #1\par}%
+  \nobreak
+  \@afterindentfalse
+  \@afterheading
+}
+
+
+% ============================================================
+% TEKSTBRUDD
+%
+%   ... siste avsnitt før bruddet.
+%   \tekstbrudd
+%   Første avsnitt etter bruddet ...
+%
+% Én blank linje, og neste avsnitt uten innrykk, som
+% scenebruddet i bok-fiksjon. Faller bruddet nederst på en
+% side, står siden med en tom linje til slutt; faller det
+% helt øverst, forsvinner det.
+% ============================================================
+\newcommand{\tekstbrudd}{%
+  \par
+  \vskip\essay@grid
+  \everypar{{\setbox\z@\lastbox}\everypar{}}%
+}
+
+
+% ============================================================
+% SITATER OG LISTER
+%
+% quote, quotation, itemize og enumerate står i gridet: én
+% blank linje over og under, ingen luft mellom punktene, og
+% samme skriftstørrelse som teksten. Et sitat er rykket inn
+% 2,5 em fra begge kanter.
+% ============================================================
+\def\@listI{\leftmargin\leftmargini
+  \parsep\z@ \topsep\essay@grid \itemsep\z@ \partopsep\z@}
+\let\@listi\@listI
+\def\@listii{\leftmargin\leftmarginii
+  \labelwidth\leftmarginii \advance\labelwidth-\labelsep
+  \parsep\z@ \topsep\z@ \itemsep\z@ \partopsep\z@}
+\def\@listiii{\leftmargin\leftmarginiii
+  \labelwidth\leftmarginiii \advance\labelwidth-\labelsep
+  \parsep\z@ \topsep\z@ \itemsep\z@ \partopsep\z@}
+
+
+% ============================================================
+% FOTNOTER
+%
+% 10/13 bp, nederst på siden også når siden er kort
+% (footmisc, opsjonen bottom). Fotnotetallet i teksten er et
+% ekte hevet tall fra fonten (sups), ikke et forminsket
+% minuskeltall. Fotnotene står utenfor gridet: teksten over
+% blir én eller flere hele linjer kortere.
+% ============================================================
+\RequirePackage[bottom]{footmisc}
+
+\renewcommand{\footnotesize}{%
+  \@setfontsize\footnotesize{10bp}{13bp}}
+\setlength{\footnotesep}{9bp}
+\setlength{\skip\footins}{\essay@grid}
+
+\renewcommand{\@makefnmark}{%
+  \hbox{\normalfont\addfontfeatures{VerticalPosition=Superior}%
+    \@thefnmark}}
+
+
+% ============================================================
+% SLUTT PÅ FIL
+% ============================================================
+\endinput

@@ -1,0 +1,400 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{essaystyle}[2026/11/19 v1.0 — essay on A4]
+
+% ============================================================
+% essaystyle.sty — essay on A4
+%
+% Every typographic choice lives in this file. Write the text
+% in main.tex: title, name and date in the preamble,
+% \maketitle at the start of the document, then the text.
+%
+%   \documentclass[12pt]{article}
+%
+% The style is built on fictionstyle.sty in book-fiction: the
+% same face, the same microtypography and the same fixed line
+% grid, but on A4, one-sided, with title, name and date at
+% the top of the first page instead of a title page and
+% front matter.
+%
+% Engine: LuaLaTeX. The font is OpenType.
+%
+% The order below: language, font, microtypography, type
+% size, geometry, page breaking, page style, hyperref, title,
+% headings, text breaks, quotations and footnotes.
+% ============================================================
+
+
+% ============================================================
+% LANGUAGE
+% ============================================================
+\RequirePackage[english]{babel}
+
+
+% ============================================================
+% FONT
+%
+% Garamond Libre, the same face as the book templates.
+% Old-style figures in the text and the page numbers. No
+% maths font: the style loads fontspec and not unicode-math.
+% ============================================================
+\RequirePackage{fontspec}
+
+\setmainfont{GaramondLibre}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-Italic,
+  BoldFont       = *-Bold,
+  BoldItalicFont = *-BoldItalic,
+  Numbers        = OldStyle ]
+
+
+% ============================================================
+% MICROTYPOGRAPHY
+%
+% The text is justified, so both protrusion and expansion
+% are on: protrusion hangs punctuation slightly into the
+% margin, and expansion evens out the word spaces. tracking
+% letterspaces the small caps.
+% ============================================================
+\RequirePackage[
+  expansion=true,
+  protrusion=true,
+  tracking=true
+]{microtype}
+
+
+% ============================================================
+% TYPE SIZE
+%
+% 12/16 bp. Over 120 mm that gives about 70 characters a
+% line, within what reads well in a single column.
+%
+% \topskip is one line, so the first baseline stands one
+% line down in the text block, and every line on the page
+% stands on a fixed grid with 16 bp between baselines.
+% \essay@grid keeps the line spacing, so the title can count
+% in whole lines also where the type is larger.
+% ============================================================
+\renewcommand{\normalsize}{%
+  \@setfontsize\normalsize{12bp}{16bp}%
+  \let\@listi\@listI}
+\normalsize
+\setlength{\topskip}{16bp}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+
+\newdimen\essay@grid
+\essay@grid=\baselineskip
+
+
+% ============================================================
+% PAGE GEOMETRY
+%
+% FORMAT. A4, one-sided.
+%
+% TEXT BLOCK. 120 mm wide and 40 lines high. The first
+% baseline stands 35.6 mm below the top edge of the sheet,
+% the last 255.8 mm.
+%
+% MARGINS. 45 mm on each side. The top margin is 30 mm to
+% the top of the text block, which lies one line (\topskip)
+% above the first baseline. The bottom margin is the rest,
+% 41.2 mm, and holds the page number.
+% ============================================================
+\RequirePackage{geometry}
+\geometry{a4paper,
+  hmargin=45mm, top=30mm,
+  textheight=640bp, footskip=32bp}
+
+
+% ============================================================
+% PAGE BREAKING
+%
+% The pages stand on a fixed grid and are not stretched. A
+% page is full, 40 lines, with two exceptions: the last page
+% ends where the text ends, and a page is one line short
+% when the last line of a paragraph would otherwise stand
+% alone at the top of the next page (a widow). The first
+% line of a paragraph may stand alone at the foot.
+%
+% The bottom of each page gets fill-order stretch, so a
+% short page stays open at the foot and does not spread the
+% space between the lines.
+% ============================================================
+\raggedbottom
+\def\@textbottom{\vskip\z@\@plus 1fill}
+\widowpenalty=\@M
+\clubpenalty=\z@
+\brokenpenalty=\z@
+
+
+% ============================================================
+% PAGE STYLE
+%
+% The page number centred at the foot, two lines below the
+% last line of text, on every page. No running head.
+% ============================================================
+\def\ps@essay{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \def\@oddfoot{\hfil\thepage\hfil}%
+  \let\@evenfoot\@oddfoot
+}
+\pagestyle{essay}
+
+
+% ============================================================
+% HYPERLINKS
+%
+% Links are black, so the page prints as without them, but
+% footnotes and links are clickable in a PDF reader. The
+% headings appear as bookmarks, and the title and name go
+% into the PDF's metadata. \\ in a title is removed from the
+% bookmark and the metadata.
+% ============================================================
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  allcolors=black
+}
+
+\pdfstringdefDisableCommands{\let\\\@empty}
+
+\newcounter{essay@anchor}
+\newcommand{\essay@bookmark}[1]{%
+  \stepcounter{essay@anchor}%
+  \pdfbookmark[0]{#1}{essay@anchor.\arabic{essay@anchor}}%
+}
+
+
+% ============================================================
+% TITLE
+%
+%   \title{...}  \author{...}  \date{...}
+%   \subtitle{...}                 % optional
+%   \maketitle
+%
+% At the top of the first page, centred: the title in small
+% caps at 20.7 pt (\LARGE) on the first line, an italic
+% subtitle two lines below if one is set, the name three
+% lines below that and the date in italic on the line after.
+% The text begins four lines below the date, on the ninth
+% line when the title takes one line and there is no
+% subtitle.
+%
+% Name, date and subtitle stand on the grid. The title has
+% 24 bp leading, a line and a half, and what follows begins
+% on the first whole line below it. Each part takes at most
+% 80 % of the measure, without hyphenation, and breaks where
+% it is too long; \\ decides where. \date{} or \author{}
+% gives no line for the date or the name.
+%
+% The numbers in one place, should anything need adjusting:
+% ============================================================
+\newcommand{\essay@titlefont}{\LARGE\scshape}
+\newcommand{\essay@titleleading}{24bp}  % leading in the title
+\newcommand{\essay@subtitlegap}{2}      % lines from title to subtitle
+\newcommand{\essay@namegap}{3}          % lines from title to name
+\newcommand{\essay@textgap}{4}          % lines from date to text
+
+\def\@subtitle{}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+
+\newbox\essay@titlebox
+\newbox\essay@subtitlebox
+\newbox\essay@namebox
+\newbox\essay@datebox
+
+% \essay@block{box}{font}{leading}{text} sets the text
+% centred in a box as wide as the text block. The box's
+% height is the first line's height, so the baseline of the
+% first line is the box's baseline.
+\newcommand{\essay@block}[4]{%
+  \setbox#1\hbox to\textwidth{\hfil
+    \vtop{%
+      \hsize=0.8\textwidth
+      \centering #2%
+      \baselineskip=#3\relax
+      \hyphenpenalty=\@M \exhyphenpenalty=\@M
+      #4\par}%
+    \hfil}}
+
+% \essay@lines{box}{leading} leaves in \@tempcnta how many
+% grid lines the last baseline in the box stands below the
+% first, rounded up. The number of lines in the box is the
+% depth divided by the leading, rounded, so the descenders
+% of the last line do not count.
+\newcommand{\essay@lines}[2]{%
+  \@tempdima=\dimexpr #2*\numexpr\dp#1/\dimexpr#2\relax\relax\relax
+  \@tempcnta=\dimexpr\@tempdima+\essay@grid-100sp\relax
+  \@tempcntb=\essay@grid
+  \divide\@tempcnta\@tempcntb}
+
+% \essay@place{line}{box} sets the box with its baseline on
+% the given line of the text block, taking no space.
+\newcommand{\essay@place}[2]{%
+  \nointerlineskip
+  \vbox to\z@{%
+    \kern\dimexpr\topskip+\essay@grid*(#1-1)-\ht#2\relax
+    \box#2\vss}}
+
+\renewcommand{\maketitle}{%
+  \par
+  \begingroup
+  \hypersetup{pdftitle={\@title}, pdfauthor={\@author}}%
+  % Title on the first line
+  \essay@block\essay@titlebox{\essay@titlefont}%
+    {\essay@titleleading}{\@title}%
+  \essay@lines\essay@titlebox{\essay@titleleading}%
+  \edef\essay@end{\the\numexpr 1+\@tempcnta\relax}%
+  \edef\essay@next{\essay@namegap}%
+  % Subtitle
+  \ifx\@subtitle\@empty
+    \edef\essay@subtitleline{0}%
+  \else
+    \essay@block\essay@subtitlebox{\large\itshape}%
+      {\essay@grid}{\@subtitle}%
+    \edef\essay@subtitleline{%
+      \the\numexpr\essay@end+\essay@subtitlegap\relax}%
+    \essay@lines\essay@subtitlebox{\essay@grid}%
+    \edef\essay@end{%
+      \the\numexpr\essay@subtitleline+\@tempcnta\relax}%
+  \fi
+  % Name
+  \ifx\@author\@empty
+    \edef\essay@nameline{0}%
+  \else
+    \essay@block\essay@namebox{}{\essay@grid}{\@author}%
+    \edef\essay@nameline{%
+      \the\numexpr\essay@end+\essay@next\relax}%
+    \essay@lines\essay@namebox{\essay@grid}%
+    \edef\essay@end{%
+      \the\numexpr\essay@nameline+\@tempcnta\relax}%
+    \def\essay@next{1}%
+  \fi
+  % Date
+  \ifx\@date\@empty
+    \edef\essay@dateline{0}%
+  \else
+    \essay@block\essay@datebox{\itshape}{\essay@grid}{\@date}%
+    \edef\essay@dateline{%
+      \the\numexpr\essay@end+\essay@next\relax}%
+    \essay@lines\essay@datebox{\essay@grid}%
+    \edef\essay@end{%
+      \the\numexpr\essay@dateline+\@tempcnta\relax}%
+  \fi
+  % Everything in one box down to the line above the text
+  \vbox to\dimexpr\topskip+\essay@grid*%
+      (\essay@end+\essay@textgap-2)\relax{%
+    \essay@place{1}\essay@titlebox
+    \ifnum\essay@subtitleline>\z@
+      \essay@place{\essay@subtitleline}\essay@subtitlebox
+    \fi
+    \ifnum\essay@nameline>\z@
+      \essay@place{\essay@nameline}\essay@namebox
+    \fi
+    \ifnum\essay@dateline>\z@
+      \essay@place{\essay@dateline}\essay@datebox
+    \fi
+    \vfil}%
+  \endgroup
+  \nobreak
+  \@afterindentfalse
+  \@afterheading
+}
+
+
+% ============================================================
+% HEADINGS
+%
+%   \heading{Title}
+%
+% An unnumbered heading in small caps, centred, with one
+% blank line above and the text on the line right below. If
+% it follows the title or another heading, the blank line is
+% dropped. A long heading breaks, and each line stands on
+% the next grid line. The first paragraph after the heading
+% has no indent, and the heading is not left alone at the
+% foot of a page with fewer than two lines of text below it.
+%
+% The headings appear as bookmarks in the PDF.
+% ============================================================
+\DeclareRobustCommand{\heading}[1]{%
+  \par
+  \if@nobreak\else\vskip\essay@grid\fi
+  \essay@bookmark{#1}%
+  {\centering\scshape
+   \hyphenpenalty=\@M \exhyphenpenalty=\@M
+   #1\par}%
+  \nobreak
+  \@afterindentfalse
+  \@afterheading
+}
+
+
+% ============================================================
+% TEXT BREAKS
+%
+%   ... last paragraph before the break.
+%   \textbreak
+%   First paragraph after the break ...
+%
+% One blank line, and the next paragraph without indent, as
+% the scene break in book-fiction. If the break falls at the
+% foot of a page, the page ends with an empty line; if it
+% falls at the very top, it disappears.
+% ============================================================
+\newcommand{\textbreak}{%
+  \par
+  \vskip\essay@grid
+  \everypar{{\setbox\z@\lastbox}\everypar{}}%
+}
+
+
+% ============================================================
+% QUOTATIONS AND LISTS
+%
+% quote, quotation, itemize and enumerate stand on the grid:
+% one blank line above and below, no space between items,
+% and the same type size as the text. A quotation is
+% indented 2.5 em from both edges.
+% ============================================================
+\def\@listI{\leftmargin\leftmargini
+  \parsep\z@ \topsep\essay@grid \itemsep\z@ \partopsep\z@}
+\let\@listi\@listI
+\def\@listii{\leftmargin\leftmarginii
+  \labelwidth\leftmarginii \advance\labelwidth-\labelsep
+  \parsep\z@ \topsep\z@ \itemsep\z@ \partopsep\z@}
+\def\@listiii{\leftmargin\leftmarginiii
+  \labelwidth\leftmarginiii \advance\labelwidth-\labelsep
+  \parsep\z@ \topsep\z@ \itemsep\z@ \partopsep\z@}
+
+
+% ============================================================
+% FOOTNOTES
+%
+% 10/13 bp, at the foot of the page also when the page is
+% short (footmisc, option bottom). The footnote number in
+% the text is a true superior figure from the font (sups),
+% not a scaled-down old-style figure. Footnotes stand off
+% the grid: the text above becomes one or more whole lines
+% shorter.
+% ============================================================
+\RequirePackage[bottom]{footmisc}
+
+\renewcommand{\footnotesize}{%
+  \@setfontsize\footnotesize{10bp}{13bp}}
+\setlength{\footnotesep}{9bp}
+\setlength{\skip\footins}{\essay@grid}
+
+\renewcommand{\@makefnmark}{%
+  \hbox{\normalfont\addfontfeatures{VerticalPosition=Superior}%
+    \@thefnmark}}
+
+
+% ============================================================
+% END OF FILE
+% ============================================================
+\endinput
