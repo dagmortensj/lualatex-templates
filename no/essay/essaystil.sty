@@ -176,23 +176,25 @@
 %   \maketitle
 %
 % Øverst på første side, midtstilt: tittelen i vanlig
-% skrift i 20,7 pt (\LARGE) på første linje, en kursiv
-% undertittel to linjer under om den er satt, navnet tre
-% linjer under det og datoen i kursiv på linja etter. Teksten begynner fire
-% linjer under datoen, på niende linje når tittelen står på
-% én linje og det ikke er noen undertittel.
+% skrift i 14,4 pt (\large) på første linje, en kursiv
+% undertittel i brødtekststørrelse to linjer under om den er
+% satt, navnet tre linjer under det og datoen i kursiv på
+% linja etter. Teksten begynner fire linjer under datoen, på
+% niende linje når tittelen står på én linje og det ikke er
+% noen undertittel.
 %
-% Navn, dato og undertittel står i gridet. Tittelen har
-% 24 bp linjeavstand, halvannen linje, og det som følger
-% begynner på første hele linje under den. Hver del står på
-% inntil 80 % av satsbredden, uten orddeling, og brytes der
-% den er for lang; \\ bestemmer hvor. \date{} eller
-% \author{} gir ingen linje for datoen eller navnet.
+% Tittelen har samme størrelse som novelletitlene i
+% bok-fiksjon, i samme forhold til brødteksten, og står som
+% dem i gridet: en lang tittel brytes, og hver linje står på
+% neste gridlinje. Hver del står på hele satsbredden, uten
+% orddeling, og brytes der den er for lang; \\ bestemmer
+% hvor. \date{} eller \author{} gir ingen linje for datoen
+% eller navnet.
 %
 % Tallene samlet, om noe skal justeres:
 % ============================================================
-\newcommand{\essay@tittelfont}{\LARGE}
-\newcommand{\essay@tittelavstand}{24bp}  % linjeavstand i tittelen
+\newcommand{\essay@tittelfont}{\large}
+\newcommand{\essay@tittelavstand}{16bp}  % linjeavstand i tittelen
 \newcommand{\essay@etterundertittel}{2}  % linjer fra tittel til undertittel
 \newcommand{\essay@etternavn}{3}         % linjer fra tittel til navn
 \newcommand{\essay@ettertittel}{4}       % linjer fra dato til tekst
@@ -212,7 +214,7 @@
 \newcommand{\essay@blokk}[4]{%
   \setbox#1\hbox to\textwidth{\hfil
     \vtop{%
-      \hsize=0.8\textwidth
+      \hsize=\textwidth
       \centering #2%
       \baselineskip=#3\relax
       \hyphenpenalty=\@M \exhyphenpenalty=\@M
@@ -252,7 +254,7 @@
   \ifx\@subtitle\@empty
     \edef\essay@undertittellinje{0}%
   \else
-    \essay@blokk\essay@undertittelboks{\large\itshape}%
+    \essay@blokk\essay@undertittelboks{\itshape}%
       {\essay@grid}{\@subtitle}%
     \edef\essay@undertittellinje{%
       \the\numexpr\essay@slutt+\essay@etterundertittel\relax}%

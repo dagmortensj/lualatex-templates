@@ -36,9 +36,9 @@ latexmk -lualatex main
 ```
 
 `\maketitle` setter tittelen øverst på første side, midtstilt: tittelen
-i vanlig skrift i 20,7 pt på første linje, en kursiv undertittel to linjer
-under om den er satt, navnet tre linjer under det og datoen i kursiv på
-linja etter. Teksten begynner fire linjer under datoen, på niende linje
+i vanlig skrift i 14,4 pt på første linje, en kursiv undertittel i
+brødtekststørrelse to linjer under om den er satt, navnet tre linjer
+under det og datoen i kursiv på linja etter. Teksten begynner fire linjer under datoen, på niende linje
 når tittelen står på én linje og det ikke er noen undertittel.
 
 - **`\date{\today}`** gir dagens dato på norsk, «19. november 2026».
@@ -46,10 +46,12 @@ når tittelen står på én linje og det ikke er noen undertittel.
   dato.
 - **`\date{}`** eller **`\author{}`** gir ingen linje for datoen eller
   navnet, og det som følger flytter seg opp.
-- **Lange titler** brytes på inntil 80 % av satsbredden, uten orddeling.
-  Med `\\` i tittelen bestemmer du selv hvor den brytes. Tittelen har
-  halvannen linjes linjeavstand, og navnet begynner på første hele
-  linje i gridet under den.
+- **Lange titler** brytes på hele satsbredden, uten orddeling. Med `\\`
+  i tittelen bestemmer du selv hvor den brytes. Hver linje står på
+  neste gridlinje.
+
+Tittelen har samme størrelse som novelletitlene i `bok-fiksjon`, i samme
+forhold til brødteksten.
 
 Tittelen og navnet går inn i PDF-ens metadata.
 
@@ -113,8 +115,8 @@ Malen har ingen pakkeopsjoner.
 - **Marger:** 45 mm på hver side; toppen av satsflata 30 mm under
   arkets overkant, første grunnlinje 35,6 mm
 - **Avsnitt:** justert, innrykk 1 gefirt, ingen luft mellom avsnitt
-- **Tittel:** vanlig skrift i 20,7 pt med 24 bp linjeavstand; undertittel i
-  kursiv, \large; navn og dato i brødtekststørrelse, datoen kursiv
+- **Tittel:** vanlig skrift i 14,4 pt (\large) i gridet; undertittel,
+  navn og dato i brødtekststørrelse, undertittelen og datoen kursiv
 - **Overskrifter:** kapiteler i brødtekststørrelse, midtstilt
 - **Fotnoter:** 10/13 bp, nederst på siden
 - **Sidetall:** midtstilt, to linjer under siste tekstlinje, på alle

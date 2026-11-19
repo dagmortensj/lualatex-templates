@@ -177,24 +177,25 @@
 %   \maketitle
 %
 % At the top of the first page, centred: the title in roman
-% at 20.7 pt (\LARGE) on the first line, an italic
-% subtitle two lines below if one is set, the name three
-% lines below that and the date in italic on the line after.
-% The text begins four lines below the date, on the ninth
-% line when the title takes one line and there is no
+% at 14.4 pt (\large) on the first line, an italic subtitle
+% at text size two lines below if one is set, the name
+% three lines below that and the date in italic on the line
+% after. The text begins four lines below the date, on the
+% ninth line when the title takes one line and there is no
 % subtitle.
 %
-% Name, date and subtitle stand on the grid. The title has
-% 24 bp leading, a line and a half, and what follows begins
-% on the first whole line below it. Each part takes at most
-% 80 % of the measure, without hyphenation, and breaks where
-% it is too long; \\ decides where. \date{} or \author{}
-% gives no line for the date or the name.
+% The title has the size of the story titles in
+% book-fiction, in the same proportion to the text, and like
+% them stands on the grid: a long title breaks, and each
+% line stands on the next grid line. Each part takes the
+% full measure, without hyphenation, and breaks where it is
+% too long; \\ decides where. \date{} or \author{} gives no
+% line for the date or the name.
 %
 % The numbers in one place, should anything need adjusting:
 % ============================================================
-\newcommand{\essay@titlefont}{\LARGE}
-\newcommand{\essay@titleleading}{24bp}  % leading in the title
+\newcommand{\essay@titlefont}{\large}
+\newcommand{\essay@titleleading}{16bp}  % leading in the title
 \newcommand{\essay@subtitlegap}{2}      % lines from title to subtitle
 \newcommand{\essay@namegap}{3}          % lines from title to name
 \newcommand{\essay@textgap}{4}          % lines from date to text
@@ -214,7 +215,7 @@
 \newcommand{\essay@block}[4]{%
   \setbox#1\hbox to\textwidth{\hfil
     \vtop{%
-      \hsize=0.8\textwidth
+      \hsize=\textwidth
       \centering #2%
       \baselineskip=#3\relax
       \hyphenpenalty=\@M \exhyphenpenalty=\@M
@@ -254,7 +255,7 @@
   \ifx\@subtitle\@empty
     \edef\essay@subtitleline{0}%
   \else
-    \essay@block\essay@subtitlebox{\large\itshape}%
+    \essay@block\essay@subtitlebox{\itshape}%
       {\essay@grid}{\@subtitle}%
     \edef\essay@subtitleline{%
       \the\numexpr\essay@end+\essay@subtitlegap\relax}%

@@ -37,8 +37,8 @@ latexmk -lualatex main
 ```
 
 `\maketitle` sets the title at the top of the first page, centred: the
-title in roman at 20.7 pt on the first line, an italic subtitle two
-lines below if one is set, the name three lines below that and the date
+title in roman at 14.4 pt on the first line, an italic subtitle at text
+size two lines below if one is set, the name three lines below that and the date
 in italic on the line after. The text begins four lines below the date,
 on the ninth line when the title takes one line and there is no
 subtitle.
@@ -48,10 +48,12 @@ subtitle.
   a given date.
 - **`\date{}`** or **`\author{}`** gives no line for the date or the
   name, and what follows moves up.
-- **Long titles** break at up to 80 % of the measure, without
-  hyphenation. With `\\` in the title you decide where it breaks. The
-  title has a line and a half of leading, and the name begins on the
-  first whole grid line below it.
+- **Long titles** break at the full measure, without hyphenation. With
+  `\\` in the title you decide where it breaks. Each line stands on the
+  next grid line.
+
+The title has the size of the story titles in `book-fiction`, in the
+same proportion to the text.
 
 The title and the name go into the PDF's metadata.
 
@@ -115,8 +117,8 @@ The template has no package options.
 - **Margins:** 45 mm on each side; the top of the text block 30 mm
   below the top edge of the sheet, the first baseline 35.6 mm
 - **Paragraphs:** justified, indent 1 em, no space between paragraphs
-- **Title:** roman at 20.7 pt with 24 bp leading; subtitle in
-  italic, \large; name and date at text size, the date in italic
+- **Title:** roman at 14.4 pt (\large) on the grid; subtitle, name
+  and date at text size, the subtitle and the date in italic
 - **Headings:** small caps at text size, centred
 - **Footnotes:** 10/13 bp, at the foot of the page
 - **Page numbers:** centred, two lines below the last line of text, on
